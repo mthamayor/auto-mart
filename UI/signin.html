@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./assets/css/index.css" rel="stylesheet" />
+    <link
+      rel="shortcut icon"
+      href="./assets/img/logo-black.ico"
+      type="image/x-icon"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.lineicons.com/1.0.1/LineIcons.min.css"
+    />
+    <title>Auto | Sign in</title>
+  </head>
+
+  <body>
+    <!-- Stores page name -->
+    <input type="hidden" name="present-page" value="sign-in" />
+
+    <!-- notifications -->
+    <div id="notification"></div>
+    <div id="page-loading" class="hide">
+      <div class="d-flex justify-content-center align-items-center h-100">
+        <div class="spinner-icon spinner-big spin-animation"></div>
+      </div>
+    </div>
+    <div id="async-loading">
+      <div class="spinner-icon spin-animation mr"></div>
+      Please Wait
+    </div>
+    <!-- notifications ends here -->
+
+    <!-- Navigation container -->
+    <header id="navigation" class="nav absolute"></header>
+    <!-- Navigation container ends -->
+
+    <div class="form-container footer-gutter">
+      <!-- Sign in form starts here -->
+      <form id="sign-in-form" class="action-form">
+        <p class="header">SIGN IN</p>
+        <div class="form-group">
+          <input class="input" placeholder="Email" name="email" type="email" />
+        </div>
+        <div class="form-group">
+          <input
+            class="input"
+            placeholder="Password"
+            name="password"
+            type="password"
+          />
+        </div>
+        <p class="form-paragraph">
+          Yet to create an account?
+          <a href="./signup.html"
+            >Sign up <i class="line-icon lni-arrow-right"></i
+          ></a>
+        </p>
+        <div class="form-group">
+          <button class="submit-btn">sign in</button>
+        </div>
+        <p class="form-paragraph">
+          <a href="./forgot-password.html">Forgot password?</a>
+        </p>
+      </form>
+      <!-- Sign in form ends here -->
+    </div>
+
+    <!-- Footer container -->
+    <footer id="footer-container"></footer>
+    <!-- Footer container ends here -->
+
+    <script src="assets/js/components.js"></script>
+    <script src="assets/js/index.js"></script>
+    <script src="assets/js/unlogged.js"></script>
+    <script src="assets/js/signin.js"></script>
+  </body>
+</html>
