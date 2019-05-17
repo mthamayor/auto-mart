@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./assets/css/index.css" rel="stylesheet" />
+    <link
+      rel="shortcut icon"
+      href="./assets/img/logo-black.ico"
+      type="image/x-icon"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.lineicons.com/1.0.1/LineIcons.min.css"
+    />
+    <title>Auto | Dashboard</title>
+  </head>
+
+  <body>
+    <!-- Stores page name -->
+    <input type="hidden" name="present-page" value="dashboard" />
+
+    <!-- Navigation container -->
+    <header id="navigation" class="nav absolute"></header>
+    <!-- Navigation container ends -->
+
+    <div class="main-content">
+      <p class="section-header font-slabo">Welcome, Anifowose</p>
+      <div class="divider mb"></div>
+      <div class="d-flex justify-content-center align-items-center flex-sm-column">
+        <a class="custom-file-upload d-flex flex-column shadow m-small" href="create-ad.html">
+          <div class="flex-3 d-flex align-items-center justify-content-center">
+            <i class="lni-plus"></i>
+          </div>
+          <div
+            class="label flex-1 d-flex align-items-center justify-content-center uppercase"
+          >
+            Create Advert
+          </div>
+        </a>
+        <a class="custom-file-upload d-flex flex-column shadow m-small" href="search-cars.html">
+          <div class="flex-3 d-flex align-items-center justify-content-center">
+            <i class="lni-search"></i>
+          </div>
+          <div
+            class="label flex-1 d-flex align-items-center justify-content-center uppercase"
+          >
+            Search cars
+          </div>
+        </a>
+        <a class="custom-file-upload d-flex flex-column shadow m-small" href="./my-adverts.html">
+          <div class="flex-3 d-flex align-items-center justify-content-center">
+            <i class="lni-car-alt"></i>
+          </div>
+          <div
+            class="label flex-1 d-flex align-items-center justify-content-center uppercase"
+          >
+            My adverts
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <footer id="footer-container"></footer>
+
+    <script src="assets/js/components.js"></script>
+    <script src="assets/js/index.js"></script>
+    <script src="assets/js/logged.js"></script>
+  </body>
+</html>
