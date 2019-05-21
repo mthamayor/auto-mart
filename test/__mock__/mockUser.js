@@ -36,5 +36,9 @@ const mockUser = {
     password: 'MAYOR.2324',
     address: 'NO 45, Harmony reservation area, ganmo',
   },
+  email: 'anifowose_habeeb@gmail.com',
+  password: 'MAYOR.2324',
+  fakeUserEmail: 'tolufashola@gmail.com',
+  fakeUserPassword: 'MSHA_WE11',
 };
 export default mockUser;
