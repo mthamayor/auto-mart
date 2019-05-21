@@ -4,6 +4,7 @@
  */
 
 import validator from 'validator';
+import bcrypt from 'bcrypt';
 import dbHelper from '../models/dbHelper';
 
 const authValidator = {
@@ -51,6 +52,53 @@ const authValidator = {
       });
     }
 
+    return next();
+  },
+  signIn(req, res, next) {
+    const {
+      email,
+      password,
+    } = req.body;
+
+    if (email === undefined || !validator.isEmail(email)
+    ) {
+      return res
+        .status(400)
+        .send({
+          status: 400,
+          error: 'email is undefined or invalid',
+        });
+    }
+
+    if (password === undefined || password.trim() === ''
+    ) {
+      return res
+        .status(400)
+        .send({
+          status: 400,
+          error: 'password is undefined',
+        });
+    }
+
+    // Check if user does not exist
+    if (dbHelper.getUserByEmail(email) === -1) {
+      return res
+        .status(404)
+        .send({
+          status: 404,
+          error: 'user does not exist',
+        });
+    }
+
+    // Check if password matches
+    const user = dbHelper.getUserByEmail(email);
+    const passwordMatch = bcrypt.compareSync(password, user.password);
+    if (!passwordMatch) {
+      return res.status(401).send({
+        status: 401,
+        error: 'invalid login credentials',
+      });
+    }
     return next();
   },
 };

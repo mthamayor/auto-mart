@@ -14,11 +14,7 @@ const auth = {
    */
   signUp(req, res) {
     let {
-      email,
-      firstName,
-      lastName,
-      address,
-      password,
+      email, firstName, lastName, address, password,
     } = req.body;
 
     email = email.trim();
@@ -53,19 +49,48 @@ const auth = {
     const options = { expiresIn: '1d' };
     const secret = process.env.JWT_SECRET;
 
-    jwt.sign(payload, secret, options,
-      (err, token) => res.status(201).send({
-        status: 201,
-        data: {
-          token,
-          id: data.id,
-          first_name: data.firstName,
-          last_name: data.lastName,
-          email: data.email,
-          address: data.address,
-          isAdmin: data.isAdmin,
-        },
-      }));
+    jwt.sign(payload, secret, options, (err, token) => res.status(201).send({
+      status: 201,
+      data: {
+        token,
+        id: data.id,
+        first_name: data.firstName,
+        last_name: data.lastName,
+        email: data.email,
+        address: data.address,
+        isAdmin: data.isAdmin,
+      },
+    }));
+  },
+
+  /**
+   * User sign in
+   */
+  signIn(req, res) {
+    const {
+      email,
+    } = req.body;
+
+    // Retreive data from db
+    const data = dbHelper.getUserByEmail(email);
+
+    // Create a jwt token and send along with the data
+    const payload = { data };
+    const options = { expiresIn: '1d' };
+    const secret = process.env.JWT_SECRET;
+
+    jwt.sign(payload, secret, options, (err, token) => res.status(200).send({
+      status: 200,
+      data: {
+        token,
+        id: data.id,
+        first_name: data.firstName,
+        last_name: data.lastName,
+        email: data.email,
+        address: data.address,
+        isAdmin: data.isAdmin,
+      },
+    }));
   },
 };
 
