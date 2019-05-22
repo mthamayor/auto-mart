@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import helpers from '../utils/helpers';
 import dummyUsers from '../models/dummyUsers';

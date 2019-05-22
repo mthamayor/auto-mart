@@ -4,7 +4,7 @@
  */
 
 import validator from 'validator';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import dbHelper from '../models/dbHelper';
 
 const authValidator = {
