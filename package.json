@@ -6,8 +6,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production babel-node server/index.js",
     "dev": "cross-env NODE_ENV=development nodemon --exec babel-node server/index.js",
-    "test": "cross-env NODE_ENV=test mocha --require @babel/register --exit",
-    "coverage": "nyc npm run test"
+    "test": "cross-env NODE_ENV=test nyc mocha --require @babel/register --exit",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
