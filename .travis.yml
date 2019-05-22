@@ -6,4 +6,4 @@ branches:
   - develop
   - master
 after_success:
-- npm run coverage && nyc report --reporter=text-lcov | coveralls
+- npm run coverage
