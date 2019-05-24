@@ -6,6 +6,13 @@ const mockUser = {
     password: 'MAYOR.2324',
     address: 'NO 45, Harmony reservation area, ganmo',
   },
+  validUser2: {
+    email: 'alimibasheer@gmail.com',
+    firstName: 'Alimi',
+    lastName: 'Basheer',
+    password: 'MAYOR.2324',
+    address: 'NO 45, Harmony reservation area, ganmo',
+  },
   invalidPasswordUser: {
     email: 'anifowose_habeeb@gmail.com',
     firstName: 'Anifowose',
