@@ -22,7 +22,7 @@ const authorization = {
 
     // Check if the token is valid
     // invalid token - synchronous
-    if (process.env.NODE_ENV !== 'test') {
+    if (process.env.NODE_ENV === 'production') {
       try {
         jwt.verify(req.token, process.env.JWT_SECRET || 'jwtSecret');
       } catch (err) {

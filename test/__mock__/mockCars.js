@@ -4,7 +4,7 @@ const mockCars = {
   validBodyType: 'car',
   validEmail: 'anifowose_habeeb@gmail.com',
   validModel: 'camry',
-  validPrice: '1000000',
+  validPrice: parseFloat(1000000),
   validState: 'new',
   validManufacturer: 'toyota',
   invalidPrice: '13js321',
