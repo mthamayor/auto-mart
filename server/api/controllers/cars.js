@@ -16,7 +16,7 @@ const cars = {
     } = req.body;
 
     const createdOn = Date.now();
-    const status = 'pending';
+    const status = 'available';
     const id = dummyCars.length + 1;
 
     dbCarsHelper.addCar({
@@ -25,14 +25,13 @@ const cars = {
       manufacturer,
       status,
       state,
-      price,
+      price: parseFloat(price, 10),
       model,
       name,
       bodyType,
-      owner,
+      owner: parseInt(owner, 10),
       email,
       imageUrlList,
-      purchaseOrders: [],
     });
 
     const car = dbCarsHelper.getCar(id);

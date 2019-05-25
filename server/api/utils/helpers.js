@@ -9,7 +9,7 @@ const helpers = {
   },
   async uploadImage(image) {
     let imageUrl = '';
-    if (process.env.NODE_ENV === 'test') {
+    if (process.env.NODE_ENV !== 'production') {
       imageUrl = faker.image.imageUrl();
       return imageUrl;
     }

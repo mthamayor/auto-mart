@@ -3,7 +3,6 @@
  */
 
 import express from 'express';
-// import carsValidator from '../middlewares/carsValidator';
 import cars from '../controllers/cars';
 import authorization from '../middlewares/authorization';
 import carsValidator from '../middlewares/carsValidator';
