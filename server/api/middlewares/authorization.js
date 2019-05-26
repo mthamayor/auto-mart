@@ -22,17 +22,19 @@ const authorization = {
 
     // Check if the token is valid
     // invalid token - synchronous
-    if (process.env.NODE_ENV === 'production') {
-      try {
-        jwt.verify(req.token, process.env.JWT_SECRET || 'jwtSecret');
-      } catch (err) {
-        // err
+
+    try {
+      jwt.verify(req.token, process.env.JWT_SECRET || 'jwtSecret');
+    } catch (err) {
+      // err
+      if (process.env.NODE_ENV === 'production') {
         return res.status(401).send({
           status: 401,
           error: 'invalid access token provided, please sign in',
         });
       }
     }
+
     return next();
   },
 };
