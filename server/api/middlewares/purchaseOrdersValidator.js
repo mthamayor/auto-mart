@@ -84,6 +84,69 @@ const purchaseOrdersValidator = {
     }
     return next();
   },
+  updatePurchaseOrder(req, res, next) {
+    const orderId = req.params.order_id;
+    const { buyer, newPrice } = req.body;
+
+    if (
+      buyer === undefined
+      || buyer.trim() === ''
+      || !validator.isNumeric(buyer)
+    ) {
+      return res.status(400).send({
+        status: 400,
+        error: 'buyer id is undefined or invalid',
+      });
+    }
+    if (
+      orderId === undefined
+      || orderId.trim() === ''
+      || !validator.isNumeric(orderId)
+    ) {
+      return res.status(400).send({
+        status: 400,
+        error: 'order id is undefined or invalid',
+      });
+    }
+
+    if (
+      newPrice === undefined
+      || newPrice.trim() === ''
+      || !validator.isNumeric(newPrice)
+    ) {
+      return res.status(400).send({
+        status: 400,
+        error: 'new price is undefined or invalid',
+      });
+    }
+
+    const findOrder = dbOrdersHelper.getOrder(
+      parseInt(orderId, 10),
+    );
+
+    if (findOrder === -1) {
+      return res.status(404).send({
+        status: 404,
+        error: 'purchase order does not exist',
+      });
+    }
+
+    if (findOrder.buyer !== parseInt(buyer, 10)) {
+      return res.status(403).send({
+        status: 403,
+        error: 'you cannot edit another user\'s order',
+      });
+    }
+
+    if (findOrder.status !== 'pending') {
+      return res.status(403).send({
+        status: 403,
+        error: 'the transaction is not pending',
+      });
+    }
+
+    return next();
+  },
 };
 
 export default purchaseOrdersValidator;

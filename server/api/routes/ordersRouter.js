@@ -18,4 +18,10 @@ ordersRouter.post(
   purchaseOrders.createOrder,
 );
 
+// Protected route
+ordersRouter.patch('/:order_id/price',
+  authorization.verifyToken,
+  purchaseOrdersValidator.updatePurchaseOrder,
+  purchaseOrders.updatePurchaseOrder);
+
 export default ordersRouter;

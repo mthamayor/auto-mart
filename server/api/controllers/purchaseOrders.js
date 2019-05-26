@@ -36,6 +36,31 @@ const purchaseOrders = {
       },
     });
   },
+  // Update the price of purchase order
+  updatePurchaseOrder(req, res) {
+    let orderId = req.params.order_id;
+    orderId = parseInt(orderId, 10);
+
+    let { newPrice } = req.body;
+
+    newPrice = parseFloat(newPrice);
+
+    let order = dbOrdersHelper.getOrder(orderId);
+    const oldPrice = order.priceOffered;
+
+    order = dbOrdersHelper.editPurchaseOrder(orderId, newPrice);
+    const data = {
+      id: order.id,
+      car_id: order.carId,
+      status: order.status,
+      old_price_offered: oldPrice,
+      new_price_offered: order.priceOffered,
+    };
+    res.status(201).send({
+      status: 201,
+      data,
+    });
+  },
 };
 
 export default purchaseOrders;
