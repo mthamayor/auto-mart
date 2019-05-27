@@ -689,4 +689,99 @@ describe('Users car endpoint test', () => {
         });
     });
   });
+  describe('route GET /api/v1/car/:car_id/', () => {
+    before((done) => {
+      dbCarsHelper.clearDB();
+      chai
+        .request(app)
+        .post('/api/v1/car')
+        .set('Authorization', 'Bearer d432dd24')
+        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .type('form')
+        .field('owner', user1.id)
+        .field('state', mockCars.validState)
+        .field('price', mockCars.validPrice)
+        .field('model', mockCars.validModel)
+        .field('manufacturer', mockCars.validManufacturer)
+        .field('bodyType', mockCars.validBodyType)
+        .field('name', mockCars.validName)
+        .field('email', user1.email)
+        .end(() => {
+          done();
+        });
+    });
+    it('should raise 400 error car_id is invalid', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/car/1s')
+        .set('Authorization', 'Bearer d432dd24')
+        .type('form')
+        .send()
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          assert.strictEqual(
+            res.body.status,
+            400,
+            'Status code should be 400',
+          );
+          assert.strictEqual(
+            res.body.error,
+            'car_id parameter is not a valid number',
+            'car_id parameter is not a valid number',
+          );
+          done();
+        });
+    });
+    it('should raise 404 error if car does not exist', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/car/2')
+        .set('Authorization', 'Bearer d432dd24')
+        .type('form')
+        .send()
+        .end((err, res) => {
+          expect(res).to.have.status(404);
+          assert.strictEqual(
+            res.body.status,
+            404,
+            'Status code should be 404',
+          );
+          assert.strictEqual(
+            res.body.error,
+            'car does not exist',
+            'car does not exist',
+          );
+          done();
+        });
+    });
+    it('should raise 200 when the car was successfully retrieved', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/car/1')
+        .set('Authorization', 'Bearer d432dd24')
+        .type('form')
+        .send({})
+        .end((err, res) => {
+          const { data, status } = res.body;
+          expect(res).to.have.status(200);
+          expect(data).to.have.property('id');
+          expect(data).to.have.property('owner');
+          expect(data).to.have.property('created_on');
+          expect(data).to.have.property('status');
+          expect(data).to.have.property('price');
+          expect(data).to.have.property('email');
+          expect(data).to.have.property('model');
+          expect(data).to.have.property('state');
+          expect(data).to.have.property('image_url_list');
+          expect(data).to.have.property('body_type');
+          assert.strictEqual(
+            status,
+            200,
+            'Status code should be 200',
+          );
+
+          done();
+        });
+    });
+  });
 });
