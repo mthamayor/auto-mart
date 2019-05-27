@@ -1,7 +1,7 @@
 /**
  * This is a mapper for the dummy database. perform all transactions here
  */
-import dummyUsers from './dummyUsers';
+import dummyUsers from '../models/dummyUsers';
 
 const dbHelper = {
   getUser(userId) {

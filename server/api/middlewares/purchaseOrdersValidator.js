@@ -4,9 +4,9 @@
  */
 
 import validator from 'validator';
-import dbCarsHelper from '../models/dbCarsHelper';
-import dbOrdersHelper from '../models/dbOrdersHelper';
-import dbHelper from '../models/dbHelper';
+import dbCarsHelper from '../utils/dbCarsHelper';
+import dbOrdersHelper from '../utils/dbOrdersHelper';
+import dbHelper from '../utils/dbHelper';
 
 
 const purchaseOrdersValidator = {

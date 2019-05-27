@@ -6,10 +6,16 @@ import chai, { assert, expect } from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../server';
 import mockUser from './__mock__/mockUser';
+import dbHelper from '../server/api/utils/dbHelper';
 
 chai.use(chaiHttp);
 
 describe('Users auth endpoint test', () => {
+  // Clean up db after all test suites
+  after((done) => {
+    dbHelper.removeAllUsers();
+    done();
+  });
   describe('route POST /api/v1/auth/signup', () => {
     it('should return 201 status & should create a user with correct params', (done) => {
       chai

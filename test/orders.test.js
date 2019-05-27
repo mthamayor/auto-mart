@@ -7,12 +7,30 @@ import chaiHttp from 'chai-http';
 import app from '../server';
 import mockUser from './__mock__/mockUser';
 import mockOrders from './__mock__/mockOrders';
+import dbCarsHelper from '../server/api/utils/dbCarsHelper';
+import dbHelper from '../server/api/utils/dbHelper';
+import mockCars from './__mock__/mockCars';
 
 chai.use(chaiHttp);
 
-describe('Users auth endpoint test', () => {
-  let newUser;
-  // Create a new user and store the response
+describe('Users order endpoint test', () => {
+  let user1;
+  let user2;
+  // create multiple users
+  before((done) => {
+    dbCarsHelper.clearDB();
+    dbHelper.removeAllUsers();
+
+    chai
+      .request(app)
+      .post('/api/v1/auth/signup')
+      .type('form')
+      .send(mockUser.validUser)
+      .end((err, res) => {
+        user1 = res.body.data;
+        done();
+      });
+  });
   before((done) => {
     chai
       .request(app)
@@ -20,9 +38,42 @@ describe('Users auth endpoint test', () => {
       .type('form')
       .send(mockUser.validUser2)
       .end((err, res) => {
-        newUser = res.body.data;
+        user2 = res.body.data;
         done();
       });
+  });
+  before((done) => {
+    // user 1 creates an ad
+    const fileUrl = `${__dirname}/__mock__/__img__/toyota-avalon.jpg`;
+    chai
+      .request(app)
+      .post('/api/v1/car')
+      .set('Authorization', 'Bearer d432dd24')
+      .attach(
+        'imageArray',
+        fileUrl,
+        'toyoto-avalon.jpg',
+      )
+      .type('form')
+      .field('owner', user1.id)
+      .field('state', mockCars.validState)
+      .field('price', mockCars.validPrice)
+      .field('model', mockCars.validModel)
+      .field(
+        'manufacturer',
+        mockCars.validManufacturer,
+      )
+      .field('bodyType', mockCars.validBodyType)
+      .field('name', mockCars.validName)
+      .field('email', user1.email)
+      .end(() => { done(); });
+  });
+
+  // Clean up db after all test suites
+  after((done) => {
+    dbHelper.removeAllUsers();
+    dbCarsHelper.clearDB();
+    done();
   });
   describe('route POST /api/v1/order', () => {
     it('should raise 400 error with invalid or no buyer', (done) => {
@@ -87,7 +138,7 @@ describe('Users auth endpoint test', () => {
         .set('Authorization', 'Bearer d432dd24')
         .type('form')
         .send({
-          buyer: newUser.id,
+          buyer: user2.id,
           priceOffered: mockOrders.validPriceOffered,
         })
         .end((err, res) => {
@@ -114,7 +165,7 @@ describe('Users auth endpoint test', () => {
         .set('Authorization', 'Bearer d432dd24')
         .type('form')
         .send({
-          buyer: newUser.id,
+          buyer: user2.id,
           carId: mockOrders.validCarId,
         })
         .end((err, res) => {
@@ -196,7 +247,7 @@ describe('Users auth endpoint test', () => {
         .set('Authorization', 'Bearer d432dd24')
         .type('form')
         .send({
-          buyer: newUser.id,
+          buyer: user2.id,
           carId: mockOrders.validCarId,
           priceOffered: mockOrders.validPriceOffered,
         })
@@ -223,7 +274,7 @@ describe('Users auth endpoint test', () => {
         .set('Authorization', 'Bearer d432dd24')
         .type('form')
         .send({
-          buyer: newUser.id,
+          buyer: user2.id,
           carId: mockOrders.validCarId,
           priceOffered: mockOrders.validPriceOffered,
         })
@@ -249,7 +300,7 @@ describe('Users auth endpoint test', () => {
         .set('Authorization', 'Bearer d432dd24')
         .type('form')
         .send({
-          buyer: newUser.id,
+          buyer: user2.id,
           newPrice: mockOrders.validnewPrice,
         })
         .end((err, res) => {
@@ -300,7 +351,7 @@ describe('Users auth endpoint test', () => {
         .set('Authorization', 'Bearer d432dd24')
         .type('form')
         .send({
-          buyer: newUser.id,
+          buyer: user2.id,
         })
         .end((err, res) => {
           expect(res).to.have.status(400);
@@ -377,7 +428,7 @@ describe('Users auth endpoint test', () => {
         .set('Authorization', 'Bearer d432dd24')
         .type('form')
         .send({
-          buyer: newUser.id,
+          buyer: user2.id,
           newPrice: mockOrders.validNewPrice,
         })
         .end((err, res) => {

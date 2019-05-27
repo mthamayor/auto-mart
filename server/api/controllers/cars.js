@@ -1,5 +1,5 @@
 import dummyCars from '../models/dummyCars';
-import dbCarsHelper from '../models/dbCarsHelper';
+import dbCarsHelper from '../utils/dbCarsHelper';
 
 const cars = {
   createAd(req, res) {
@@ -48,7 +48,29 @@ const cars = {
         state: car.state,
         status: car.status,
         image_urls: car.imageUrlList,
-        purchase_orders: car.purchaseOrders,
+      },
+    });
+  },
+
+  markAsSold(req, res) {
+    let id = req.params.car_id;
+    id = parseInt(id, 10);
+    dbCarsHelper.markAsSold(id);
+
+    const car = dbCarsHelper.getCar(id);
+
+    res.status(201).send({
+      status: 201,
+      data: {
+        id: car.id,
+        email: car.email,
+        created_on: car.createdOn,
+        manufacturer: car.manufacturer,
+        model: car.model,
+        price: car.price,
+        state: car.state,
+        status: car.status,
+        image_urls: car.imageUrlList,
       },
     });
   },
