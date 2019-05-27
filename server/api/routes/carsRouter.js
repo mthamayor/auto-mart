@@ -13,4 +13,11 @@ const carsRouter = express.Router();
 // Protected route
 carsRouter.post('/', authorization.verifyToken, carsValidator.createAd, cars.createAd);
 
+carsRouter.patch(
+  '/:car_id/status',
+  authorization.verifyToken,
+  carsValidator.markAsSold,
+  cars.markAsSold,
+);
+
 export default carsRouter;

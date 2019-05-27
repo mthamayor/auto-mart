@@ -5,6 +5,7 @@ const mockCars = {
   validEmail: 'anifowose_habeeb@gmail.com',
   validModel: 'camry',
   validPrice: parseFloat(1000000),
+  validNewPrice: '1200000',
   validState: 'new',
   validManufacturer: 'toyota',
   invalidPrice: '13js321',

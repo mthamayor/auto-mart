@@ -1,4 +1,4 @@
-import dummyOrders from './dummyOrders';
+import dummyOrders from '../models/dummyOrders';
 
 const dbOrdersHelper = {
   addPurchaseOrder(order) {
@@ -28,6 +28,11 @@ const dbOrdersHelper = {
       }
     }
     return -1;
+  },
+  clearDB() {
+    while (dummyOrders.length > 0) {
+      dummyOrders.pop();
+    }
   },
 };
 

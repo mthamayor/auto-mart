@@ -6,11 +6,49 @@ import chai, { expect, assert } from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../server';
 import mockCars from './__mock__/mockCars';
+import dbCarsHelper from '../server/api/utils/dbCarsHelper';
+import dbHelper from '../server/api/utils/dbHelper';
+import mockUser from './__mock__/mockUser';
 
 
 chai.use(chaiHttp);
 
 describe('Users car endpoint test', () => {
+  let user1;
+  let user2;
+  before((done) => {
+    dbCarsHelper.clearDB();
+    dbHelper.removeAllUsers();
+    // create multiple users
+    chai
+      .request(app)
+      .post('/api/v1/auth/signup')
+      .type('form')
+      .send(mockUser.validUser)
+      .end((err, res) => {
+        user1 = res.body.data;
+        done();
+      });
+  });
+  before((done) => {
+    chai
+      .request(app)
+      .post('/api/v1/auth/signup')
+      .type('form')
+      .send(mockUser.validUser2)
+      .end((err, res) => {
+        user2 = res.body.data;
+        done();
+      });
+  });
+
+  // Clean up db after all test suites
+  after((done) => {
+    dbHelper.removeAllUsers();
+    dbCarsHelper.clearDB();
+    done();
+  });
+
   describe('route POST /api/v1/car', () => {
     const fileUrl = `${__dirname}/__mock__/__img__/toyota-avalon.jpg`;
     it('should raise 400 error with no attached file', (done) => {
@@ -339,7 +377,7 @@ describe('Users car endpoint test', () => {
         .post('/api/v1/car')
         .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
         .type('form')
-        .field('owner', mockCars.validOwner)
+        .field('owner', user1.id)
         .field('state', mockCars.validState)
         .field('price', mockCars.validPrice)
         .field('model', mockCars.validModel)
@@ -411,6 +449,179 @@ describe('Users car endpoint test', () => {
             price,
             mockCars.validPrice,
             'price should be valid',
+          );
+          done();
+        });
+    });
+  });
+  describe('route POST /api/v1/car/:car_id/price', () => {
+    it('should raise 400 error user is undefined', (done) => {
+      chai
+        .request(app)
+        .patch('/api/v1/car/1/status')
+        .set('Authorization', 'Bearer d432dd24')
+        .type('form')
+        .send({
+          newPrice: mockCars.validNewPrice,
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          assert.strictEqual(
+            res.body.status,
+            400,
+            'Status code should be 400',
+          );
+          assert.strictEqual(
+            res.body.error,
+            'user is required',
+            'user is required',
+          );
+          done();
+        });
+    });
+    it('should raise 400 error when carId is undefined', (done) => {
+      chai
+        .request(app)
+        .patch('/api/v1/car/1as/status')
+        .set('Authorization', 'Bearer d432dd24')
+        .type('form')
+        .send({
+          user: user2.id,
+          newPrice: mockCars.validNewPrice,
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          assert.strictEqual(
+            res.body.status,
+            400,
+            'Status code should be 400',
+          );
+          assert.strictEqual(
+            res.body.error,
+            'car_id parameter is undefined or invalid',
+            'car_id parameter is undefined or invalid',
+          );
+          done();
+        });
+    });
+    it('should raise 400 error newPrice is undefined', (done) => {
+      chai
+        .request(app)
+        .patch('/api/v1/car/1/status')
+        .set('Authorization', 'Bearer d432dd24')
+        .type('form')
+        .send({
+          user: user2.id,
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          assert.strictEqual(
+            res.body.status,
+            400,
+            'Status code should be 400',
+          );
+          assert.strictEqual(
+            res.body.error,
+            'newPrice is undefined or invalid',
+            'newPrice is undefined or invalid',
+          );
+          done();
+        });
+    });
+    it('should raise 404 error if car advert does not exist', (done) => {
+      chai
+        .request(app)
+        .patch('/api/v1/car/2/status')
+        .set('Authorization', 'Bearer d432dd24')
+        .type('form')
+        .send({
+          user: user2.id,
+          newPrice: mockCars.validNewPrice,
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(404);
+          assert.strictEqual(
+            res.body.status,
+            404,
+            'Status code should be 404',
+          );
+          assert.strictEqual(
+            res.body.error,
+            'car advert does not exist',
+            'car advert does not exist',
+          );
+          done();
+        });
+    });
+    it('should raise 403 error if trying to edit another user\'s ad', (done) => {
+      chai
+        .request(app)
+        .patch('/api/v1/car/1/status')
+        .set('Authorization', 'Bearer d432dd24')
+        .type('form')
+        .send({
+          user: user2.id,
+          newPrice: mockCars.validNewPrice,
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(403);
+          assert.strictEqual(
+            res.body.status,
+            403,
+            'Status code should be 403',
+          );
+          assert.strictEqual(
+            res.body.error,
+            "you cannot edit another user's advert",
+            "you cannot edit another user's advert",
+          );
+          done();
+        });
+    });
+    it("should raise 403 error if trying to edit another user's ad", (done) => {
+      chai
+        .request(app)
+        .patch('/api/v1/car/1/status')
+        .set('Authorization', 'Bearer d432dd24')
+        .type('form')
+        .send({
+          user: user1.id,
+          newPrice: mockCars.validNewPrice,
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(201);
+          const { data } = res.body;
+          assert.strictEqual(
+            res.body.status,
+            201,
+            'Status code should be 201',
+          );
+          assert.strictEqual(data.status, 'sold', "advert status shoulb be 'sold'");
+          done();
+        });
+    });
+    it('should raise 409 error if trying to edit sold car', (done) => {
+      chai
+        .request(app)
+        .patch('/api/v1/car/1/status')
+        .set('Authorization', 'Bearer d432dd24')
+        .type('form')
+        .send({
+          user: user1.id,
+          newPrice: mockCars.validNewPrice,
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(409);
+          const { error } = res.body;
+          assert.strictEqual(
+            res.body.status,
+            409,
+            'Status code should be 409',
+          );
+          assert.strictEqual(
+            error,
+            'the car has already been marked as sold',
+            'the car has already been marked as sold',
           );
           done();
         });

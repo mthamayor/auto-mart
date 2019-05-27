@@ -9,6 +9,7 @@ import fs from 'fs';
 import { promisify } from 'util';
 
 import helpers from '../utils/helpers';
+import dbCarsHelper from '../utils/dbCarsHelper';
 
 const unlinkAsync = promisify(fs.unlink);
 
@@ -138,6 +139,67 @@ const carsValidator = {
       req.body.imageUrlList = imageList;
       return next();
     });
+  },
+  markAsSold(req, res, next) {
+    const carId = req.params.car_id;
+    const { user, newPrice } = req.body;
+
+    if (
+      user === undefined
+      || user.trim() === ''
+      || !validator.isNumeric(user)
+    ) {
+      return res.status(400).send({
+        status: 400,
+        error: 'user is required',
+      });
+    }
+    if (
+      carId === undefined
+      || carId.trim() === ''
+      || !validator.isNumeric(carId)
+    ) {
+      return res.status(400).send({
+        status: 400,
+        error: 'car_id parameter is undefined or invalid',
+      });
+    }
+
+    if (
+      newPrice === undefined
+      || newPrice.trim() === ''
+      || !validator.isNumeric(newPrice)
+    ) {
+      return res.status(400).send({
+        status: 400,
+        error: 'newPrice is undefined or invalid',
+      });
+    }
+
+    const findCar = dbCarsHelper.getCar(parseInt(carId, 10));
+
+    if (findCar === -1) {
+      return res.status(404).send({
+        status: 404,
+        error: 'car advert does not exist',
+      });
+    }
+
+    if (findCar.owner !== parseInt(user, 10)) {
+      return res.status(403).send({
+        status: 403,
+        error: "you cannot edit another user's advert",
+      });
+    }
+
+    if (findCar.status !== 'available') {
+      return res.status(409).send({
+        status: 409,
+        error: 'the car has already been marked as sold',
+      });
+    }
+
+    return next();
   },
 };
 

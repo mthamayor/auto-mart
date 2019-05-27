@@ -1,6 +1,6 @@
 import dummyOrders from '../models/dummyOrders';
-import dbCarsHelper from '../models/dbCarsHelper';
-import dbOrdersHelper from '../models/dbOrdersHelper';
+import dbCarsHelper from '../utils/dbCarsHelper';
+import dbOrdersHelper from '../utils/dbOrdersHelper';
 
 const purchaseOrders = {
   createOrder(req, res) {

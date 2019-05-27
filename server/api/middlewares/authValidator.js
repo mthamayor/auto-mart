@@ -5,7 +5,7 @@
 
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
-import dbHelper from '../models/dbHelper';
+import dbHelper from '../utils/dbHelper';
 
 const authValidator = {
   signUp(req, res, next) {

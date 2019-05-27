@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import helpers from '../utils/helpers';
 import dummyUsers from '../models/dummyUsers';
-import dbHelper from '../models/dbHelper';
+import dbHelper from '../utils/dbHelper';
 
 /**
  * Auth controller
