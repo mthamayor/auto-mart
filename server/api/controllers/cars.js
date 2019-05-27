@@ -74,6 +74,32 @@ const cars = {
       },
     });
   },
+  updateCarPice(req, res) {
+    let id = req.params.car_id;
+    let { newPrice } = req.body;
+
+    id = parseInt(id, 10);
+    newPrice = parseFloat(newPrice);
+
+    dbCarsHelper.updateCarPrice(id, newPrice);
+
+    const car = dbCarsHelper.getCar(id);
+
+    res.status(201).send({
+      status: 201,
+      data: {
+        id: car.id,
+        email: car.email,
+        created_on: car.createdOn,
+        manufacturer: car.manufacturer,
+        model: car.model,
+        price: car.price,
+        state: car.state,
+        status: car.status,
+        image_urls: car.imageUrlList,
+      },
+    });
+  },
 };
 
 export default cars;
