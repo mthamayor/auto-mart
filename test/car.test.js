@@ -16,8 +16,8 @@ chai.use(chaiHttp);
 describe('Users car endpoint test', () => {
   let user1;
   let user2;
+  const fileUrl = `${__dirname}/__mock__/__img__/toyota-avalon.jpg`;
   before((done) => {
-    dbCarsHelper.clearDB();
     dbHelper.removeAllUsers();
     // create multiple users
     chai
@@ -50,7 +50,6 @@ describe('Users car endpoint test', () => {
   });
 
   describe('route POST /api/v1/car', () => {
-    const fileUrl = `${__dirname}/__mock__/__img__/toyota-avalon.jpg`;
     it('should raise 400 error with no attached file', (done) => {
       chai
         .request(app)
@@ -454,7 +453,31 @@ describe('Users car endpoint test', () => {
         });
     });
   });
-  describe('route POST /api/v1/car/:car_id/price', () => {
+  describe('route POST /api/v1/car/:car_id/status', () => {
+    before((done) => {
+      dbCarsHelper.clearDB();
+      done();
+    });
+    before((done) => {
+      chai
+        .request(app)
+        .post('/api/v1/car')
+        .set('Authorization', 'Bearer d432dd24')
+        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .type('form')
+        .field('owner', user1.id)
+        .field('state', mockCars.validState)
+        .field('price', mockCars.validPrice)
+        .field('model', mockCars.validModel)
+        .field('manufacturer', mockCars.validManufacturer)
+        .field('bodyType', mockCars.validBodyType)
+        .field('name', mockCars.validName)
+        .field('email', user1.email)
+        .end(() => {
+          done();
+        });
+    });
+
     it('should raise 400 error user is undefined', (done) => {
       chai
         .request(app)
@@ -462,7 +485,6 @@ describe('Users car endpoint test', () => {
         .set('Authorization', 'Bearer d432dd24')
         .type('form')
         .send({
-          newPrice: mockCars.validNewPrice,
         })
         .end((err, res) => {
           expect(res).to.have.status(400);
@@ -487,7 +509,6 @@ describe('Users car endpoint test', () => {
         .type('form')
         .send({
           user: user2.id,
-          newPrice: mockCars.validNewPrice,
         })
         .end((err, res) => {
           expect(res).to.have.status(400);
@@ -500,30 +521,6 @@ describe('Users car endpoint test', () => {
             res.body.error,
             'car_id parameter is undefined or invalid',
             'car_id parameter is undefined or invalid',
-          );
-          done();
-        });
-    });
-    it('should raise 400 error newPrice is undefined', (done) => {
-      chai
-        .request(app)
-        .patch('/api/v1/car/1/status')
-        .set('Authorization', 'Bearer d432dd24')
-        .type('form')
-        .send({
-          user: user2.id,
-        })
-        .end((err, res) => {
-          expect(res).to.have.status(400);
-          assert.strictEqual(
-            res.body.status,
-            400,
-            'Status code should be 400',
-          );
-          assert.strictEqual(
-            res.body.error,
-            'newPrice is undefined or invalid',
-            'newPrice is undefined or invalid',
           );
           done();
         });
@@ -536,7 +533,6 @@ describe('Users car endpoint test', () => {
         .type('form')
         .send({
           user: user2.id,
-          newPrice: mockCars.validNewPrice,
         })
         .end((err, res) => {
           expect(res).to.have.status(404);
@@ -561,7 +557,6 @@ describe('Users car endpoint test', () => {
         .type('form')
         .send({
           user: user2.id,
-          newPrice: mockCars.validNewPrice,
         })
         .end((err, res) => {
           expect(res).to.have.status(403);
@@ -578,7 +573,7 @@ describe('Users car endpoint test', () => {
           done();
         });
     });
-    it("should raise 403 error if trying to edit another user's ad", (done) => {
+    it('should raise 201 when ad is successfully marked as sold', (done) => {
       chai
         .request(app)
         .patch('/api/v1/car/1/status')
@@ -586,17 +581,20 @@ describe('Users car endpoint test', () => {
         .type('form')
         .send({
           user: user1.id,
-          newPrice: mockCars.validNewPrice,
         })
         .end((err, res) => {
           expect(res).to.have.status(201);
-          const { data } = res.body;
+          const { status, data } = res.body;
           assert.strictEqual(
-            res.body.status,
+            status,
             201,
             'Status code should be 201',
           );
-          assert.strictEqual(data.status, 'sold', "advert status shoulb be 'sold'");
+          assert.strictEqual(
+            data.status,
+            'sold',
+            'Car status should be sold',
+          );
           done();
         });
     });
@@ -608,7 +606,6 @@ describe('Users car endpoint test', () => {
         .type('form')
         .send({
           user: user1.id,
-          newPrice: mockCars.validNewPrice,
         })
         .end((err, res) => {
           expect(res).to.have.status(409);
@@ -623,6 +620,71 @@ describe('Users car endpoint test', () => {
             'the car has already been marked as sold',
             'the car has already been marked as sold',
           );
+          done();
+        });
+    });
+  });
+  describe('route POST /api/v1/car/:car_id/price', () => {
+    before((done) => {
+      dbCarsHelper.clearDB();
+      chai
+        .request(app)
+        .post('/api/v1/car')
+        .set('Authorization', 'Bearer d432dd24')
+        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .type('form')
+        .field('owner', user1.id)
+        .field('state', mockCars.validState)
+        .field('price', mockCars.validPrice)
+        .field('model', mockCars.validModel)
+        .field('manufacturer', mockCars.validManufacturer)
+        .field('bodyType', mockCars.validBodyType)
+        .field('name', mockCars.validName)
+        .field('email', user1.email)
+        .end(() => { done(); });
+    });
+    it('should raise 400 error newPrice is undefined', (done) => {
+      chai
+        .request(app)
+        .patch('/api/v1/car/1/price')
+        .set('Authorization', 'Bearer d432dd24')
+        .type('form')
+        .send({
+          user: user1.id,
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          assert.strictEqual(
+            res.body.status,
+            400,
+            'Status code should be 400',
+          );
+          assert.strictEqual(
+            res.body.error,
+            'newPrice is undefined or invalid',
+            'newPrice is undefined or invalid',
+          );
+          done();
+        });
+    });
+    it('should raise 201 when price is successfully updated', (done) => {
+      chai
+        .request(app)
+        .patch('/api/v1/car/1/price')
+        .set('Authorization', 'Bearer d432dd24')
+        .type('form')
+        .send({
+          user: user1.id,
+          newPrice: '1200000',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(201);
+          assert.strictEqual(
+            res.body.status,
+            201,
+            'Status code should be 201',
+          );
+
           done();
         });
     });

@@ -20,4 +20,12 @@ carsRouter.patch(
   cars.markAsSold,
 );
 
+carsRouter.patch(
+  '/:car_id/price',
+  authorization.verifyToken,
+  carsValidator.markAsSold,
+  carsValidator.updateCarPrice,
+  cars.updateCarPice,
+);
+
 export default carsRouter;

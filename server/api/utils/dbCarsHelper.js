@@ -26,5 +26,14 @@ const dbCarsHelper = {
       dummyCars.pop();
     }
   },
+  updateCarPrice(id, newPrice) {
+    for (let i = 0; i < dummyCars.length; i += 1) {
+      if (dummyCars[i].id === id) {
+        dummyCars[i].price = newPrice;
+        return dummyCars[i];
+      }
+    }
+    return -1;
+  },
 };
 export default dbCarsHelper;

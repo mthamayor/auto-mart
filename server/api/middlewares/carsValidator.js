@@ -142,7 +142,7 @@ const carsValidator = {
   },
   markAsSold(req, res, next) {
     const carId = req.params.car_id;
-    const { user, newPrice } = req.body;
+    const { user } = req.body;
 
     if (
       user === undefined
@@ -164,18 +164,6 @@ const carsValidator = {
         error: 'car_id parameter is undefined or invalid',
       });
     }
-
-    if (
-      newPrice === undefined
-      || newPrice.trim() === ''
-      || !validator.isNumeric(newPrice)
-    ) {
-      return res.status(400).send({
-        status: 400,
-        error: 'newPrice is undefined or invalid',
-      });
-    }
-
     const findCar = dbCarsHelper.getCar(parseInt(carId, 10));
 
     if (findCar === -1) {
@@ -199,6 +187,20 @@ const carsValidator = {
       });
     }
 
+    return next();
+  },
+  updateCarPrice(req, res, next) {
+    const { newPrice } = req.body;
+    if (
+      newPrice === undefined
+      || newPrice.trim() === ''
+      || !validator.isNumeric(newPrice)
+    ) {
+      return res.status(400).send({
+        status: 400,
+        error: 'newPrice is undefined or invalid',
+      });
+    }
     return next();
   },
 };
