@@ -203,6 +203,26 @@ const carsValidator = {
     }
     return next();
   },
+  getUserCar(req, res, next) {
+    const carId = req.params.car_id;
+    if (
+      carId.trim() === ''
+      || !validator.isNumeric(carId)
+    ) {
+      return res.status(400).send({
+        status: 400,
+        error: 'car_id parameter is not a valid number',
+      });
+    }
+    const car = dbCarsHelper.getUserCar(parseInt(carId, 10));
+    if (car === -1) {
+      return res.status(404).send({
+        status: 404,
+        error: 'car does not exist',
+      });
+    }
+    return next();
+  },
 };
 
 export default carsValidator;

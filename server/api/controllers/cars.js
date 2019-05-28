@@ -100,6 +100,30 @@ const cars = {
       },
     });
   },
+  getUserCar(req, res) {
+    let carId = req.params.car_id;
+    carId = parseInt(carId, 10);
+
+    const car = dbCarsHelper.getUserCar(carId);
+
+    res.status(200).send({
+      status: 200,
+      data: {
+        id: car.id,
+        created_on: car.createdOn,
+        status: car.status,
+        state: car.state,
+        price: car.price,
+        model: car.model,
+        body_type: car.bodyType,
+        email: car.email,
+        image_url_list: car.imageUrlList,
+        owner: car.owner,
+        name: car.name,
+
+      },
+    });
+  },
 };
 
 export default cars;

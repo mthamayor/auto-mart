@@ -12,6 +12,14 @@ const dbCarsHelper = {
     }
     return -1;
   },
+  getUserCar(id) {
+    for (let i = 0; i < dummyCars.length; i += 1) {
+      if (dummyCars[i].id === id && dummyCars[i].status === 'available') {
+        return dummyCars[i];
+      }
+    }
+    return -1;
+  },
   markAsSold(id) {
     for (let i = 0; i < dummyCars.length; i += 1) {
       if (dummyCars[i].id === id) {
