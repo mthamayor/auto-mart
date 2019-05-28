@@ -4,10 +4,9 @@ import dbOrdersHelper from '../utils/dbOrdersHelper';
 
 const purchaseOrders = {
   createOrder(req, res) {
-    let { buyer, carId, priceOffered } = req.body;
-
+    let { carId, priceOffered } = req.body;
+    const authData = req.authToken.data;
     carId = parseInt(carId, 10);
-    buyer = parseInt(buyer, 10);
     priceOffered = parseFloat(priceOffered);
 
     const status = 'pending';
@@ -16,8 +15,8 @@ const purchaseOrders = {
 
     dbOrdersHelper.addPurchaseOrder({
       id,
+      buyer: authData.id,
       carId,
-      buyer,
       priceOffered,
       createdOn,
       status,
@@ -28,6 +27,7 @@ const purchaseOrders = {
       status: 201,
       data: {
         id,
+        buyer: authData.id,
         car_id: parseInt(carId, 10),
         created_on: createdOn,
         status,

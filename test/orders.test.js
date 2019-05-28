@@ -16,6 +16,8 @@ chai.use(chaiHttp);
 describe('Users order endpoint test', () => {
   let user1;
   let user2;
+  let carCreated;
+  let carCreated2;
   // create multiple users
   before((done) => {
     dbCarsHelper.clearDB();
@@ -48,25 +50,56 @@ describe('Users order endpoint test', () => {
     chai
       .request(app)
       .post('/api/v1/car')
-      .set('Authorization', 'Bearer d432dd24')
-      .attach(
-        'imageArray',
-        fileUrl,
-        'toyoto-avalon.jpg',
-      )
+      .set('Authorization', `Bearer ${user1.token}`)
+      .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
       .type('form')
       .field('owner', user1.id)
       .field('state', mockCars.validState)
       .field('price', mockCars.validPrice)
       .field('model', mockCars.validModel)
-      .field(
-        'manufacturer',
-        mockCars.validManufacturer,
-      )
+      .field('manufacturer', mockCars.validManufacturer)
       .field('bodyType', mockCars.validBodyType)
       .field('name', mockCars.validName)
       .field('email', user1.email)
-      .end(() => { done(); });
+      .end((err, res) => {
+        carCreated = res.body.data;
+        done();
+      });
+  });
+
+  // create a sold advert
+  before((done) => {
+    // user 1 creates second advert
+    const fileUrl = `${__dirname}/__mock__/__img__/toyota-avalon.jpg`;
+    chai
+      .request(app)
+      .post('/api/v1/car')
+      .set('Authorization', `Bearer ${user1.token}`)
+      .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+      .type('form')
+      .field('owner', user1.id)
+      .field('state', mockCars.validState)
+      .field('price', mockCars.validPrice)
+      .field('model', mockCars.validModel)
+      .field('manufacturer', mockCars.validManufacturer)
+      .field('bodyType', mockCars.validBodyType)
+      .field('name', mockCars.validName)
+      .field('email', user1.email)
+      .end((err, res) => {
+        carCreated2 = res.body.data;
+        done();
+      });
+  });
+  before((done) => {
+    chai
+      .request(app)
+      .patch(`/api/v1/car/${carCreated2.id}/status`)
+      .set('Authorization', `Bearer ${user1.token}`)
+      .type('form')
+      .send()
+      .end(() => {
+        done();
+      });
   });
 
   // Clean up db after all test suites
@@ -76,69 +109,13 @@ describe('Users order endpoint test', () => {
     done();
   });
   describe('route POST /api/v1/order', () => {
-    it('should raise 400 error with invalid or no buyer', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/order')
-        .set('Authorization', 'Bearer d432dd24')
-        .type('form')
-        .send({
-          carId: mockOrders.validCarId,
-          priceOffered: mockOrders.validPriceOffered,
-        })
-        .end((err, res) => {
-          expect(res).to.have.status(400);
-
-          assert.strictEqual(
-            res.body.status,
-            400,
-            'Status code should be 400',
-          );
-          assert.strictEqual(
-            res.body.error,
-            'buyer id is undefined or invalid',
-            'buyer id is undefined or invalid',
-          );
-
-          done();
-        });
-    });
-    it('should raise 404 error with non existent buyer', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/order')
-        .set('Authorization', 'Bearer d432dd24')
-        .type('form')
-        .send({
-          buyer: mockOrders.nonExistingBuyer,
-          carId: mockOrders.validCarId,
-          priceOffered: mockOrders.validPriceOffered,
-        })
-        .end((err, res) => {
-          expect(res).to.have.status(404);
-
-          assert.strictEqual(
-            res.body.status,
-            404,
-            'Status code should be 404',
-          );
-          assert.strictEqual(
-            res.body.error,
-            'buyer does not exist',
-            'buyer does not exist',
-          );
-
-          done();
-        });
-    });
     it('should raise 400 error with invalid or no car id', (done) => {
       chai
         .request(app)
         .post('/api/v1/order')
-        .set('Authorization', 'Bearer d432dd24')
+        .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send({
-          buyer: user2.id,
           priceOffered: mockOrders.validPriceOffered,
         })
         .end((err, res) => {
@@ -162,11 +139,10 @@ describe('Users order endpoint test', () => {
       chai
         .request(app)
         .post('/api/v1/order')
-        .set('Authorization', 'Bearer d432dd24')
+        .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send({
-          buyer: user2.id,
-          carId: mockOrders.validCarId,
+          carId: carCreated.id,
         })
         .end((err, res) => {
           expect(res).to.have.status(400);
@@ -189,10 +165,9 @@ describe('Users order endpoint test', () => {
       chai
         .request(app)
         .post('/api/v1/order')
-        .set('Authorization', 'Bearer d432dd24')
+        .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send({
-          buyer: mockOrders.adCreatorId,
           carId: mockOrders.nonExistingAdId,
           priceOffered: mockOrders.validPriceOffered,
         })
@@ -213,15 +188,40 @@ describe('Users order endpoint test', () => {
           done();
         });
     });
+    it('should raise 403 error with making purchase order on sold car', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/order')
+        .set('Authorization', `Bearer ${user2.token}`)
+        .type('form')
+        .send({
+          carId: carCreated2.id,
+          priceOffered: mockOrders.validPriceOffered,
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(403);
+          assert.strictEqual(
+            res.body.status,
+            403,
+            'Status code should be 403',
+          );
+          assert.strictEqual(
+            res.body.error,
+            'car has already been sold',
+            'car has already been sold',
+          );
+
+          done();
+        });
+    });
     it('should raise 409 error with ad creator making purchase order', (done) => {
       chai
         .request(app)
         .post('/api/v1/order')
-        .set('Authorization', 'Bearer d432dd24')
+        .set('Authorization', `Bearer ${user1.token}`)
         .type('form')
         .send({
-          buyer: mockOrders.adCreatorId,
-          carId: mockOrders.validCarId,
+          carId: carCreated.id,
           priceOffered: mockOrders.validPriceOffered,
         })
         .end((err, res) => {
@@ -244,10 +244,9 @@ describe('Users order endpoint test', () => {
       chai
         .request(app)
         .post('/api/v1/order')
-        .set('Authorization', 'Bearer d432dd24')
+        .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send({
-          buyer: user2.id,
           carId: mockOrders.validCarId,
           priceOffered: mockOrders.validPriceOffered,
         })
@@ -259,11 +258,7 @@ describe('Users order endpoint test', () => {
           expect(data).to.have.property('created_on');
           expect(data).to.have.property('price_offered');
 
-          assert.strictEqual(
-            status,
-            201,
-            'Status code should be 201',
-          );
+          assert.strictEqual(status, 201, 'Status code should be 201');
           done();
         });
     });
@@ -271,10 +266,9 @@ describe('Users order endpoint test', () => {
       chai
         .request(app)
         .post('/api/v1/order')
-        .set('Authorization', 'Bearer d432dd24')
+        .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send({
-          buyer: user2.id,
           carId: mockOrders.validCarId,
           priceOffered: mockOrders.validPriceOffered,
         })
@@ -297,33 +291,7 @@ describe('Users order endpoint test', () => {
       chai
         .request(app)
         .patch('/api/v1/order/1s/price')
-        .set('Authorization', 'Bearer d432dd24')
-        .type('form')
-        .send({
-          buyer: user2.id,
-          newPrice: mockOrders.validnewPrice,
-        })
-        .end((err, res) => {
-          expect(res).to.have.status(400);
-
-          assert.strictEqual(
-            res.body.status,
-            400,
-            'Status code should be 400',
-          );
-          assert.strictEqual(
-            res.body.error,
-            'order id is undefined or invalid',
-            'order id is undefined or invalid',
-          );
-          done();
-        });
-    });
-    it('should raise 400 error with invalid buyer id or no buyer id', (done) => {
-      chai
-        .request(app)
-        .patch('/api/v1/order/1/price')
-        .set('Authorization', 'Bearer d432dd24')
+        .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send({
           newPrice: mockOrders.validnewPrice,
@@ -338,8 +306,8 @@ describe('Users order endpoint test', () => {
           );
           assert.strictEqual(
             res.body.error,
-            'buyer id is undefined or invalid',
-            'buyer id is undefined or invalid',
+            'order id is undefined or invalid',
+            'order id is undefined or invalid',
           );
           done();
         });
@@ -348,11 +316,9 @@ describe('Users order endpoint test', () => {
       chai
         .request(app)
         .patch('/api/v1/order/1/price')
-        .set('Authorization', 'Bearer d432dd24')
+        .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
-        .send({
-          buyer: user2.id,
-        })
+        .send()
         .end((err, res) => {
           expect(res).to.have.status(400);
 
@@ -373,10 +339,9 @@ describe('Users order endpoint test', () => {
       chai
         .request(app)
         .patch('/api/v1/order/1/price')
-        .set('Authorization', 'Bearer d432dd24')
+        .set('Authorization', `Bearer ${user1.token}`)
         .type('form')
         .send({
-          buyer: 1,
           newPrice: mockOrders.validNewPrice,
         })
         .end((err, res) => {
@@ -399,10 +364,9 @@ describe('Users order endpoint test', () => {
       chai
         .request(app)
         .patch('/api/v1/order/10101/price')
-        .set('Authorization', 'Bearer d432dd24')
+        .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send({
-          buyer: 1,
           newPrice: mockOrders.validNewPrice,
         })
         .end((err, res) => {
@@ -425,10 +389,9 @@ describe('Users order endpoint test', () => {
       chai
         .request(app)
         .patch('/api/v1/order/1/price')
-        .set('Authorization', 'Bearer d432dd24')
+        .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send({
-          buyer: user2.id,
           newPrice: mockOrders.validNewPrice,
         })
         .end((err, res) => {

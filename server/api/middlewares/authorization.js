@@ -7,35 +7,39 @@ const authorization = {
    */
   verifyToken(req, res, next) {
     const bearerHeader = req.headers.authorization;
-
+    let token;
     // Check if bearer is undefined
     if (typeof bearerHeader !== 'undefined') {
       const bearer = bearerHeader.split(' ');
       const bearerToken = bearer[1];
-      req.token = bearerToken;
+      token = bearerToken;
     } else {
-      return res.status(401).send({
+      res.status(401).send({
         status: 401,
         error: 'authorization token not provided',
       });
+      return;
     }
 
     // Check if the token is valid
-    // invalid token - synchronous
+    // invalid token - asynchronous
 
-    try {
-      jwt.verify(req.token, process.env.JWT_SECRET || 'jwtSecret');
-    } catch (err) {
-      // err
-      if (process.env.NODE_ENV === 'production') {
-        return res.status(401).send({
+    const secret = process.env.JWT_SECRET || 'jwtSecret';
+    jwt.verify(token, secret, (err, authToken) => {
+      if (err) {
+        res.status(401).send({
           status: 401,
-          error: 'invalid access token provided, please sign in',
+          error:
+            'user not authenticated, invalid authorization token provided',
         });
+        return;
       }
-    }
+      // if authenticated with auth token,
+      // append authToken to request
 
-    return next();
+      req.authToken = authToken;
+      next();
+    });
   },
 };
 

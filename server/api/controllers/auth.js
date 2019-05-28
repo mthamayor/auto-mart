@@ -45,11 +45,24 @@ const auth = {
     const data = dbHelper.getUser(id);
 
     // Create a jwt token and send along with the data
-    const payload = { data };
     const options = { expiresIn: '1d' };
-    const secret = process.env.JWT_SECRET;
+    const secret = process.env.JWT_SECRET || 'jwtSecret';
 
-    jwt.sign(payload, secret, options, (err, token) => res.status(201).send({
+    const token = jwt.sign(
+      {
+        data: {
+          id: data.id,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          address: data.address,
+          isAdmin: data.isAdmin,
+        },
+      },
+      secret,
+      options,
+    );
+    return res.status(201).send({
       status: 201,
       data: {
         token,
@@ -60,7 +73,7 @@ const auth = {
         address: data.address,
         isAdmin: data.isAdmin,
       },
-    }));
+    });
   },
 
   /**
@@ -75,11 +88,25 @@ const auth = {
     const data = dbHelper.getUserByEmail(email);
 
     // Create a jwt token and send along with the data
-    const payload = { data };
     const options = { expiresIn: '1d' };
-    const secret = process.env.JWT_SECRET;
+    const secret = process.env.JWT_SECRET || 'jwtSecret';
 
-    jwt.sign(payload, secret, options, (err, token) => res.status(200).send({
+    const token = jwt.sign(
+      {
+        data: {
+          id: data.id,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          address: data.address,
+          isAdmin: data.isAdmin,
+        },
+      },
+      secret,
+      options,
+    );
+
+    return res.status(200).send({
       status: 200,
       data: {
         token,
@@ -90,7 +117,7 @@ const auth = {
         address: data.address,
         isAdmin: data.isAdmin,
       },
-    }));
+    });
   },
 };
 
