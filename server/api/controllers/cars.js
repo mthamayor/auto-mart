@@ -4,9 +4,7 @@ import dbCarsHelper from '../utils/dbCarsHelper';
 const cars = {
   createAd(req, res) {
     const {
-      owner,
       state,
-      email,
       price,
       manufacturer,
       model,
@@ -18,9 +16,11 @@ const cars = {
     const createdOn = Date.now();
     const status = 'available';
     const id = dummyCars.length + 1;
+    const authData = req.authToken.data;
 
     dbCarsHelper.addCar({
       id,
+      owner: authData.id,
       createdOn,
       manufacturer,
       status,
@@ -29,8 +29,6 @@ const cars = {
       model,
       name,
       bodyType,
-      owner: parseInt(owner, 10),
-      email,
       imageUrlList,
     });
 
@@ -63,7 +61,7 @@ const cars = {
       status: 201,
       data: {
         id: car.id,
-        email: car.email,
+        owner: car.owner,
         created_on: car.createdOn,
         manufacturer: car.manufacturer,
         model: car.model,

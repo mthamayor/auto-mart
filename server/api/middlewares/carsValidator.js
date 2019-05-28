@@ -40,33 +40,13 @@ const carsValidator = {
 
       const imgFiles = req.files;
       const {
-        owner,
         state,
         price,
         manufacturer,
         model,
         bodyType,
         name,
-        email,
       } = req.body;
-      if (owner === undefined || owner.trim() === '') {
-        return res.status(400).send({
-          status: 400,
-          error: 'owner undefined or invalid',
-        });
-      }
-      if (!validator.isNumeric(owner)) {
-        return res.status(400).send({
-          status: 400,
-          error: 'owner is not a number',
-        });
-      }
-      if (email === undefined || email.trim() === '' || !validator.isEmail(email)) {
-        return res.status(400).send({
-          status: 400,
-          error: 'email is not valid',
-        });
-      }
       if (state === undefined || state.trim() === '') {
         return res.status(400).send({
           status: 400,
@@ -142,18 +122,12 @@ const carsValidator = {
   },
   markAsSold(req, res, next) {
     const carId = req.params.car_id;
-    const { user } = req.body;
+    const authData = req.authToken;
+    let user;
+    if (authData.id === undefined) {
+      user = authData.data.id;
+    } else { user = authData.id; }
 
-    if (
-      user === undefined
-      || user.trim() === ''
-      || !validator.isNumeric(user)
-    ) {
-      return res.status(400).send({
-        status: 400,
-        error: 'user is required',
-      });
-    }
     if (
       carId === undefined
       || carId.trim() === ''
@@ -172,8 +146,7 @@ const carsValidator = {
         error: 'car advert does not exist',
       });
     }
-
-    if (findCar.owner !== parseInt(user, 10)) {
+    if (findCar.owner !== user) {
       return res.status(403).send({
         status: 403,
         error: "you cannot edit another user's advert",
@@ -191,18 +164,21 @@ const carsValidator = {
   },
   updateCarPrice(req, res, next) {
     const { newPrice } = req.body;
+
     if (
       newPrice === undefined
       || newPrice.trim() === ''
       || !validator.isNumeric(newPrice)
     ) {
-      return res.status(400).send({
+      res.status(400).send({
         status: 400,
         error: 'newPrice is undefined or invalid',
       });
+      return;
     }
-    return next();
+    next();
   },
+
   getUserCar(req, res, next) {
     const carId = req.params.car_id;
     if (

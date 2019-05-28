@@ -50,326 +50,6 @@ describe('Users car endpoint test', () => {
   });
 
   describe('route POST /api/v1/car', () => {
-    it('should raise 400 error with no attached file', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/car')
-        .set('Authorization', 'Bearer d432dd24')
-        .type('form')
-        .field('owner', mockCars.validOwner)
-        .field('state', mockCars.validState)
-        .field('price', mockCars.validPrice)
-        .field('model', mockCars.validModel)
-        .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
-        .field('name', mockCars.validName)
-        .field('email', mockCars.validEmail)
-        .end((err, res) => {
-          expect(res).to.have.status(400);
-          const { error } = res.body;
-          assert.strictEqual(
-            error,
-            'please add between 1 and 6 images',
-            'correct number of images should be added',
-          );
-          done();
-        });
-    });
-
-    it('should raise 400 error with no or invalid owner', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/car')
-        .set('Authorization', 'Bearer d432dd24')
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
-        .type('form')
-        .field('state', mockCars.validState)
-        .field('price', mockCars.validPrice)
-        .field('model', mockCars.validModel)
-        .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
-        .field('name', mockCars.validName)
-        .field('email', mockCars.validEmail)
-        .end((err, res) => {
-          expect(res).to.have.status(400);
-
-          const { error } = res.body;
-          assert.strictEqual(
-            error,
-            'owner undefined or invalid',
-            'The owner should be valid',
-          );
-          done();
-        });
-    });
-
-    it('should raise 400 error with no attached state', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/car')
-        .set('Authorization', 'Bearer d432dd24')
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
-        .type('form')
-        .field('owner', mockCars.validOwner)
-        .field('price', mockCars.validPrice)
-        .field('model', mockCars.validModel)
-        .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
-        .field('name', mockCars.validName)
-        .field('email', mockCars.validEmail)
-        .end((err, res) => {
-          expect(res).to.have.status(400);
-
-          const { error } = res.body;
-          assert.strictEqual(
-            error,
-            'vehicle state is undefined',
-            'vehicle state was not defined',
-          );
-
-          done();
-        });
-    });
-
-    it('should raise 400 error with an invalid state', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/car')
-        .set('Authorization', 'Bearer d432dd24')
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
-        .type('form')
-        .field('owner', mockCars.validOwner)
-        .field('price', mockCars.validPrice)
-        .field('model', mockCars.validModel)
-        .field('state', mockCars.invalidState)
-        .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
-        .field('name', mockCars.validName)
-        .field('email', mockCars.validEmail)
-        .end((err, res) => {
-          expect(res).to.have.status(400);
-
-          const { error } = res.body;
-          assert.strictEqual(
-            error,
-            'vehicle state can only be new or used',
-            'vehicle state can only be new or used',
-          );
-
-          done();
-        });
-    });
-
-    it('should raise 400 error with no  price', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/car')
-        .set('Authorization', 'Bearer d432dd24')
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
-        .type('form')
-        .field('owner', mockCars.validOwner)
-        .field('state', mockCars.validState)
-        .field('model', mockCars.validModel)
-        .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
-        .field('name', mockCars.validName)
-        .field('email', mockCars.validEmail)
-        .end((err, res) => {
-          expect(res).to.have.status(400);
-
-          done();
-        });
-    });
-
-    it('should raise 400 error with undefined price', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/car')
-        .set('Authorization', 'Bearer d432dd24')
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
-        .type('form')
-        .field('owner', mockCars.validOwner)
-        .field('state', mockCars.validState)
-        .field('model', mockCars.validModel)
-        .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
-        .field('name', mockCars.validName)
-        .field('email', mockCars.validEmail)
-        .end((err, res) => {
-          expect(res).to.have.status(400);
-
-          const { error } = res.body;
-          assert.strictEqual(
-            error,
-            'price is undefined',
-            'price is undefined',
-          );
-
-          done();
-        });
-    });
-
-    it('should raise 400 error with invalid price', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/car')
-        .set('Authorization', 'Bearer d432dd24')
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
-        .type('form')
-        .field('owner', mockCars.validOwner)
-        .field('state', mockCars.validState)
-        .field('price', mockCars.invalidPrice)
-        .field('model', mockCars.validModel)
-        .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
-        .field('name', mockCars.validName)
-        .field('email', mockCars.validEmail)
-        .end((err, res) => {
-          expect(res).to.have.status(400);
-
-          const { error } = res.body;
-          assert.strictEqual(
-            error,
-            'price is not a number',
-            'price is not a number',
-          );
-
-          done();
-        });
-    });
-
-    it('should raise 400 error with invalid or no model', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/car')
-        .set('Authorization', 'Bearer d432dd24')
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
-        .type('form')
-        .field('owner', mockCars.validOwner)
-        .field('state', mockCars.validState)
-        .field('price', mockCars.validPrice)
-        .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
-        .field('name', mockCars.validName)
-        .field('email', mockCars.validEmail)
-        .end((err, res) => {
-          expect(res).to.have.status(400);
-
-          const { error } = res.body;
-          assert.strictEqual(
-            error,
-            'model undefined or invalid',
-            'model undefined or invalid',
-          );
-
-          done();
-        });
-    });
-    it('should raise 400 error with invalid or no manufacturer', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/car')
-        .set('Authorization', 'Bearer d432dd24')
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
-        .type('form')
-        .field('owner', mockCars.validOwner)
-        .field('state', mockCars.validState)
-        .field('price', mockCars.validPrice)
-        .field('model', mockCars.validModel)
-        .field('bodyType', mockCars.validBodyType)
-        .field('name', mockCars.validName)
-        .field('email', mockCars.validEmail)
-        .end((err, res) => {
-          expect(res).to.have.status(400);
-
-          const { error } = res.body;
-          assert.strictEqual(
-            error,
-            'manufacturer is undefined or invalid',
-            'manufacturer is undefined or invalid',
-          );
-
-
-          done();
-        });
-    });
-    it('should raise 400 error with invalid or no body type', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/car')
-        .set('Authorization', 'Bearer d432dd24')
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
-        .type('form')
-        .field('owner', mockCars.validOwner)
-        .field('state', mockCars.validState)
-        .field('price', mockCars.validPrice)
-        .field('model', mockCars.validModel)
-        .field('manufacturer', mockCars.validManufacturer)
-        .field('name', mockCars.validName)
-        .field('email', mockCars.validEmail)
-        .end((err, res) => {
-          expect(res).to.have.status(400);
-
-          const { error } = res.body;
-          assert.strictEqual(
-            error,
-            'body type is undefined or invalid',
-            'body type is undefined or invalid',
-          );
-          done();
-        });
-    });
-    it('should raise 400 error with no or invalid vehicle name', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/car')
-        .set('Authorization', 'Bearer d432dd24')
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
-        .type('form')
-        .field('owner', mockCars.validOwner)
-        .field('state', mockCars.validState)
-        .field('price', mockCars.validPrice)
-        .field('model', mockCars.validModel)
-        .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
-        .field('email', mockCars.validEmail)
-        .end((err, res) => {
-          expect(res).to.have.status(400);
-          const { error } = res.body;
-          assert.strictEqual(
-            error,
-            'vehicle name undefined or invalid',
-            'vehicle name undefined or invalid',
-          );
-          done();
-        });
-    });
-    it('should raise 400 error with invalid or no email', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/car')
-        .set('Authorization', 'Bearer d432dd24')
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
-        .type('form')
-        .field('owner', mockCars.validOwner)
-        .field('state', mockCars.validState)
-        .field('price', mockCars.validPrice)
-        .field('model', mockCars.validModel)
-        .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
-        .field('name', mockCars.validName)
-        .end((err, res) => {
-          expect(res).to.have.status(400);
-
-          const { error } = res.body;
-          assert.strictEqual(
-            error,
-            'email is not valid',
-            'email is not valid',
-          );
-          done();
-        });
-    });
     it('should raise 401 when authorization token not provided', (done) => {
       chai
         .request(app)
@@ -398,14 +78,14 @@ describe('Users car endpoint test', () => {
           done();
         });
     });
-    it('should raise 201 and successfully create the ad', (done) => {
+    it('should raise 401 with invalid authorization token', (done) => {
       chai
         .request(app)
         .post('/api/v1/car')
-        .set('Authorization', 'Bearer d432dd24')
+        .set('Authorization', 'Bearer adsfljewos')
         .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
         .type('form')
-        .field('owner', mockCars.validOwner)
+        .field('owner', user1.id)
         .field('state', mockCars.validState)
         .field('price', mockCars.validPrice)
         .field('model', mockCars.validModel)
@@ -413,6 +93,279 @@ describe('Users car endpoint test', () => {
         .field('bodyType', mockCars.validBodyType)
         .field('name', mockCars.validName)
         .field('email', mockCars.validEmail)
+        .end((err, res) => {
+          expect(res).to.have.status(401);
+          expect(res.body).to.have.property('status');
+          expect(res.body).to.have.property('error');
+
+          const { error } = res.body;
+          assert.strictEqual(
+            error,
+            'user not authenticated, invalid authorization token provided',
+            'user not authenticated, invalid authorization token provided',
+          );
+          done();
+        });
+    });
+    it('should raise 400 error with no attached file', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/car')
+        .set('Authorization', `Bearer ${user1.token}`)
+        .type('form')
+        .field('state', mockCars.validState)
+        .field('price', mockCars.validPrice)
+        .field('model', mockCars.validModel)
+        .field('manufacturer', mockCars.validManufacturer)
+        .field('bodyType', mockCars.validBodyType)
+        .field('name', mockCars.validName)
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          const { error } = res.body;
+          assert.strictEqual(
+            error,
+            'please add between 1 and 6 images',
+            'correct number of images should be added',
+          );
+          done();
+        });
+    });
+
+    it('should raise 400 error with no attached state', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/car')
+        .set('Authorization', `Bearer ${user1.token}`)
+        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .type('form')
+        .field('price', mockCars.validPrice)
+        .field('model', mockCars.validModel)
+        .field('manufacturer', mockCars.validManufacturer)
+        .field('bodyType', mockCars.validBodyType)
+        .field('name', mockCars.validName)
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+
+          const { error } = res.body;
+          assert.strictEqual(
+            error,
+            'vehicle state is undefined',
+            'vehicle state was not defined',
+          );
+
+          done();
+        });
+    });
+
+    it('should raise 400 error with an invalid state', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/car')
+        .set('Authorization', `Bearer ${user1.token}`)
+        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .type('form')
+        .field('price', mockCars.validPrice)
+        .field('model', mockCars.validModel)
+        .field('state', mockCars.invalidState)
+        .field('manufacturer', mockCars.validManufacturer)
+        .field('bodyType', mockCars.validBodyType)
+        .field('name', mockCars.validName)
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+
+          const { error } = res.body;
+          assert.strictEqual(
+            error,
+            'vehicle state can only be new or used',
+            'vehicle state can only be new or used',
+          );
+
+          done();
+        });
+    });
+
+    it('should raise 400 error with no  price', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/car')
+        .set('Authorization', `Bearer ${user1.token}`)
+        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .type('form')
+        .field('state', mockCars.validState)
+        .field('model', mockCars.validModel)
+        .field('manufacturer', mockCars.validManufacturer)
+        .field('bodyType', mockCars.validBodyType)
+        .field('name', mockCars.validName)
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+
+          done();
+        });
+    });
+
+    it('should raise 400 error with undefined price', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/car')
+        .set('Authorization', `Bearer ${user1.token}`)
+        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .type('form')
+        .field('state', mockCars.validState)
+        .field('model', mockCars.validModel)
+        .field('manufacturer', mockCars.validManufacturer)
+        .field('bodyType', mockCars.validBodyType)
+        .field('name', mockCars.validName)
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+
+          const { error } = res.body;
+          assert.strictEqual(
+            error,
+            'price is undefined',
+            'price is undefined',
+          );
+
+          done();
+        });
+    });
+
+    it('should raise 400 error with invalid price', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/car')
+        .set('Authorization', `Bearer ${user1.token}`)
+        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .type('form')
+        .field('state', mockCars.validState)
+        .field('price', mockCars.invalidPrice)
+        .field('model', mockCars.validModel)
+        .field('manufacturer', mockCars.validManufacturer)
+        .field('bodyType', mockCars.validBodyType)
+        .field('name', mockCars.validName)
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+
+          const { error } = res.body;
+          assert.strictEqual(
+            error,
+            'price is not a number',
+            'price is not a number',
+          );
+
+          done();
+        });
+    });
+
+    it('should raise 400 error with invalid or no model', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/car')
+        .set('Authorization', `Bearer ${user1.token}`)
+        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .type('form')
+        .field('state', mockCars.validState)
+        .field('price', mockCars.validPrice)
+        .field('manufacturer', mockCars.validManufacturer)
+        .field('bodyType', mockCars.validBodyType)
+        .field('name', mockCars.validName)
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+
+          const { error } = res.body;
+          assert.strictEqual(
+            error,
+            'model undefined or invalid',
+            'model undefined or invalid',
+          );
+
+          done();
+        });
+    });
+    it('should raise 400 error with invalid or no manufacturer', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/car')
+        .set('Authorization', `Bearer ${user1.token}`)
+        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .type('form')
+        .field('state', mockCars.validState)
+        .field('price', mockCars.validPrice)
+        .field('model', mockCars.validModel)
+        .field('bodyType', mockCars.validBodyType)
+        .field('name', mockCars.validName)
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+
+          const { error } = res.body;
+          assert.strictEqual(
+            error,
+            'manufacturer is undefined or invalid',
+            'manufacturer is undefined or invalid',
+          );
+
+          done();
+        });
+    });
+    it('should raise 400 error with invalid or no body type', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/car')
+        .set('Authorization', `Bearer ${user1.token}`)
+        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .type('form')
+        .field('state', mockCars.validState)
+        .field('price', mockCars.validPrice)
+        .field('model', mockCars.validModel)
+        .field('manufacturer', mockCars.validManufacturer)
+        .field('name', mockCars.validName)
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+
+          const { error } = res.body;
+          assert.strictEqual(
+            error,
+            'body type is undefined or invalid',
+            'body type is undefined or invalid',
+          );
+          done();
+        });
+    });
+    it('should raise 400 error with no or invalid vehicle name', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/car')
+        .set('Authorization', `Bearer ${user1.token}`)
+        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .type('form')
+        .field('state', mockCars.validState)
+        .field('price', mockCars.validPrice)
+        .field('model', mockCars.validModel)
+        .field('manufacturer', mockCars.validManufacturer)
+        .field('bodyType', mockCars.validBodyType)
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          const { error } = res.body;
+          assert.strictEqual(
+            error,
+            'vehicle name undefined or invalid',
+            'vehicle name undefined or invalid',
+          );
+          done();
+        });
+    });
+    it('should raise 201 and successfully create the ad', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/car')
+        .set('Authorization', `Bearer ${user1.token}`)
+        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .type('form')
+        .field('state', mockCars.validState)
+        .field('price', mockCars.validPrice)
+        .field('model', mockCars.validModel)
+        .field('manufacturer', mockCars.validManufacturer)
+        .field('bodyType', mockCars.validBodyType)
+        .field('name', mockCars.validName)
         .end((err, res) => {
           expect(res).to.have.status(201);
           expect(res.body).to.have.property('status');
@@ -426,14 +379,9 @@ describe('Users car endpoint test', () => {
           expect(data).to.have.property('state');
 
           const {
-            email, manufacturer, model, price,
+            manufacturer, model, price,
           } = data;
 
-          assert.strictEqual(
-            email,
-            mockCars.validEmail,
-            'email is not valid',
-          );
           assert.strictEqual(
             manufacturer,
             mockCars.validManufacturer,
@@ -462,54 +410,26 @@ describe('Users car endpoint test', () => {
       chai
         .request(app)
         .post('/api/v1/car')
-        .set('Authorization', 'Bearer d432dd24')
+        .set('Authorization', `Bearer ${user1.token}`)
         .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
         .type('form')
-        .field('owner', user1.id)
         .field('state', mockCars.validState)
         .field('price', mockCars.validPrice)
         .field('model', mockCars.validModel)
         .field('manufacturer', mockCars.validManufacturer)
         .field('bodyType', mockCars.validBodyType)
         .field('name', mockCars.validName)
-        .field('email', user1.email)
         .end(() => {
           done();
         });
     });
-
-    it('should raise 400 error user is undefined', (done) => {
-      chai
-        .request(app)
-        .patch('/api/v1/car/1/status')
-        .set('Authorization', 'Bearer d432dd24')
-        .type('form')
-        .send({
-        })
-        .end((err, res) => {
-          expect(res).to.have.status(400);
-          assert.strictEqual(
-            res.body.status,
-            400,
-            'Status code should be 400',
-          );
-          assert.strictEqual(
-            res.body.error,
-            'user is required',
-            'user is required',
-          );
-          done();
-        });
-    });
-    it('should raise 400 error when carId is undefined', (done) => {
+    it('should raise 400 error when carId is invalid', (done) => {
       chai
         .request(app)
         .patch('/api/v1/car/1as/status')
-        .set('Authorization', 'Bearer d432dd24')
+        .set('Authorization', `Bearer ${user1.token}`)
         .type('form')
-        .send({
-          user: user2.id,
-        })
+        .send()
         .end((err, res) => {
           expect(res).to.have.status(400);
           assert.strictEqual(
@@ -529,11 +449,9 @@ describe('Users car endpoint test', () => {
       chai
         .request(app)
         .patch('/api/v1/car/2/status')
-        .set('Authorization', 'Bearer d432dd24')
+        .set('Authorization', `Bearer ${user1.token}`)
         .type('form')
-        .send({
-          user: user2.id,
-        })
+        .send()
         .end((err, res) => {
           expect(res).to.have.status(404);
           assert.strictEqual(
@@ -553,11 +471,9 @@ describe('Users car endpoint test', () => {
       chai
         .request(app)
         .patch('/api/v1/car/1/status')
-        .set('Authorization', 'Bearer d432dd24')
+        .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
-        .send({
-          user: user2.id,
-        })
+        .send()
         .end((err, res) => {
           expect(res).to.have.status(403);
           assert.strictEqual(
@@ -577,19 +493,13 @@ describe('Users car endpoint test', () => {
       chai
         .request(app)
         .patch('/api/v1/car/1/status')
-        .set('Authorization', 'Bearer d432dd24')
+        .set('Authorization', `Bearer ${user1.token}`)
         .type('form')
-        .send({
-          user: user1.id,
-        })
+        .send()
         .end((err, res) => {
           expect(res).to.have.status(201);
           const { status, data } = res.body;
-          assert.strictEqual(
-            status,
-            201,
-            'Status code should be 201',
-          );
+          assert.strictEqual(status, 201, 'Status code should be 201');
           assert.strictEqual(
             data.status,
             'sold',
@@ -602,11 +512,9 @@ describe('Users car endpoint test', () => {
       chai
         .request(app)
         .patch('/api/v1/car/1/status')
-        .set('Authorization', 'Bearer d432dd24')
+        .set('Authorization', `Bearer ${user1.token}`)
         .type('form')
-        .send({
-          user: user1.id,
-        })
+        .send()
         .end((err, res) => {
           expect(res).to.have.status(409);
           const { error } = res.body;
@@ -630,28 +538,26 @@ describe('Users car endpoint test', () => {
       chai
         .request(app)
         .post('/api/v1/car')
-        .set('Authorization', 'Bearer d432dd24')
+        .set('Authorization', `Bearer ${user1.token}`)
         .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
         .type('form')
-        .field('owner', user1.id)
         .field('state', mockCars.validState)
         .field('price', mockCars.validPrice)
         .field('model', mockCars.validModel)
         .field('manufacturer', mockCars.validManufacturer)
         .field('bodyType', mockCars.validBodyType)
         .field('name', mockCars.validName)
-        .field('email', user1.email)
-        .end(() => { done(); });
+        .end(() => {
+          done();
+        });
     });
     it('should raise 400 error newPrice is undefined', (done) => {
       chai
         .request(app)
         .patch('/api/v1/car/1/price')
-        .set('Authorization', 'Bearer d432dd24')
+        .set('Authorization', `Bearer ${user1.token}`)
         .type('form')
-        .send({
-          user: user1.id,
-        })
+        .send()
         .end((err, res) => {
           expect(res).to.have.status(400);
           assert.strictEqual(
@@ -671,10 +577,9 @@ describe('Users car endpoint test', () => {
       chai
         .request(app)
         .patch('/api/v1/car/1/price')
-        .set('Authorization', 'Bearer d432dd24')
+        .set('Authorization', `Bearer ${user1.token}`)
         .type('form')
         .send({
-          user: user1.id,
           newPrice: '1200000',
         })
         .end((err, res) => {
@@ -695,17 +600,15 @@ describe('Users car endpoint test', () => {
       chai
         .request(app)
         .post('/api/v1/car')
-        .set('Authorization', 'Bearer d432dd24')
+        .set('Authorization', `Bearer ${user1.token}`)
         .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
         .type('form')
-        .field('owner', user1.id)
         .field('state', mockCars.validState)
         .field('price', mockCars.validPrice)
         .field('model', mockCars.validModel)
         .field('manufacturer', mockCars.validManufacturer)
         .field('bodyType', mockCars.validBodyType)
         .field('name', mockCars.validName)
-        .field('email', user1.email)
         .end(() => {
           done();
         });
@@ -714,7 +617,6 @@ describe('Users car endpoint test', () => {
       chai
         .request(app)
         .get('/api/v1/car/1s')
-        .set('Authorization', 'Bearer d432dd24')
         .type('form')
         .send()
         .end((err, res) => {
@@ -736,7 +638,6 @@ describe('Users car endpoint test', () => {
       chai
         .request(app)
         .get('/api/v1/car/2')
-        .set('Authorization', 'Bearer d432dd24')
         .type('form')
         .send()
         .end((err, res) => {
@@ -758,9 +659,8 @@ describe('Users car endpoint test', () => {
       chai
         .request(app)
         .get('/api/v1/car/1')
-        .set('Authorization', 'Bearer d432dd24')
         .type('form')
-        .send({})
+        .send()
         .end((err, res) => {
           const { data, status } = res.body;
           expect(res).to.have.status(200);
@@ -769,7 +669,6 @@ describe('Users car endpoint test', () => {
           expect(data).to.have.property('created_on');
           expect(data).to.have.property('status');
           expect(data).to.have.property('price');
-          expect(data).to.have.property('email');
           expect(data).to.have.property('model');
           expect(data).to.have.property('state');
           expect(data).to.have.property('image_url_list');
