@@ -7,19 +7,17 @@ const authorization = {
    */
   verifyToken(req, res, next) {
     const bearerHeader = req.headers.authorization;
-    let token;
     // Check if bearer is undefined
-    if (typeof bearerHeader !== 'undefined') {
-      const bearer = bearerHeader.split(' ');
-      const bearerToken = bearer[1];
-      token = bearerToken;
-    } else {
+    if (typeof bearerHeader === 'undefined') {
       res.status(401).send({
         status: 401,
         error: 'authorization token not provided',
       });
       return;
     }
+    const bearer = bearerHeader.split(' ');
+    const bearerToken = bearer[1];
+    const token = bearerToken;
 
     // Check if the token is valid
     // invalid token - asynchronous
@@ -40,6 +38,17 @@ const authorization = {
       req.authToken = authToken;
       next();
     });
+  },
+  isAdmin(req, res, next) {
+    const authData = req.authToken.data;
+    if (authData.isAdmin === false) {
+      res.status(401).send({
+        status: 401,
+        error: 'you do not have permission to access this route',
+      });
+      return;
+    }
+    next();
   },
 };
 

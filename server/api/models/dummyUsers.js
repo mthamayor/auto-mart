@@ -12,3 +12,8 @@ export const removeAllUsers = () => {
 export const addUser = (data) => {
   dummyUsers.push(data);
 };
+
+export const setAdmin = (id) => {
+  const user = getUser(id);
+  user.isAdmin = true;
+};

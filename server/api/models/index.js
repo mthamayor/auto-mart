@@ -5,6 +5,7 @@ import dummyCars, {
   markAsSold,
   updateCarPrice,
   clearCars,
+  deleteCar,
 } from './dummyCars';
 
 import dummyOrders, {
@@ -19,28 +20,33 @@ import dummyUsers, {
   getUserByEmail,
   addUser,
   removeAllUsers,
+  setAdmin,
 } from './dummyUsers';
 
-export const carsHelper = {
+const carsHelper = {
   addCar,
   getCar,
   getAvailableCar,
   markAsSold,
   clearCars,
   updateCarPrice,
+  deleteCar,
 };
-export const ordersHelper = {
+const ordersHelper = {
   addPurchaseOrder,
   getOrder,
   getOrderByBuyer,
   editPurchaseOrder,
   clearOrders,
 };
-export const usersHelper = {
+const usersHelper = {
   getUser,
   removeAllUsers,
   addUser,
   getUserByEmail,
+  setAdmin,
 };
 
-export { dummyCars, dummyUsers, dummyOrders };
+export {
+  dummyCars, dummyUsers, dummyOrders, carsHelper, ordersHelper, usersHelper,
+};

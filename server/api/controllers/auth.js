@@ -117,6 +117,46 @@ const auth = {
       },
     });
   },
+  setAdmin(req, res) {
+    let userId = req.params.user_id;
+    userId = parseInt(userId, 10);
+
+    usersHelper.setAdmin(userId);
+
+    // Retreive data from db
+    const data = usersHelper.getUser(userId);
+
+    // Create a jwt token and send along with the data
+    const options = { expiresIn: '1d' };
+    const secret = process.env.JWT_SECRET || 'jwtSecret';
+    const token = jwt.sign(
+      {
+        data: {
+          id: data.id,
+          first_name: data.firstName,
+          last_name: data.lastName,
+          email: data.email,
+          address: data.address,
+          isAdmin: data.isAdmin,
+        },
+      },
+      secret,
+      options,
+    );
+
+    return res.status(200).send({
+      status: 200,
+      data: {
+        token,
+        id: data.id,
+        first_name: data.firstName,
+        last_name: data.lastName,
+        email: data.email,
+        address: data.address,
+        isAdmin: data.isAdmin,
+      },
+    });
+  },
 };
 
 export default auth;

@@ -62,7 +62,6 @@ describe('Users car endpoint test', () => {
         .field('manufacturer', mockCars.validManufacturer)
         .field('bodyType', mockCars.validBodyType)
         .field('name', mockCars.validName)
-        .field('email', mockCars.validEmail)
         .end((err, res) => {
           expect(res).to.have.status(401);
           expect(res.body).to.have.property('status');
@@ -91,7 +90,6 @@ describe('Users car endpoint test', () => {
         .field('manufacturer', mockCars.validManufacturer)
         .field('bodyType', mockCars.validBodyType)
         .field('name', mockCars.validName)
-        .field('email', mockCars.validEmail)
         .end((err, res) => {
           expect(res).to.have.status(401);
           expect(res.body).to.have.property('status');
@@ -670,7 +668,7 @@ describe('Users car endpoint test', () => {
           expect(data).to.have.property('price');
           expect(data).to.have.property('model');
           expect(data).to.have.property('state');
-          expect(data).to.have.property('image_url_list');
+          expect(data).to.have.property('image_urls');
           expect(data).to.have.property('body_type');
           assert.strictEqual(
             status,
@@ -678,6 +676,129 @@ describe('Users car endpoint test', () => {
             'Status code should be 200',
           );
 
+          done();
+        });
+    });
+  });
+  describe('route DELETE /api/v1/car/:car_id/', () => {
+    before((done) => {
+      carsHelper.clearCars();
+      chai
+        .request(app)
+        .post('/api/v1/car')
+        .set('Authorization', `Bearer ${user1.token}`)
+        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .type('form')
+        .field('state', mockCars.validState)
+        .field('price', mockCars.validPrice)
+        .field('model', mockCars.validModel)
+        .field('manufacturer', mockCars.validManufacturer)
+        .field('bodyType', mockCars.validBodyType)
+        .field('name', mockCars.validName)
+        .end(() => {
+          done();
+        });
+    });
+    // set user 1 as admin
+    before((done) => {
+      chai
+        .request(app)
+        .post(`/api/v1/auth/${user1.id}/admin`)
+        .type('form')
+        .send()
+        .end((err, res) => {
+          user1 = res.body.data;
+          done();
+        });
+    });
+
+    it('should raise 401 if user is not an admin', (done) => {
+      chai
+        .request(app)
+        .delete('/api/v1/car/1')
+        .set('Authorization', `Bearer ${user2.token}`)
+        .type('form')
+        .send()
+        .end((err, res) => {
+          expect(res).to.have.status(401);
+          expect(res.body).to.have.property('status');
+          expect(res.body).to.have.property('error');
+
+          const { error, status } = res.body;
+          assert.strictEqual(status, 401, 'delete status should be 401');
+          assert.strictEqual(
+            error,
+            'you do not have permission to access this route',
+            'you do not have permission to access this route',
+          );
+          done();
+        });
+    });
+
+
+    it('should raise 400 error car_id is invalid', (done) => {
+      chai
+        .request(app)
+        .delete('/api/v1/car/1s')
+        .set('Authorization', `Bearer ${user1.token}`)
+        .type('form')
+        .send()
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          assert.strictEqual(
+            res.body.status,
+            400,
+            'Status code should be 400',
+          );
+          assert.strictEqual(
+            res.body.error,
+            'car_id parameter is not a valid number',
+            'car_id parameter is not a valid number',
+          );
+          done();
+        });
+    });
+    it('should raise 404 error if car does not exist', (done) => {
+      chai
+        .request(app)
+        .delete('/api/v1/car/2')
+        .set('Authorization', `Bearer ${user1.token}`)
+        .type('form')
+        .send()
+        .end((err, res) => {
+          expect(res).to.have.status(404);
+          assert.strictEqual(
+            res.body.status,
+            404,
+            'Status code should be 404',
+          );
+          assert.strictEqual(
+            res.body.error,
+            'car does not exist',
+            'car does not exist',
+          );
+          done();
+        });
+    });
+    it('should raise 200 when the car was successfully deleted', (done) => {
+      chai
+        .request(app)
+        .delete('/api/v1/car/1')
+        .set('Authorization', `Bearer ${user1.token}`)
+        .type('form')
+        .send()
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).to.have.property('status');
+          expect(res.body).to.have.property('data');
+
+          const { data, status } = res.body;
+          assert.strictEqual(status, 200, 'delete status should be 200');
+          assert.strictEqual(
+            data,
+            'Car Ad successfully deleted',
+            'Car Ad successfully deleted',
+          );
           done();
         });
     });

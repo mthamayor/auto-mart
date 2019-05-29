@@ -41,3 +41,11 @@ export const updateCarPrice = (id, newPrice) => {
   }
   return car;
 };
+
+export const deleteCar = (id) => {
+  for (let i = 0; i < dummyCars.length; i += 1) {
+    if (dummyCars[i].id === id) {
+      dummyCars.splice(i, 1);
+    }
+  }
+};

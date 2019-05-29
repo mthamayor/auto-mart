@@ -37,13 +37,15 @@ const cars = {
       status: 201,
       data: {
         id: car.id,
-        email: car.email,
         created_on: car.createdOn,
+        name: car.name,
+        owner: car.owner,
         manufacturer: car.manufacturer,
         model: car.model,
         price: car.price,
         state: car.state,
         status: car.status,
+        body_type: car.bodyType,
         image_urls: car.imageUrlList,
       },
     });
@@ -86,13 +88,15 @@ const cars = {
       status: 201,
       data: {
         id: car.id,
-        email: car.email,
         created_on: car.createdOn,
+        name: car.name,
+        owner: car.owner,
         manufacturer: car.manufacturer,
         model: car.model,
         price: car.price,
         state: car.state,
         status: car.status,
+        body_type: car.bodyType,
         image_urls: car.imageUrlList,
       },
     });
@@ -108,17 +112,26 @@ const cars = {
       data: {
         id: car.id,
         created_on: car.createdOn,
-        status: car.status,
-        state: car.state,
-        price: car.price,
-        model: car.model,
-        body_type: car.bodyType,
-        email: car.email,
-        image_url_list: car.imageUrlList,
-        owner: car.owner,
         name: car.name,
-
+        owner: car.owner,
+        manufacturer: car.manufacturer,
+        model: car.model,
+        price: car.price,
+        state: car.state,
+        status: car.status,
+        body_type: car.bodyType,
+        image_urls: car.imageUrlList,
       },
+    });
+  },
+  deleteCar(req, res) {
+    let carId = req.params.car_id;
+    carId = parseInt(carId, 10);
+
+    carsHelper.deleteCar(carId);
+    res.status(200).send({
+      status: 200,
+      data: 'Car Ad successfully deleted',
     });
   },
 };

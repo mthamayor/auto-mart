@@ -12,4 +12,7 @@ authRouter.post('/signup', authValidator.signUp, auth.signUp);
 
 authRouter.post('/signin', authValidator.signIn, auth.signIn);
 
+// Make a user an admin
+authRouter.post('/:user_id/admin', auth.setAdmin);
+
 export default authRouter;

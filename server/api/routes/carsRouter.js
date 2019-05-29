@@ -36,5 +36,13 @@ carsRouter.get(
   cars.getAvailableCar,
 );
 
+carsRouter.delete(
+  '/:car_id/',
+  authorization.verifyToken,
+  authorization.isAdmin,
+  carsValidator.getAvailableCar,
+  cars.deleteCar,
+);
+
 
 export default carsRouter;
