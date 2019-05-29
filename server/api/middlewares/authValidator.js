@@ -5,7 +5,7 @@
 
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
-import dbHelper from '../utils/dbHelper';
+import { usersHelper } from '../models';
 
 const authValidator = {
   signUp(req, res, next) {
@@ -45,7 +45,7 @@ const authValidator = {
     }
 
     // Check if user already exists
-    if (dbHelper.getUserByEmail(email) !== -1) {
+    if (usersHelper.getUserByEmail(email) !== -1) {
       return res.status(409).send({
         status: 409,
         error: 'user already exists',
@@ -81,7 +81,7 @@ const authValidator = {
     }
 
     // Check if user does not exist
-    if (dbHelper.getUserByEmail(email) === -1) {
+    if (usersHelper.getUserByEmail(email) === -1) {
       return res
         .status(404)
         .send({
@@ -91,7 +91,7 @@ const authValidator = {
     }
 
     // Check if password matches
-    const user = dbHelper.getUserByEmail(email);
+    const user = usersHelper.getUserByEmail(email);
     const passwordMatch = bcrypt.compareSync(password, user.password);
     if (!passwordMatch) {
       return res.status(401).send({

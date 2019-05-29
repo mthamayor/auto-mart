@@ -4,9 +4,8 @@
 
 import express from 'express';
 
-import authorization from '../middlewares/authorization';
-import purchaseOrdersValidator from '../middlewares/purchaseOrdersValidator';
-import purchaseOrders from '../controllers/purchaseOrders';
+import { authorization, purchaseOrdersValidator } from '../middlewares';
+import { purchaseOrders } from '../controllers';
 
 const ordersRouter = express.Router();
 

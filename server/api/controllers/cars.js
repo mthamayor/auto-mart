@@ -1,5 +1,4 @@
-import dummyCars from '../models/dummyCars';
-import dbCarsHelper from '../utils/dbCarsHelper';
+import { dummyCars, carsHelper } from '../models';
 
 const cars = {
   createAd(req, res) {
@@ -18,7 +17,7 @@ const cars = {
     const id = dummyCars.length + 1;
     const authData = req.authToken.data;
 
-    dbCarsHelper.addCar({
+    carsHelper.addCar({
       id,
       owner: authData.id,
       createdOn,
@@ -32,7 +31,7 @@ const cars = {
       imageUrlList,
     });
 
-    const car = dbCarsHelper.getCar(id);
+    const car = carsHelper.getCar(id);
 
     res.status(201).send({
       status: 201,
@@ -53,9 +52,9 @@ const cars = {
   markAsSold(req, res) {
     let id = req.params.car_id;
     id = parseInt(id, 10);
-    dbCarsHelper.markAsSold(id);
+    carsHelper.markAsSold(id);
 
-    const car = dbCarsHelper.getCar(id);
+    const car = carsHelper.getCar(id);
 
     res.status(201).send({
       status: 201,
@@ -79,9 +78,9 @@ const cars = {
     id = parseInt(id, 10);
     newPrice = parseFloat(newPrice);
 
-    dbCarsHelper.updateCarPrice(id, newPrice);
+    carsHelper.updateCarPrice(id, newPrice);
 
-    const car = dbCarsHelper.getCar(id);
+    const car = carsHelper.getCar(id);
 
     res.status(201).send({
       status: 201,
@@ -98,11 +97,11 @@ const cars = {
       },
     });
   },
-  getUserCar(req, res) {
+  getAvailableCar(req, res) {
     let carId = req.params.car_id;
     carId = parseInt(carId, 10);
 
-    const car = dbCarsHelper.getUserCar(carId);
+    const car = carsHelper.getAvailableCar(carId);
 
     res.status(200).send({
       status: 200,

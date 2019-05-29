@@ -6,8 +6,7 @@ import chai, { expect, assert } from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../server';
 import mockCars from './__mock__/mockCars';
-import dbCarsHelper from '../server/api/utils/dbCarsHelper';
-import dbHelper from '../server/api/utils/dbHelper';
+import { usersHelper, carsHelper } from '../server/api/models';
 import mockUser from './__mock__/mockUser';
 
 
@@ -18,7 +17,7 @@ describe('Users car endpoint test', () => {
   let user2;
   const fileUrl = `${__dirname}/__mock__/__img__/toyota-avalon.jpg`;
   before((done) => {
-    dbHelper.removeAllUsers();
+    usersHelper.removeAllUsers();
     // create multiple users
     chai
       .request(app)
@@ -44,8 +43,8 @@ describe('Users car endpoint test', () => {
 
   // Clean up db after all test suites
   after((done) => {
-    dbHelper.removeAllUsers();
-    dbCarsHelper.clearDB();
+    usersHelper.removeAllUsers();
+    carsHelper.clearCars();
     done();
   });
 
@@ -403,7 +402,7 @@ describe('Users car endpoint test', () => {
   });
   describe('route POST /api/v1/car/:car_id/status', () => {
     before((done) => {
-      dbCarsHelper.clearDB();
+      carsHelper.clearCars();
       done();
     });
     before((done) => {
@@ -534,7 +533,7 @@ describe('Users car endpoint test', () => {
   });
   describe('route POST /api/v1/car/:car_id/price', () => {
     before((done) => {
-      dbCarsHelper.clearDB();
+      carsHelper.clearCars();
       chai
         .request(app)
         .post('/api/v1/car')
@@ -596,7 +595,7 @@ describe('Users car endpoint test', () => {
   });
   describe('route GET /api/v1/car/:car_id/', () => {
     before((done) => {
-      dbCarsHelper.clearDB();
+      carsHelper.clearCars();
       chai
         .request(app)
         .post('/api/v1/car')

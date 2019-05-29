@@ -6,14 +6,14 @@ import chai, { assert, expect } from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../server';
 import mockUser from './__mock__/mockUser';
-import dbHelper from '../server/api/utils/dbHelper';
+import { usersHelper } from '../server/api/models';
 
 chai.use(chaiHttp);
 
 describe('Users auth endpoint test', () => {
   // Clean up db after all test suites
   after((done) => {
-    dbHelper.removeAllUsers();
+    usersHelper.removeAllUsers();
     done();
   });
   describe('route POST /api/v1/auth/signup', () => {

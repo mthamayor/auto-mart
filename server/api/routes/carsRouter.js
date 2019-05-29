@@ -3,9 +3,8 @@
  */
 
 import express from 'express';
-import cars from '../controllers/cars';
-import authorization from '../middlewares/authorization';
-import carsValidator from '../middlewares/carsValidator';
+import { cars } from '../controllers';
+import { authorization, carsValidator } from '../middlewares';
 
 const carsRouter = express.Router();
 
@@ -33,8 +32,8 @@ carsRouter.patch(
 
 carsRouter.get(
   '/:car_id/',
-  carsValidator.getUserCar,
-  cars.getUserCar,
+  carsValidator.getAvailableCar,
+  cars.getAvailableCar,
 );
 
 

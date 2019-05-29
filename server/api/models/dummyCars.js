@@ -15,3 +15,29 @@
  */
 const dummyCars = [];
 export default dummyCars;
+
+export const addCar = (car) => {
+  dummyCars.push(car);
+};
+export const getCar = id => dummyCars.find(car => car.id === id) || -1;
+
+export const getAvailableCar = id => dummyCars.find(car => (car.status === 'available' && car.id === id)) || -1;
+
+export const markAsSold = (id) => {
+  const car = getCar(id);
+  if (car !== -1) {
+    car.status = 'sold';
+  }
+  return car;
+};
+export const clearCars = () => {
+  dummyCars.splice(0, dummyCars.length);
+};
+
+export const updateCarPrice = (id, newPrice) => {
+  const car = getCar(id);
+  if (car !== -1) {
+    car.price = newPrice;
+  }
+  return car;
+};
