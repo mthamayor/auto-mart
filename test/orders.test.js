@@ -7,8 +7,7 @@ import chaiHttp from 'chai-http';
 import app from '../server';
 import mockUser from './__mock__/mockUser';
 import mockOrders from './__mock__/mockOrders';
-import dbCarsHelper from '../server/api/utils/dbCarsHelper';
-import dbHelper from '../server/api/utils/dbHelper';
+import { usersHelper, carsHelper } from '../server/api/models';
 import mockCars from './__mock__/mockCars';
 
 chai.use(chaiHttp);
@@ -20,8 +19,8 @@ describe('Users order endpoint test', () => {
   let carCreated2;
   // create multiple users
   before((done) => {
-    dbCarsHelper.clearDB();
-    dbHelper.removeAllUsers();
+    carsHelper.clearCars();
+    usersHelper.removeAllUsers();
 
     chai
       .request(app)
@@ -104,8 +103,8 @@ describe('Users order endpoint test', () => {
 
   // Clean up db after all test suites
   after((done) => {
-    dbHelper.removeAllUsers();
-    dbCarsHelper.clearDB();
+    usersHelper.removeAllUsers();
+    carsHelper.clearCars();
     done();
   });
   describe('route POST /api/v1/order', () => {

@@ -1,6 +1,5 @@
-import dummyOrders from '../models/dummyOrders';
-import dbCarsHelper from '../utils/dbCarsHelper';
-import dbOrdersHelper from '../utils/dbOrdersHelper';
+import { dummyOrders, ordersHelper, carsHelper } from '../models';
+
 
 const purchaseOrders = {
   createOrder(req, res) {
@@ -13,7 +12,7 @@ const purchaseOrders = {
     const createdOn = Date.now();
     const id = dummyOrders.length + 1;
 
-    dbOrdersHelper.addPurchaseOrder({
+    ordersHelper.addPurchaseOrder({
       id,
       buyer: authData.id,
       carId,
@@ -21,7 +20,7 @@ const purchaseOrders = {
       createdOn,
       status,
     });
-    const car = dbCarsHelper.getCar(carId);
+    const car = carsHelper.getCar(carId);
 
     res.status(201).send({
       status: 201,
@@ -45,10 +44,10 @@ const purchaseOrders = {
 
     newPrice = parseFloat(newPrice);
 
-    let order = dbOrdersHelper.getOrder(orderId);
+    let order = ordersHelper.getOrder(orderId);
     const oldPrice = order.priceOffered;
 
-    order = dbOrdersHelper.editPurchaseOrder(orderId, newPrice);
+    order = ordersHelper.editPurchaseOrder(orderId, newPrice);
     const data = {
       id: order.id,
       car_id: order.carId,

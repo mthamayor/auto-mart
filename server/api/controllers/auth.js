@@ -1,9 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import helpers from '../utils/helpers';
-import dummyUsers from '../models/dummyUsers';
-import dbHelper from '../utils/dbHelper';
-
+import { dummyUsers, usersHelper } from '../models';
 /**
  * Auth controller
  * Handles every user and auth related tasks
@@ -31,7 +29,7 @@ const auth = {
 
     const id = dummyUsers.length + 1;
 
-    dbHelper.addUser({
+    usersHelper.addUser({
       id,
       email,
       firstName,
@@ -42,7 +40,7 @@ const auth = {
     });
 
     // Retreive data from db
-    const data = dbHelper.getUser(id);
+    const data = usersHelper.getUser(id);
 
     // Create a jwt token and send along with the data
     const options = { expiresIn: '1d' };
@@ -85,7 +83,7 @@ const auth = {
     } = req.body;
 
     // Retreive data from db
-    const data = dbHelper.getUserByEmail(email);
+    const data = usersHelper.getUserByEmail(email);
 
     // Create a jwt token and send along with the data
     const options = { expiresIn: '1d' };
@@ -97,6 +95,46 @@ const auth = {
           id: data.id,
           firstName: data.firstName,
           lastName: data.lastName,
+          email: data.email,
+          address: data.address,
+          isAdmin: data.isAdmin,
+        },
+      },
+      secret,
+      options,
+    );
+
+    return res.status(200).send({
+      status: 200,
+      data: {
+        token,
+        id: data.id,
+        first_name: data.firstName,
+        last_name: data.lastName,
+        email: data.email,
+        address: data.address,
+        isAdmin: data.isAdmin,
+      },
+    });
+  },
+  setAdmin(req, res) {
+    let userId = req.params.user_id;
+    userId = parseInt(userId, 10);
+
+    usersHelper.setAdmin(userId);
+
+    // Retreive data from db
+    const data = usersHelper.getUser(userId);
+
+    // Create a jwt token and send along with the data
+    const options = { expiresIn: '1d' };
+    const secret = process.env.JWT_SECRET || 'jwtSecret';
+    const token = jwt.sign(
+      {
+        data: {
+          id: data.id,
+          first_name: data.firstName,
+          last_name: data.lastName,
           email: data.email,
           address: data.address,
           isAdmin: data.isAdmin,

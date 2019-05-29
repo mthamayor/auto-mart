@@ -9,7 +9,7 @@ import fs from 'fs';
 import { promisify } from 'util';
 
 import helpers from '../utils/helpers';
-import dbCarsHelper from '../utils/dbCarsHelper';
+import { carsHelper } from '../models';
 
 const unlinkAsync = promisify(fs.unlink);
 
@@ -138,7 +138,7 @@ const carsValidator = {
         error: 'car_id parameter is undefined or invalid',
       });
     }
-    const findCar = dbCarsHelper.getCar(parseInt(carId, 10));
+    const findCar = carsHelper.getCar(parseInt(carId, 10));
 
     if (findCar === -1) {
       return res.status(404).send({
@@ -179,7 +179,7 @@ const carsValidator = {
     next();
   },
 
-  getUserCar(req, res, next) {
+  getAvailableCar(req, res, next) {
     const carId = req.params.car_id;
     if (
       carId.trim() === ''
@@ -190,7 +190,7 @@ const carsValidator = {
         error: 'car_id parameter is not a valid number',
       });
     }
-    const car = dbCarsHelper.getUserCar(parseInt(carId, 10));
+    const car = carsHelper.getAvailableCar(parseInt(carId, 10));
     if (car === -1) {
       return res.status(404).send({
         status: 404,

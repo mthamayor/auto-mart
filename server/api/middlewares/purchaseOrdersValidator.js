@@ -4,8 +4,8 @@
  */
 
 import validator from 'validator';
-import dbCarsHelper from '../utils/dbCarsHelper';
-import dbOrdersHelper from '../utils/dbOrdersHelper';
+import { ordersHelper, carsHelper } from '../models';
+
 
 const purchaseOrdersValidator = {
   createPurchaseOrder(req, res, next) {
@@ -37,7 +37,7 @@ const purchaseOrdersValidator = {
       return;
     }
 
-    const findCar = dbCarsHelper.getCar(parseInt(carId, 10));
+    const findCar = carsHelper.getCar(parseInt(carId, 10));
 
     if (findCar.owner === buyer) {
       res.status(409).send({
@@ -62,7 +62,7 @@ const purchaseOrdersValidator = {
       return;
     }
 
-    const purchaseOrder = dbOrdersHelper.getOrderByBuyer(buyer);
+    const purchaseOrder = ordersHelper.getOrderByBuyer(buyer);
     if (purchaseOrder !== -1) {
       res.status(409).send({
         status: 409,
@@ -100,7 +100,7 @@ const purchaseOrdersValidator = {
       });
     }
 
-    const findOrder = dbOrdersHelper.getOrder(
+    const findOrder = ordersHelper.getOrder(
       parseInt(orderId, 10),
     );
     if (findOrder === -1) {

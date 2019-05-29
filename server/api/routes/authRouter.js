@@ -3,13 +3,16 @@
  */
 
 import express from 'express';
-import auth from '../controllers/auth';
-import authValidator from '../middlewares/authValidator';
+import { auth } from '../controllers';
+import { authValidator } from '../middlewares';
 
 const authRouter = express.Router();
 
 authRouter.post('/signup', authValidator.signUp, auth.signUp);
 
 authRouter.post('/signin', authValidator.signIn, auth.signIn);
+
+// Make a user an admin
+authRouter.post('/:user_id/admin', auth.setAdmin);
 
 export default authRouter;
