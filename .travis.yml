@@ -7,3 +7,10 @@ branches:
   - master
 after_success:
 - npm run coverage
+deploy:
+  provider: heroku
+  api_key:
+    secure: "RlA2WXh2fb8lQAS4TLpMYwvB6rYxD327WJpRAhLaOtX32CWrFU+D4/yyyeMjtPYmjiouzmOdvqH2guMcsSbDr8iP/4Ktg7QLoS1mprwq3AhFcl6uqvhFm8jZNFLbK5EVltLBFoySXX2kRlygKQv2fn0r3ogrQ7FNRotDC2qis1h/sM0ytw+KyQZXPk0G/I701l2UMspalZ6T8Rhpym/R+paUM8meGNmGc2sd6giXYBKrxI+m9KrVajPM9Sv/E/blEWa7KO2RFFr6EXiccRFLkBGdbIk+nf/8GxZqt8XSytYyObfu2X3HXxMnGEnKjyBdjf+u+888QRskiVpbRsIp9Jzvh0SqU5JdDvzUhT/hnzBV9QjaIK68yD8ydfQcFaXOMjnm/5gApJrRuJ5xYDtp1As6XtQIE+sB+T/IWIEL8xDi+MpUfFpcin8YXInNmZu3qexn4k6R1Ixc0X/iqci9MEhTQz5TLz3N2nvdVy2AgIXAxBQkz+8yHy7/84ywBPOXtNEnk5xAc2NPNWE4bZfqV9y6mJMAsVBCqf/jzuYeLtABvyBDx1f1X4xqMNvfVgf2dKVnJZkxWEUjupVMgtzKBhBMv+NYmUPj+V2cg0lZOt8M7h2HdKS/ZCO621UughA0eGiByBniZgFbBvTEpSsAjL/DA3KoQ/SfYPbbnQgra8g="
+  app: mthamayor-auto-mart
+  on:
+    repo: mthamayor/auto-mart
