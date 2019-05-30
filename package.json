@@ -1,6 +1,9 @@
 {
   "name": "auto-mart",
   "version": "1.0.0",
+  "engines": {
+    "node": "11.1.0"
+  },
   "description": "A car sales app",
   "main": "server/index.js",
   "scripts": {
