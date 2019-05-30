@@ -6,6 +6,8 @@ import dummyCars, {
   updateCarPrice,
   clearCars,
   deleteCar,
+  filterCars,
+  filterPrice,
 } from './dummyCars';
 
 import dummyOrders, {
@@ -15,6 +17,7 @@ import dummyOrders, {
   getOrderByBuyer,
   clearOrders,
 } from './dummyOrders';
+
 import dummyUsers, {
   getUser,
   getUserByEmail,
@@ -31,7 +34,10 @@ const carsHelper = {
   clearCars,
   updateCarPrice,
   deleteCar,
+  filterCars,
+  filterPrice,
 };
+
 const ordersHelper = {
   addPurchaseOrder,
   getOrder,
@@ -39,6 +45,7 @@ const ordersHelper = {
   editPurchaseOrder,
   clearOrders,
 };
+
 const usersHelper = {
   getUser,
   removeAllUsers,

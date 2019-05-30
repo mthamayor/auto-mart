@@ -76,14 +76,10 @@ const cars = {
   updateCarPice(req, res) {
     let id = req.params.car_id;
     let { newPrice } = req.body;
-
     id = parseInt(id, 10);
     newPrice = parseFloat(newPrice);
-
     carsHelper.updateCarPrice(id, newPrice);
-
     const car = carsHelper.getCar(id);
-
     res.status(201).send({
       status: 201,
       data: {
@@ -104,9 +100,7 @@ const cars = {
   getAvailableCar(req, res) {
     let carId = req.params.car_id;
     carId = parseInt(carId, 10);
-
     const car = carsHelper.getAvailableCar(carId);
-
     res.status(200).send({
       status: 200,
       data: {
@@ -127,11 +121,40 @@ const cars = {
   deleteCar(req, res) {
     let carId = req.params.car_id;
     carId = parseInt(carId, 10);
-
     carsHelper.deleteCar(carId);
     res.status(200).send({
       status: 200,
       data: 'Car Ad successfully deleted',
+    });
+  },
+  filterCars(req, res) {
+    const { filterParams, filterPriceParams } = req;
+    let filteredCars = carsHelper.filterCars(filterParams);
+    // console.log(filterPriceParams);
+    // console.log(filteredCars);
+    if (filterPriceParams !== undefined) {
+      filteredCars = carsHelper.filterPrice(filteredCars, filterPriceParams);
+    }
+    const data = [];
+    filteredCars.forEach((car) => {
+      const returnData = {
+        id: car.id,
+        owner: car.owner,
+        created_on: car.createdOn,
+        manufacturer: car.manufacturer,
+        status: car.status,
+        state: car.state,
+        price: car.price,
+        model: car.model,
+        name: car.name,
+        body_type: car.bodyType,
+        image_urls: car.imageUrlList,
+      };
+      data.push(returnData);
+    });
+    res.status(200).send({
+      status: 200,
+      data,
     });
   },
 };
