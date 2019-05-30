@@ -1,13 +1,11 @@
 /**
  * Routes every car API endpoint here
  */
-
 import express from 'express';
 import { cars } from '../controllers';
 import { authorization, carsValidator } from '../middlewares';
 
 const carsRouter = express.Router();
-
 
 // Protected route
 carsRouter.post('/',
@@ -44,5 +42,9 @@ carsRouter.delete(
   cars.deleteCar,
 );
 
+carsRouter.get('/',
+  authorization.adminSearch,
+  carsValidator.filterCars,
+  cars.filterCars);
 
 export default carsRouter;

@@ -2,10 +2,8 @@
  * user validator controller
  * Handles every user Validator related tasks
  */
-
 import validator from 'validator';
 import { ordersHelper, carsHelper } from '../models';
-
 
 const purchaseOrdersValidator = {
   createPurchaseOrder(req, res, next) {

@@ -120,12 +120,9 @@ const auth = {
   setAdmin(req, res) {
     let userId = req.params.user_id;
     userId = parseInt(userId, 10);
-
     usersHelper.setAdmin(userId);
-
     // Retreive data from db
     const data = usersHelper.getUser(userId);
-
     // Create a jwt token and send along with the data
     const options = { expiresIn: '1d' };
     const secret = process.env.JWT_SECRET || 'jwtSecret';
@@ -143,7 +140,6 @@ const auth = {
       secret,
       options,
     );
-
     return res.status(200).send({
       status: 200,
       data: {

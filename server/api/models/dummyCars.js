@@ -23,6 +23,8 @@ export const getCar = id => dummyCars.find(car => car.id === id) || -1;
 
 export const getAvailableCar = id => dummyCars.find(car => (car.status === 'available' && car.id === id)) || -1;
 
+export const getAvailableCars = () => dummyCars.filter(car => car.status === 'available');
+
 export const markAsSold = (id) => {
   const car = getCar(id);
   if (car !== -1) {
@@ -30,6 +32,7 @@ export const markAsSold = (id) => {
   }
   return car;
 };
+
 export const clearCars = () => {
   dummyCars.splice(0, dummyCars.length);
 };
@@ -48,4 +51,46 @@ export const deleteCar = (id) => {
       dummyCars.splice(i, 1);
     }
   }
+};
+
+export const filterCars = (filterReceived) => {
+  let filterParams = filterReceived;
+  let cars = dummyCars.map(car => car);
+
+  // Return cars if no filter is received
+  if (filterReceived.length === 0) {
+    return cars;
+  }
+
+  const carStatus = filterParams.filter(filter => (filter.name === 'status' && filter.value === 'available'));
+
+  if (carStatus.length > 0) {
+    cars = getAvailableCars();
+  }
+  filterParams = filterParams.filter(filter => filter.name !== 'status');
+
+  if (filterParams.length === 0) {
+    return cars;
+  }
+
+  const filteredCars = cars.filter((car) => {
+    let found = false;
+    for (let i = 0; i < filterParams.length; i += 1) {
+      const { name } = filterParams[i];
+      const { value } = filterParams[i];
+      const carName = car[name];
+      if (carName.toUpperCase() === value.toUpperCase()) {
+        found = true;
+        break;
+      }
+    }
+    return found;
+  });
+  return filteredCars;
+};
+
+export const filterPrice = (carList, filterPriceParam) => {
+  const { minPrice, maxPrice } = filterPriceParam;
+  const filteredCars = carList.filter(car => (car.price >= minPrice && car.price <= maxPrice));
+  return filteredCars;
 };
