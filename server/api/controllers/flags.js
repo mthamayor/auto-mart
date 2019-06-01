@@ -25,6 +25,7 @@ const flags = {
       carId: parseInt(carId, 10),
       reason,
       description,
+      createdOn: Date.now(),
     });
 
     const flag = flagsHelper.getFlag(id);
