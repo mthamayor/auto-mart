@@ -130,8 +130,6 @@ const cars = {
   filterCars(req, res) {
     const { filterParams, filterPriceParams } = req;
     let filteredCars = carsHelper.filterCars(filterParams);
-    // console.log(filterPriceParams);
-    // console.log(filteredCars);
     if (filterPriceParams !== undefined) {
       filteredCars = carsHelper.filterPrice(filteredCars, filterPriceParams);
     }
