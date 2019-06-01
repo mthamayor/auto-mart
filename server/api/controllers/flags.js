@@ -1,4 +1,5 @@
 import { flagsHelper } from '../models';
+import helpers from '../utils/helpers';
 
 
 const flags = {
@@ -23,8 +24,8 @@ const flags = {
       id,
       userId: reporter,
       carId: parseInt(carId, 10),
-      reason,
-      description,
+      reason: helpers.replaceAllWhitespace(reason),
+      description: helpers.replaceAllWhitespace(description),
       createdOn: Date.now(),
     });
 
