@@ -26,6 +26,8 @@ import dummyUsers, {
   setAdmin,
 } from './dummyUsers';
 
+import dummyFlags, { addFlag, getAllFlags, getFlag } from './flags';
+
 const carsHelper = {
   addCar,
   getCar,
@@ -54,6 +56,12 @@ const usersHelper = {
   setAdmin,
 };
 
+const flagsHelper = {
+  addFlag, getAllFlags, getFlag,
+};
+
 export {
-  dummyCars, dummyUsers, dummyOrders, carsHelper, ordersHelper, usersHelper,
+  dummyCars, dummyUsers, dummyOrders,
+  dummyFlags, carsHelper, ordersHelper,
+  usersHelper, flagsHelper,
 };

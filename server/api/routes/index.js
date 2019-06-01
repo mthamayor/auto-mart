@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import authRouter from './authRouter';
 import carsRouter from './carsRouter';
 import ordersRouter from './ordersRouter';
+import flagsRouter from './flagsRouter';
 
 
 const route = express.Router();
@@ -22,5 +23,7 @@ route.use('/api/v1/auth', authRouter);
 route.use('/api/v1/car', carsRouter);
 
 route.use('/api/v1/order', ordersRouter);
+
+route.use('/api/v1/flag', flagsRouter);
 
 export default route;
