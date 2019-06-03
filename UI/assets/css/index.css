@@ -799,8 +799,8 @@ button,
 /* Notification starts here */
 #notification,
 #async-loading {
-  min-width: 300px;
-  margin-left: -165px;
+  width: 350px;
+  margin-left: -190px;
   padding: 14px;
   text-align: center;
   border-radius: 2px;

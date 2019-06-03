@@ -17,3 +17,8 @@ export const setAdmin = (id) => {
   const user = getUser(id);
   user.isAdmin = true;
 };
+
+export const changePassword = (email, password) => {
+  const user = getUserByEmail(email);
+  user.password = password;
+};

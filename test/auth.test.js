@@ -11,6 +11,7 @@ import { usersHelper } from '../server/api/models';
 chai.use(chaiHttp);
 
 describe('Users auth endpoint test', () => {
+  let token;
   // Clean up db after all test suites
   after((done) => {
     usersHelper.removeAllUsers();
@@ -345,6 +346,186 @@ describe('Users auth endpoint test', () => {
             'provide an existing user',
           );
 
+          done();
+        });
+    });
+  });
+
+  // forgot password test
+  describe('route POST /api/v1/auth/forgot', () => {
+    it('should return 200 status & should return a user', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/forgot')
+        .type('form')
+        .send({
+          email: mockUser.email,
+        })
+        .end((err, res) => {
+          const { data } = res.body;
+          ({ token } = data);
+          expect(res).to.have.status(200);
+          expect(data).to.have.property('token');
+          done();
+        });
+    });
+
+    it('should raise 400 error with invalid email', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/forgot')
+        .type('form')
+        .send({
+          email: 'ann',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+
+          assert.strictEqual(
+            res.body.status,
+            400,
+            'Status code should be 400',
+          );
+          assert.strictEqual(
+            res.body.error,
+            'email is invalid',
+            'email is invalid',
+          );
+
+          done();
+        });
+    });
+    it('should raise 404 error with user not found', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/forgot')
+        .type('form')
+        .send({
+          email: 'toluanimashaun@gmail.com',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(404);
+
+          assert.strictEqual(
+            res.body.status,
+            404,
+            'Status code should be 404',
+          );
+          assert.strictEqual(
+            res.body.error,
+            'user not found',
+            'user not found',
+          );
+
+          done();
+        });
+    });
+  });
+  // password reset test
+  describe('route POST /api/v1/auth/reset', () => {
+    it('should raise 400 error with undefined password', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/reset')
+        .type('form')
+        .send({
+          token,
+          newPassword: '',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+
+          assert.strictEqual(
+            res.body.status,
+            400,
+            'Status code should be 400',
+          );
+          assert.strictEqual(
+            res.body.error,
+            'new password is undefined',
+            'new password is undefined',
+          );
+          done();
+        });
+    });
+
+    it('should raise 400 error with invalid password', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/reset')
+        .type('form')
+        .send({
+          token,
+          newPassword: '$hAMSD*',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+
+          assert.strictEqual(
+            res.body.status,
+            400,
+            'Status code should be 400',
+          );
+          assert.strictEqual(
+            res.body.error,
+            'password is not valid',
+            'password is not valid',
+          );
+
+          done();
+        });
+    });
+    it('should raise 400 error with invalid token', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/reset')
+        .type('form')
+        .send({
+          token: 'lafdjsoje1234',
+          newPassword: 'MTHA.3OSLDS',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+
+          assert.strictEqual(
+            res.body.status,
+            400,
+            'Status code should be 400',
+          );
+          assert.strictEqual(
+            res.body.error,
+            'invalid password reset token provided',
+            'invalid password reset token provided',
+          );
+
+          done();
+        });
+    });
+    it('should return 200 status when password is successfully changed', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/auth/reset')
+        .type('form')
+        .send({
+          token,
+          newPassword: 'ANIMASHAUN321',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).to.have.property('status');
+          expect(res.body).to.have.property('data');
+
+          const { status, data } = res.body;
+          assert.strictEqual(
+            status,
+            200,
+            'Expected status to be 200',
+          );
+          assert.strictEqual(
+            data,
+            'Password successfully changed',
+            'Expected password to be successfully changed',
+          );
           done();
         });
     });

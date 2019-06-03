@@ -1,17 +1,17 @@
 const forgotPasswordForm = document.querySelector('#forgot-password-form');
 
-forgotPasswordForm.addEventListener('submit', event => {
+forgotPasswordForm.addEventListener('submit', (event) => {
   event.preventDefault();
-  const email = forgotPasswordForm['email'].value;
+  const email = forgotPasswordForm.email.value;
 
   // Form validation
-  if (email.length <= 0) {
+  if (!Helpers.isEmail(email)) {
     Populator.showNotification('Please enter a valid email');
     return;
   }
   // Form validation ends here
 
-  //Api calls
+  // Api calls
   Populator.showAsyncNotification();
 
   setTimeout(() => {
