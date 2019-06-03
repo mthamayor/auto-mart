@@ -6,28 +6,12 @@
 import validator from 'validator';
 import multer from 'multer';
 import fs from 'fs';
-import path from 'path';
 import { promisify } from 'util';
-
-import helpers from '../utils/helpers';
 import { carsHelper } from '../models';
+import upload from '../config/multer';
+import { imageUploader } from '../utils';
 
 const unlinkAsync = promisify(fs.unlink);
-
-const storage = multer.diskStorage({
-  filename: (req, file, callback) => {
-    callback(null, Date.now() + file.originalname);
-  },
-});
-const fileFilter = (req, file, callback) => {
-  const ext = path.extname(file.originalname);
-  if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
-    callback(new Error('Only images are allowed'));
-    return;
-  }
-  callback(null, true);
-};
-const upload = multer({ storage, fileFilter }).array('imageArray', 10);
 
 const carsValidator = {
   createAd(req, res, next) {
@@ -43,7 +27,7 @@ const carsValidator = {
         // An unknown error occurred when uploading.
         res.status(403).send({
           status: 403,
-          error: 'Error occured while uploading',
+          error: err.message,
         });
         return;
       }
@@ -114,7 +98,7 @@ const carsValidator = {
         });
         return;
       }
-      // Restrict images to 1 - 4
+      // Restrict images to 1 - 5
       if (imgFiles.length <= 0 || imgFiles.length > 6) {
         res.status(400).send({
           status: 400,
@@ -125,7 +109,8 @@ const carsValidator = {
       const imageList = [];
 
       for (let i = 0; i < imgFiles.length; i += 1) {
-        const image = await helpers.uploadImage(req.files[i]);
+        const image = await imageUploader(req.files[i]);
+        // delete files after upload
         await unlinkAsync(imgFiles[i].path);
         if (image === -1) {
           res.status(502).send({

@@ -24,9 +24,13 @@ import dummyUsers, {
   addUser,
   removeAllUsers,
   setAdmin,
+  changePassword,
 } from './dummyUsers';
 
 import dummyFlags, { addFlag, getAllFlags, getFlag } from './flags';
+import passwordReset, {
+  getRequest, addRequest, removeRequest, getRequestWithToken,
+} from './passwordReset';
 
 const carsHelper = {
   addCar,
@@ -54,14 +58,19 @@ const usersHelper = {
   addUser,
   getUserByEmail,
   setAdmin,
+  changePassword,
 };
 
 const flagsHelper = {
   addFlag, getAllFlags, getFlag,
 };
 
+const passwordHelper = {
+  passwordReset, getRequest, getRequestWithToken, addRequest, removeRequest,
+};
+
 export {
   dummyCars, dummyUsers, dummyOrders,
   dummyFlags, carsHelper, ordersHelper,
-  usersHelper, flagsHelper,
+  usersHelper, flagsHelper, passwordHelper,
 };

@@ -1,7 +1,8 @@
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import helpers from '../utils/helpers';
-import { dummyUsers, usersHelper } from '../models';
+import crypto from 'crypto';
+import { dummyUsers, usersHelper, passwordHelper } from '../models';
+import { hashPassword, helpers } from '../utils';
+import customMailer from '../config/mailer';
 /**
  * Auth controller
  * Handles every user and auth related tasks
@@ -22,11 +23,7 @@ const auth = {
     address = helpers.replaceAllWhitespace(address);
     password = password.trim();
 
-    // Hash and encrypt password
-    const saltRounds = 10;
-    const salt = bcrypt.genSaltSync(saltRounds);
-    const hash = bcrypt.hashSync(password, salt);
-
+    const hash = hashPassword(password);
     const id = dummyUsers.length + 1;
 
     usersHelper.addUser({
@@ -60,7 +57,7 @@ const auth = {
       secret,
       options,
     );
-    return res.status(201).send({
+    res.status(201).send({
       status: 201,
       data: {
         token,
@@ -104,7 +101,7 @@ const auth = {
       options,
     );
 
-    return res.status(200).send({
+    res.status(200).send({
       status: 200,
       data: {
         token,
@@ -151,6 +148,64 @@ const auth = {
         address: data.address,
         isAdmin: data.isAdmin,
       },
+    });
+  },
+  forgotPassword(req, res) {
+    const { email } = req.body;
+    const token = crypto.randomBytes(20).toString('hex');
+
+    passwordHelper.addRequest({
+      email,
+      token,
+      expiresOn: Date.now() + 3600000,
+    });
+    const resetRequest = passwordHelper.getRequest(email);
+
+    const mailOptions = {
+      to: resetRequest.email,
+      from: process.env.GMAIL,
+      subject: 'AutoMart Password Reset',
+      text: 'You are receiving this because you requested to reset your password\n\n'
+            + 'please click on the following link to complete the process\n\n'
+            + `http://mthamayor.github.io/auto-mart/reset?token=${token}`,
+    };
+
+    if (process.env.NODE_ENV !== 'production') {
+      res.status(200).send({
+        status: 200,
+        data: { token },
+      });
+      return;
+    }
+
+    customMailer.sendMail(mailOptions, (err) => {
+      if (err) {
+        res.status(500).send({
+          status: 500,
+          data: 'Password reset Failed',
+        });
+        return;
+      }
+      res.status(200).send({
+        status: 200,
+        data: 'Password reset successful',
+      });
+    });
+  },
+  resetPassword(req, res) {
+    let {
+      email, newPassword,
+    } = req.body;
+
+    email = email.trim();
+    newPassword = newPassword.trim();
+    const hash = hashPassword(newPassword);
+    usersHelper.changePassword(email, hash);
+    passwordHelper.removeRequest(email);
+
+    res.status(200).send({
+      status: 200,
+      data: 'Password successfully changed',
     });
   },
 };

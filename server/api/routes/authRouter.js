@@ -15,4 +15,10 @@ authRouter.post('/signin', authValidator.signIn, auth.signIn);
 // Make a user an admin
 authRouter.post('/:user_id/admin', authValidator.setAdmin, auth.setAdmin);
 
+// Forgot password route
+authRouter.post('/forgot', authValidator.forgotPassword, auth.forgotPassword);
+
+// Reset password route
+authRouter.post('/reset', authValidator.resetPassword, auth.resetPassword);
+
 export default authRouter;

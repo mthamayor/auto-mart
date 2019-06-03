@@ -5,7 +5,8 @@
 
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
-import { usersHelper } from '../models';
+import { usersHelper, passwordHelper } from '../models';
+import helpers from '../utils/helpers';
 
 const authValidator = {
   signUp(req, res, next) {
@@ -120,6 +121,66 @@ const authValidator = {
       });
       return;
     }
+    next();
+  },
+  forgotPassword(req, res, next) {
+    const { email } = req.body;
+    if (!validator.isEmail(email)) {
+      res.status(400).send({
+        status: 400,
+        error: 'email is invalid',
+      });
+      return;
+    }
+    // check if user exists
+    const user = usersHelper.getUserByEmail(email.trim());
+
+    if (user === -1) {
+      res.status(404).send({
+        status: 404,
+        error: 'user not found',
+      });
+      return;
+    }
+    next();
+  },
+  resetPassword(req, res, next) {
+    const { newPassword, token } = req.body;
+    if (newPassword === undefined || newPassword.trim() === '') {
+      res.status(400).send({
+        status: 400,
+        error: 'new password is undefined',
+      });
+      return;
+    }
+    if (!helpers.validPassword(newPassword)) {
+      res.status(400).send({
+        status: 400,
+        error: 'password is not valid',
+      });
+      return;
+    }
+
+    const passwordRequest = passwordHelper.getRequestWithToken(token);
+
+    if (passwordRequest === -1) {
+      res.status(400).send({
+        status: 400,
+        error: 'invalid password reset token provided',
+      });
+      return;
+    }
+
+    if (Date.now() > passwordRequest.expiresOn) {
+      res.status(400).send({
+        status: 400,
+        error: 'Token has expired',
+      });
+      return;
+    }
+
+    req.body.email = passwordRequest.email;
+
     next();
   },
 };
