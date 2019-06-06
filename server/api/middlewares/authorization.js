@@ -9,7 +9,7 @@ const authorization = {
     const bearerHeader = req.headers.authorization;
     // Check if bearer is undefined
     if (typeof bearerHeader === 'undefined') {
-      res.status(401).send({
+      res.status(401).json({
         status: 401,
         error: 'authorization token not provided',
       });
@@ -25,7 +25,7 @@ const authorization = {
     const secret = process.env.JWT_SECRET || 'jwtSecret';
     jwt.verify(token, secret, (err, authToken) => {
       if (err) {
-        res.status(401).send({
+        res.status(401).json({
           status: 401,
           error:
             'user not authenticated, invalid authorization token provided',
@@ -42,7 +42,7 @@ const authorization = {
   isAdmin(req, res, next) {
     const authData = req.authToken.data;
     if (authData.isAdmin === false) {
-      res.status(401).send({
+      res.status(401).json({
         status: 401,
         error: 'you do not have permission to access this route',
       });
@@ -57,7 +57,7 @@ const authorization = {
     if ((status !== undefined && status === 'sold') || querySize <= 0) {
       const bearerHeader = req.headers.authorization;
       if (bearerHeader === undefined) {
-        res.status(401).send({
+        res.status(401).json({
           status: 401,
           error: 'you do not have permission to access this route',
         });
@@ -69,14 +69,14 @@ const authorization = {
       try {
         decoded = jwt.verify(token, secret);
       } catch (err) {
-        res.status(401).send({
+        res.status(401).json({
           status: 401,
           error: 'invalid token provided. please provide a valid token',
         });
         return;
       }
       if (!decoded.data.isAdmin) {
-        res.status(403).send({
+        res.status(403).json({
           status: 403,
           error: 'Forbidden: only admins can access this route',
         });

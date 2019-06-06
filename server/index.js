@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
+import cors from 'cors';
 import path from 'path';
 import fs from 'fs';
 import appRootPath from 'app-root-path';
@@ -13,8 +14,9 @@ const app = express();
 // create a write stream (in append mode)
 const accessLogStream = fs.createWriteStream(path.join(appRootPath.path, 'access.log'), { flags: 'a' });
 
-
 app.use(morgan('combined', { stream: accessLogStream }));
+
+app.use(cors());
 
 app.use(route);
 

@@ -17,7 +17,7 @@ const flags = {
     if (fetchFlags.length === 0) {
       id = 1;
     } else {
-      id = fetchFlags[fetchFlags.length - 1].id + 1;
+      id = flagsHelper.getLastFlag().id + 1;
     }
 
     flagsHelper.addFlag({
@@ -30,8 +30,7 @@ const flags = {
     });
 
     const flag = flagsHelper.getFlag(id);
-
-    res.status(201).send({
+    res.status(201).json({
       status: 201,
       data: {
         id: flag.id,

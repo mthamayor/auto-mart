@@ -14,7 +14,12 @@ const cars = {
 
     const createdOn = Date.now();
     const status = 'available';
-    const id = dummyCars.length + 1;
+    let id;
+    if (dummyCars.length === 0) {
+      id = 1;
+    } else {
+      id = carsHelper.getLastCar().id + 1;
+    }
     const authData = req.authToken.data;
 
     carsHelper.addCar({
@@ -33,7 +38,7 @@ const cars = {
 
     const car = carsHelper.getCar(id);
 
-    res.status(201).send({
+    res.status(201).json({
       status: 201,
       data: {
         id: car.id,
@@ -58,7 +63,7 @@ const cars = {
 
     const car = carsHelper.getCar(id);
 
-    res.status(201).send({
+    res.status(201).json({
       status: 201,
       data: {
         id: car.id,
@@ -80,7 +85,7 @@ const cars = {
     newPrice = parseFloat(newPrice);
     carsHelper.updateCarPrice(id, newPrice);
     const car = carsHelper.getCar(id);
-    res.status(201).send({
+    res.status(201).json({
       status: 201,
       data: {
         id: car.id,
@@ -101,7 +106,7 @@ const cars = {
     let carId = req.params.car_id;
     carId = parseInt(carId, 10);
     const car = carsHelper.getAvailableCar(carId);
-    res.status(200).send({
+    res.status(200).json({
       status: 200,
       data: {
         id: car.id,
@@ -122,7 +127,7 @@ const cars = {
     let carId = req.params.car_id;
     carId = parseInt(carId, 10);
     carsHelper.deleteCar(carId);
-    res.status(200).send({
+    res.status(200).json({
       status: 200,
       data: 'Car Ad successfully deleted',
     });
@@ -150,7 +155,7 @@ const cars = {
       };
       data.push(returnData);
     });
-    res.status(200).send({
+    res.status(200).json({
       status: 200,
       data,
     });

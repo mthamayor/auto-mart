@@ -15,35 +15,35 @@ const authValidator = {
     } = req.body;
 
     if (email === undefined || !validator.isEmail(email)) {
-      res.status(400).send({
+      res.status(400).json({
         status: 400,
         error: 'email is undefined or invalid',
       });
       return;
     }
     if (firstName === undefined || !validator.isAlpha(firstName.trim())) {
-      res.status(400).send({
+      res.status(400).json({
         status: 400,
         error: 'first name is undefined or invalid',
       });
       return;
     }
     if (lastName === undefined || !validator.isAlpha(lastName.trim())) {
-      res.status(400).send({
+      res.status(400).json({
         status: 400,
         error: 'last name is undefined or invalid',
       });
       return;
     }
     if (address === undefined || address.trim() === '') {
-      res.status(400).send({
+      res.status(400).json({
         status: 400,
         error: 'address is undefined or invalid',
       });
       return;
     }
     if (password === undefined || password.trim() === '') {
-      res.status(400).send({
+      res.status(400).json({
         status: 400,
         error: 'password is undefined or invalid',
       });
@@ -52,7 +52,7 @@ const authValidator = {
 
     // Check if user already exists
     if (usersHelper.getUserByEmail(email) !== -1) {
-      res.status(409).send({
+      res.status(409).json({
         status: 409,
         error: 'user already exists',
       });
@@ -71,7 +71,7 @@ const authValidator = {
     ) {
       res
         .status(400)
-        .send({
+        .json({
           status: 400,
           error: 'email is undefined or invalid',
         });
@@ -82,7 +82,7 @@ const authValidator = {
     ) {
       res
         .status(400)
-        .send({
+        .json({
           status: 400,
           error: 'password is undefined',
         });
@@ -93,7 +93,7 @@ const authValidator = {
     if (usersHelper.getUserByEmail(email) === -1) {
       res
         .status(404)
-        .send({
+        .json({
           status: 404,
           error: 'user does not exist',
         });
@@ -104,7 +104,7 @@ const authValidator = {
     const user = usersHelper.getUserByEmail(email);
     const passwordMatch = bcrypt.compareSync(password, user.password);
     if (!passwordMatch) {
-      res.status(401).send({
+      res.status(401).json({
         status: 401,
         error: 'invalid login credentials',
       });
@@ -115,7 +115,7 @@ const authValidator = {
   setAdmin(req, res, next) {
     const id = req.params.user_id;
     if (usersHelper.getUser(parseInt(id, 10)) === -1) {
-      res.status(404).send({
+      res.status(404).json({
         status: 404,
         error: 'user does not exist',
       });
@@ -126,7 +126,7 @@ const authValidator = {
   forgotPassword(req, res, next) {
     const { email } = req.body;
     if (!validator.isEmail(email)) {
-      res.status(400).send({
+      res.status(400).json({
         status: 400,
         error: 'email is invalid',
       });
@@ -136,7 +136,7 @@ const authValidator = {
     const user = usersHelper.getUserByEmail(email.trim());
 
     if (user === -1) {
-      res.status(404).send({
+      res.status(404).json({
         status: 404,
         error: 'user not found',
       });
@@ -147,14 +147,14 @@ const authValidator = {
   resetPassword(req, res, next) {
     const { newPassword, token } = req.body;
     if (newPassword === undefined || newPassword.trim() === '') {
-      res.status(400).send({
+      res.status(400).json({
         status: 400,
         error: 'new password is undefined',
       });
       return;
     }
     if (!helpers.validPassword(newPassword)) {
-      res.status(400).send({
+      res.status(400).json({
         status: 400,
         error: 'password is not valid',
       });
@@ -164,7 +164,7 @@ const authValidator = {
     const passwordRequest = passwordHelper.getRequestWithToken(token);
 
     if (passwordRequest === -1) {
-      res.status(400).send({
+      res.status(400).json({
         status: 400,
         error: 'invalid password reset token provided',
       });
@@ -172,7 +172,7 @@ const authValidator = {
     }
 
     if (Date.now() > passwordRequest.expiresOn) {
-      res.status(400).send({
+      res.status(400).json({
         status: 400,
         error: 'Token has expired',
       });
