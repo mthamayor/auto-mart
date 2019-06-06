@@ -4,6 +4,7 @@ import authRouter from './authRouter';
 import carsRouter from './carsRouter';
 import ordersRouter from './ordersRouter';
 import flagsRouter from './flagsRouter';
+import docsRouter from './docsRouter';
 
 
 const route = express.Router();
@@ -25,5 +26,7 @@ route.use('/api/v1/car', carsRouter);
 route.use('/api/v1/order', ordersRouter);
 
 route.use('/api/v1/flag', flagsRouter);
+
+route.use('/api/v1/docs', docsRouter);
 
 export default route;
