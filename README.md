@@ -8,9 +8,19 @@ Auto Mart is an online marketplace for automobiles of diverse makes, model or bo
 
 ## Getting started
 
- 1. Clone the repository
- 2. Install dependencies from the root directory
- 3. Starting the project from a localhost server
+ 1. Documentation, Pivotal tracker project and UI
+ 2. Clone the repository
+ 3. Install dependencies from the root directory
+ 4. Starting the project from a localhost server
+ 5. Deployment
+
+## Documentation, Pivotal tracker project and UI
+
+This Documentation for this API can be found on [here](https://mthamayor-auto-mart.herokuapp.com/api/v1/docs)
+
+This Pivotal tracker project for this API can be found on [here](https://www.pivotaltracker.com/n/projects/2346094)
+
+This User Interface for this API can be found on [here](http://mthamayor.github.io/auto-mart)
 
 ## Cloning the repository
 

@@ -50,6 +50,14 @@ const authValidator = {
       return;
     }
 
+    if (!helpers.validPassword(password)) {
+      res.status(400).send({
+        status: 400,
+        error: 'password is not valid',
+      });
+      return;
+    }
+
     // Check if user already exists
     if (usersHelper.getUserByEmail(email) !== -1) {
       res.status(409).json({
