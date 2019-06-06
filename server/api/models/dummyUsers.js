@@ -5,6 +5,8 @@ export const getUser = userId => dummyUsers.find(user => user.id === userId) || 
 
 export const getUserByEmail = userEmail => dummyUsers.find(user => user.email === userEmail) || -1;
 
+export const getLastUser = () => dummyUsers[dummyUsers.length - 1];
+
 export const removeAllUsers = () => {
   dummyUsers.splice(0, dummyUsers.length);
 };

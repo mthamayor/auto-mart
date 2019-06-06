@@ -14,7 +14,7 @@ const flagsValidator = {
       || carId.trim() === ''
       || !validator.isNumeric(carId)
     ) {
-      res.status(400).send({
+      res.status(400).json({
         status: 400,
         error: 'car id is undefined or invalid',
       });
@@ -25,7 +25,7 @@ const flagsValidator = {
       reason === undefined
       || reason.trim() === ''
     ) {
-      res.status(400).send({
+      res.status(400).json({
         status: 400,
         error: 'reason is undefined',
       });
@@ -35,7 +35,7 @@ const flagsValidator = {
       description === undefined
       || description.trim() === ''
     ) {
-      res.status(400).send({
+      res.status(400).json({
         status: 400,
         error: 'description is undefined',
       });
@@ -45,7 +45,7 @@ const flagsValidator = {
     const car = carsHelper.getCar(parseInt(carId, 10));
 
     if (car === -1) {
-      res.status(404).send({
+      res.status(404).json({
         status: 404,
         error: 'car to flag was not found',
       });
@@ -53,7 +53,7 @@ const flagsValidator = {
     }
 
     if (car.owner === reporter) {
-      res.status(403).send({
+      res.status(403).json({
         status: 403,
         error: 'you cannot flag your own advert',
       });
@@ -61,7 +61,7 @@ const flagsValidator = {
     }
 
     if (car.status === 'sold') {
-      res.status(403).send({
+      res.status(403).json({
         status: 403,
         error: 'you cannot flag a sold advert',
       });

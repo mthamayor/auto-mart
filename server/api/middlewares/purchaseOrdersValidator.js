@@ -16,7 +16,7 @@ const purchaseOrdersValidator = {
       || carId.trim() === ''
       || !validator.isNumeric(carId)
     ) {
-      res.status(400).send({
+      res.status(400).json({
         status: 400,
         error: 'car id is undefined or invalid',
       });
@@ -28,7 +28,7 @@ const purchaseOrdersValidator = {
       || priceOffered.trim() === ''
       || !validator.isNumeric(priceOffered)
     ) {
-      res.status(400).send({
+      res.status(400).json({
         status: 400,
         error: 'price is undefined or invalid',
       });
@@ -38,14 +38,14 @@ const purchaseOrdersValidator = {
     const findCar = carsHelper.getCar(parseInt(carId, 10));
 
     if (findCar.owner === buyer) {
-      res.status(409).send({
+      res.status(409).json({
         status: 409,
         error: 'you cannot create purchase order for ad you created',
       });
       return;
     }
     if (findCar === -1) {
-      res.status(404).send({
+      res.status(404).json({
         status: 404,
         error: 'car not found',
       });
@@ -53,7 +53,7 @@ const purchaseOrdersValidator = {
     }
 
     if (findCar.status !== 'available') {
-      res.status(403).send({
+      res.status(403).json({
         status: 403,
         error: 'car has already been sold',
       });
@@ -62,7 +62,7 @@ const purchaseOrdersValidator = {
 
     const purchaseOrder = ordersHelper.getOrderByBuyer(buyer);
     if (purchaseOrder !== -1) {
-      res.status(409).send({
+      res.status(409).json({
         status: 409,
         error: 'you already created a purchase order',
       });
@@ -81,7 +81,7 @@ const purchaseOrdersValidator = {
       || orderId.trim() === ''
       || !validator.isNumeric(orderId)
     ) {
-      return res.status(400).send({
+      return res.status(400).json({
         status: 400,
         error: 'order id is undefined or invalid',
       });
@@ -92,7 +92,7 @@ const purchaseOrdersValidator = {
       || newPrice.trim() === ''
       || !validator.isNumeric(newPrice)
     ) {
-      return res.status(400).send({
+      return res.status(400).json({
         status: 400,
         error: 'new price is undefined or invalid',
       });
@@ -102,21 +102,21 @@ const purchaseOrdersValidator = {
       parseInt(orderId, 10),
     );
     if (findOrder === -1) {
-      return res.status(404).send({
+      return res.status(404).json({
         status: 404,
         error: 'purchase order does not exist',
       });
     }
 
     if (findOrder.buyer !== buyer) {
-      return res.status(403).send({
+      return res.status(403).json({
         status: 403,
         error: 'you cannot edit another user\'s order',
       });
     }
 
     if (findOrder.status !== 'pending') {
-      return res.status(403).send({
+      return res.status(403).json({
         status: 403,
         error: 'the transaction is not pending',
       });

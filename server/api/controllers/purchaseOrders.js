@@ -8,7 +8,14 @@ const purchaseOrders = {
     priceOffered = parseFloat(priceOffered);
     const status = 'pending';
     const createdOn = Date.now();
-    const id = dummyOrders.length + 1;
+
+    let id;
+    if (dummyOrders.length === 0) {
+      id = 1;
+    } else {
+      id = ordersHelper.getLastOrder().id + 1;
+    }
+
     ordersHelper.addPurchaseOrder({
       id,
       buyer: authData.id,
@@ -18,7 +25,7 @@ const purchaseOrders = {
       status,
     });
     const car = carsHelper.getCar(carId);
-    res.status(201).send({
+    res.status(201).json({
       status: 201,
       data: {
         id,
@@ -47,7 +54,7 @@ const purchaseOrders = {
       old_price_offered: oldPrice,
       new_price_offered: order.priceOffered,
     };
-    res.status(201).send({
+    res.status(201).json({
       status: 201,
       data,
     });

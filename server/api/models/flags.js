@@ -16,3 +16,5 @@ export const addFlag = (flag) => {
 export const getAllFlags = () => dummyFlags;
 
 export const getFlag = id => dummyFlags.find(flag => flag.id === id) || -1;
+
+export const getLastFlag = () => dummyFlags[dummyFlags.length - 1];

@@ -18,14 +18,14 @@ const carsValidator = {
     upload(req, res, async (err) => {
       if (err instanceof multer.MulterError) {
         // A Multer error occurred when uploading.
-        res.status(400).send({
+        res.status(400).json({
           status: 400,
           error: 'Images uploaded are not valid',
         });
         return;
       } if (err) {
         // An unknown error occurred when uploading.
-        res.status(403).send({
+        res.status(403).json({
           status: 403,
           error: err.message,
         });
@@ -43,56 +43,56 @@ const carsValidator = {
         name,
       } = req.body;
       if (state === undefined || state.trim() === '') {
-        res.status(400).send({
+        res.status(400).json({
           status: 400,
           error: 'vehicle state is undefined',
         });
         return;
       }
       if (state !== 'new' && state !== 'used') {
-        res.status(400).send({
+        res.status(400).json({
           status: 400,
           error: 'vehicle state can only be new or used',
         });
         return;
       }
       if (price === undefined || price.trim() === '') {
-        res.status(400).send({
+        res.status(400).json({
           status: 400,
           error: 'price is undefined',
         });
         return;
       }
       if (!validator.isNumeric(price)) {
-        res.status(400).send({
+        res.status(400).json({
           status: 400,
           error: 'price is not a number',
         });
         return;
       }
       if (manufacturer === undefined || manufacturer.trim() === '') {
-        res.status(400).send({
+        res.status(400).json({
           status: 400,
           error: 'manufacturer is undefined or invalid',
         });
         return;
       }
       if (model === undefined || model.trim() === '') {
-        res.status(400).send({
+        res.status(400).json({
           status: 400,
           error: 'model undefined or invalid',
         });
         return;
       }
       if (bodyType === undefined || bodyType.trim() === '') {
-        res.status(400).send({
+        res.status(400).json({
           status: 400,
           error: 'body type is undefined or invalid',
         });
         return;
       }
       if (name === undefined || name.trim() === '') {
-        res.status(400).send({
+        res.status(400).json({
           status: 400,
           error: 'vehicle name undefined or invalid',
         });
@@ -100,7 +100,7 @@ const carsValidator = {
       }
       // Restrict images to 1 - 5
       if (imgFiles.length <= 0 || imgFiles.length > 6) {
-        res.status(400).send({
+        res.status(400).json({
           status: 400,
           error: 'please add between 1 and 6 images',
         });
@@ -113,7 +113,7 @@ const carsValidator = {
         // delete files after upload
         await unlinkAsync(imgFiles[i].path);
         if (image === -1) {
-          res.status(502).send({
+          res.status(502).json({
             status: 502,
             error: 'error uploading the images to cloudinary',
           });
@@ -139,7 +139,7 @@ const carsValidator = {
       || carId.trim() === ''
       || !validator.isNumeric(carId)
     ) {
-      res.status(400).send({
+      res.status(400).json({
         status: 400,
         error: 'car_id parameter is undefined or invalid',
       });
@@ -148,14 +148,14 @@ const carsValidator = {
     const findCar = carsHelper.getCar(parseInt(carId, 10));
 
     if (findCar === -1) {
-      res.status(404).send({
+      res.status(404).json({
         status: 404,
         error: 'car advert does not exist',
       });
       return;
     }
     if (findCar.owner !== user) {
-      res.status(403).send({
+      res.status(403).json({
         status: 403,
         error: "you cannot edit another user's advert",
       });
@@ -163,7 +163,7 @@ const carsValidator = {
     }
 
     if (findCar.status !== 'available') {
-      res.status(409).send({
+      res.status(409).json({
         status: 409,
         error: 'the car has already been marked as sold',
       });
@@ -180,7 +180,7 @@ const carsValidator = {
       || newPrice.trim() === ''
       || !validator.isNumeric(newPrice)
     ) {
-      res.status(400).send({
+      res.status(400).json({
         status: 400,
         error: 'newPrice is undefined or invalid',
       });
@@ -195,14 +195,14 @@ const carsValidator = {
       carId.trim() === ''
       || !validator.isNumeric(carId)
     ) {
-      return res.status(400).send({
+      return res.status(400).json({
         status: 400,
         error: 'car_id parameter is not a valid number',
       });
     }
     const car = carsHelper.getAvailableCar(parseInt(carId, 10));
     if (car === -1) {
-      return res.status(404).send({
+      return res.status(404).json({
         status: 404,
         error: 'car does not exist',
       });
@@ -238,7 +238,7 @@ const carsValidator = {
       (minPrice === undefined && minPrice !== maxPrice)
       || (maxPrice === undefined && maxPrice !== minPrice)
     ) {
-      res.status(400).send({
+      res.status(400).json({
         status: 400,
         error: 'please specify both min_price and maxprice',
       });
@@ -249,14 +249,14 @@ const carsValidator = {
       && maxPrice.trim() !== ''
       && minPrice.trim() !== '') {
       if (!validator.isNumeric(minPrice)) {
-        res.status(400).send({
+        res.status(400).json({
           status: 400,
           error: 'min_price is not a number',
         });
         return;
       }
       if (!validator.isNumeric(maxPrice)) {
-        res.status(400).send({
+        res.status(400).json({
           status: 400,
           error: 'max_price is not a number',
         });
@@ -266,7 +266,7 @@ const carsValidator = {
       maxPrice = parseFloat(maxPrice);
 
       if (minPrice >= maxPrice) {
-        res.status(400).send({
+        res.status(400).json({
           status: 400,
           error: 'min_price cannot be greater or equal to max price',
         });

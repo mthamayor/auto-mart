@@ -37,6 +37,8 @@ export const clearCars = () => {
   dummyCars.splice(0, dummyCars.length);
 };
 
+export const getLastCar = () => dummyCars[dummyCars.length - 1];
+
 export const updateCarPrice = (id, newPrice) => {
   const car = getCar(id);
   if (car !== -1) {

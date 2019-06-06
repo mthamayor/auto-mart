@@ -8,6 +8,7 @@ import dummyCars, {
   deleteCar,
   filterCars,
   filterPrice,
+  getLastCar,
 } from './dummyCars';
 
 import dummyOrders, {
@@ -16,6 +17,7 @@ import dummyOrders, {
   getOrder,
   getOrderByBuyer,
   clearOrders,
+  getLastOrder,
 } from './dummyOrders';
 
 import dummyUsers, {
@@ -25,9 +27,12 @@ import dummyUsers, {
   removeAllUsers,
   setAdmin,
   changePassword,
+  getLastUser,
 } from './dummyUsers';
 
-import dummyFlags, { addFlag, getAllFlags, getFlag } from './flags';
+import dummyFlags, {
+  addFlag, getAllFlags, getFlag, getLastFlag,
+} from './flags';
 import passwordReset, {
   getRequest, addRequest, removeRequest, getRequestWithToken,
 } from './passwordReset';
@@ -42,6 +47,7 @@ const carsHelper = {
   deleteCar,
   filterCars,
   filterPrice,
+  getLastCar,
 };
 
 const ordersHelper = {
@@ -50,6 +56,7 @@ const ordersHelper = {
   getOrderByBuyer,
   editPurchaseOrder,
   clearOrders,
+  getLastOrder,
 };
 
 const usersHelper = {
@@ -59,10 +66,11 @@ const usersHelper = {
   getUserByEmail,
   setAdmin,
   changePassword,
+  getLastUser,
 };
 
 const flagsHelper = {
-  addFlag, getAllFlags, getFlag,
+  addFlag, getAllFlags, getFlag, getLastFlag,
 };
 
 const passwordHelper = {

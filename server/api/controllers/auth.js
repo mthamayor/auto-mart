@@ -24,7 +24,12 @@ const auth = {
     password = password.trim();
 
     const hash = hashPassword(password);
-    const id = dummyUsers.length + 1;
+    let id;
+    if (dummyUsers.length === 0) {
+      id = 1;
+    } else {
+      id = usersHelper.getLastUser().id + 1;
+    }
 
     usersHelper.addUser({
       id,
@@ -57,7 +62,7 @@ const auth = {
       secret,
       options,
     );
-    res.status(201).send({
+    res.status(201).json({
       status: 201,
       data: {
         token,
@@ -101,7 +106,7 @@ const auth = {
       options,
     );
 
-    res.status(200).send({
+    res.status(200).json({
       status: 200,
       data: {
         token,
@@ -137,7 +142,7 @@ const auth = {
       secret,
       options,
     );
-    return res.status(200).send({
+    return res.status(200).json({
       status: 200,
       data: {
         token,
@@ -171,7 +176,7 @@ const auth = {
     };
 
     if (process.env.NODE_ENV !== 'production') {
-      res.status(200).send({
+      res.status(200).json({
         status: 200,
         data: { token },
       });
@@ -180,13 +185,13 @@ const auth = {
 
     customMailer.sendMail(mailOptions, (err) => {
       if (err) {
-        res.status(500).send({
+        res.status(500).json({
           status: 500,
           data: 'Password reset Failed',
         });
         return;
       }
-      res.status(200).send({
+      res.status(200).json({
         status: 200,
         data: 'Password reset successful',
       });
@@ -203,7 +208,7 @@ const auth = {
     usersHelper.changePassword(email, hash);
     passwordHelper.removeRequest(email);
 
-    res.status(200).send({
+    res.status(200).json({
       status: 200,
       data: 'Password successfully changed',
     });

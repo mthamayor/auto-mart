@@ -19,6 +19,8 @@ export const getOrder = id => dummyOrders.find(order => order.id === id) || -1;
 
 export const getOrderByBuyer = buyer => dummyOrders.find(order => order.buyer === buyer) || -1;
 
+export const getLastOrder = () => dummyOrders[dummyOrders.length - 1];
+
 export const editPurchaseOrder = (id, newPrice) => {
   const order = getOrder(id);
   if (order !== -1) {
