@@ -172,7 +172,7 @@ const auth = {
       subject: 'AutoMart Password Reset',
       text: 'You are receiving this because you requested to reset your password\n\n'
             + 'please click on the following link to complete the process\n\n'
-            + `http://mthamayor.github.io/auto-mart/reset?token=${token}`,
+            + `https://mthamayor.github.io/auto-mart/reset-password?token=${token}`,
     };
 
     if (process.env.NODE_ENV !== 'production') {
