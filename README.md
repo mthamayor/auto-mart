@@ -12,7 +12,8 @@ Auto Mart is an online marketplace for automobiles of diverse makes, model or bo
  2. Clone the repository
  3. Install dependencies from the root directory
  4. Starting the project from a localhost server
- 5. Deployment
+ 5. ENV Variables
+ 6. Deployment
 
 ## Documentation, Pivotal tracker project and UI
 
@@ -43,6 +44,11 @@ From the project's root directory, you can start both the server and client conc
 You can choose to run tests with
 
     npm run test
+
+## ENV Variables
+
+A sample of the env file is provided. Some features will not work in productions unless they are
+filled out.
 
 ## Deployment
 
