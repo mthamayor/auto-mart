@@ -1,5 +1,7 @@
-import helpers from './helpers';
 import imageUploader from './imageUploader';
-import hashPassword from './hashPassword';
+import HelperFunctions from './HelperFunctions';
+import ResponseHandler from './ResponseHandler';
 
-export { helpers, imageUploader, hashPassword };
+export {
+  HelperFunctions, imageUploader, ResponseHandler,
+};

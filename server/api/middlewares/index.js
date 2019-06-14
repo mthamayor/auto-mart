@@ -1,9 +1,9 @@
-import carsValidator from './carsValidator';
-import authValidator from './authValidator';
-import purchaseOrdersValidator from './purchaseOrdersValidator';
-import authorization from './authorization';
-import flagsValidator from './flagsValidator';
+import CarsValidator from './CarsValidator';
+import AuthValidator from './AuthValidator';
+import PurchaseOrdersValidator from './PurchaseOrdersValidator';
+import Authorization from './Authorization';
+import FlagsValidator from './FlagsValidator';
 
 export {
-  carsValidator, authValidator, purchaseOrdersValidator, flagsValidator, authorization,
+  CarsValidator, AuthValidator, PurchaseOrdersValidator, FlagsValidator, Authorization,
 };

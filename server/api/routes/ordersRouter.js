@@ -4,23 +4,23 @@
 
 import express from 'express';
 
-import { authorization, purchaseOrdersValidator } from '../middlewares';
-import { purchaseOrders } from '../controllers';
+import { Authorization, PurchaseOrdersValidator } from '../middlewares';
+import { PurchaseOrders } from '../controllers';
 
 const ordersRouter = express.Router();
 
 // Protected route
 ordersRouter.post(
   '/',
-  authorization.verifyToken,
-  purchaseOrdersValidator.createPurchaseOrder,
-  purchaseOrders.createOrder,
+  Authorization.verifyToken,
+  PurchaseOrdersValidator.createPurchaseOrder,
+  PurchaseOrders.createOrder,
 );
 
 // Protected route
 ordersRouter.patch('/:order_id/price',
-  authorization.verifyToken,
-  purchaseOrdersValidator.updatePurchaseOrder,
-  purchaseOrders.updatePurchaseOrder);
+  Authorization.verifyToken,
+  PurchaseOrdersValidator.updatePurchaseOrder,
+  PurchaseOrders.updatePurchaseOrder);
 
 export default ordersRouter;

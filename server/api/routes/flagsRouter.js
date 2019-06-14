@@ -2,17 +2,17 @@
  * Routes every car API endpoint here
  */
 import express from 'express';
-import { flags } from '../controllers';
-import { authorization, flagsValidator } from '../middlewares';
+import { Flags } from '../controllers';
+import { Authorization, FlagsValidator } from '../middlewares';
 
 const flagsRouter = express.Router();
 
 // Protected route
 flagsRouter.post(
   '/',
-  authorization.verifyToken,
-  flagsValidator.createFlag,
-  flags.createFlag,
+  Authorization.verifyToken,
+  FlagsValidator.createFlag,
+  Flags.createFlag,
 );
 
 
