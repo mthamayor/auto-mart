@@ -2,49 +2,49 @@
  * Routes every car API endpoint here
  */
 import express from 'express';
-import { cars } from '../controllers';
-import { authorization, carsValidator } from '../middlewares';
+import { Cars } from '../controllers';
+import { Authorization, CarsValidator } from '../middlewares';
 
 const carsRouter = express.Router();
 
 // Protected route
 carsRouter.post('/',
-  authorization.verifyToken,
-  carsValidator.createAd,
-  cars.createAd);
+  Authorization.verifyToken,
+  CarsValidator.createAd,
+  Cars.createAd);
 
 carsRouter.patch(
   '/:car_id/status',
-  authorization.verifyToken,
-  carsValidator.markAsSold,
-  cars.markAsSold,
+  Authorization.verifyToken,
+  CarsValidator.markAsSold,
+  Cars.markAsSold,
 );
 
 carsRouter.patch(
   '/:car_id/price',
-  authorization.verifyToken,
-  carsValidator.markAsSold,
-  carsValidator.updateCarPrice,
-  cars.updateCarPice,
+  Authorization.verifyToken,
+  CarsValidator.markAsSold,
+  CarsValidator.updateCarPrice,
+  Cars.updateCarPice,
 );
 
 carsRouter.get(
   '/:car_id/',
-  carsValidator.getAvailableCar,
-  cars.getAvailableCar,
+  CarsValidator.getAvailableCar,
+  Cars.getAvailableCar,
 );
 
 carsRouter.delete(
   '/:car_id/',
-  authorization.verifyToken,
-  authorization.isAdmin,
-  carsValidator.getAvailableCar,
-  cars.deleteCar,
+  Authorization.verifyToken,
+  Authorization.isAdmin,
+  CarsValidator.getAvailableCar,
+  Cars.deleteCar,
 );
 
 carsRouter.get('/',
-  authorization.adminSearch,
-  carsValidator.filterCars,
-  cars.filterCars);
+  Authorization.adminSearch,
+  CarsValidator.filterCars,
+  Cars.filterCars);
 
 export default carsRouter;

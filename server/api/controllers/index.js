@@ -1,8 +1,8 @@
-import cars from './cars';
-import purchaseOrders from './purchaseOrders';
-import auth from './auth';
-import flags from './flags';
+import Cars from './Cars';
+import PurchaseOrders from './PurchaseOrders';
+import Auth from './Auth';
+import Flags from './Flags';
 
 export {
-  cars, purchaseOrders, auth, flags,
+  Cars, PurchaseOrders, Auth, Flags,
 };

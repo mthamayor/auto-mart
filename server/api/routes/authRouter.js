@@ -3,22 +3,22 @@
  */
 
 import express from 'express';
-import { auth } from '../controllers';
-import { authValidator } from '../middlewares';
+import { Auth } from '../controllers';
+import { AuthValidator } from '../middlewares';
 
 const authRouter = express.Router();
 
-authRouter.post('/signup', authValidator.signUp, auth.signUp);
+authRouter.post('/signup', AuthValidator.signUp, Auth.signUp);
 
-authRouter.post('/signin', authValidator.signIn, auth.signIn);
+authRouter.post('/signin', AuthValidator.signIn, Auth.signIn);
 
 // Make a user an admin
-authRouter.post('/:user_id/admin', authValidator.setAdmin, auth.setAdmin);
+authRouter.post('/:user_id/admin', AuthValidator.setAdmin, Auth.setAdmin);
 
 // Forgot password route
-authRouter.post('/forgot', authValidator.forgotPassword, auth.forgotPassword);
+authRouter.post('/forgot', AuthValidator.forgotPassword, Auth.forgotPassword);
 
 // Reset password route
-authRouter.post('/reset', authValidator.resetPassword, auth.resetPassword);
+authRouter.post('/reset', AuthValidator.resetPassword, Auth.resetPassword);
 
 export default authRouter;
