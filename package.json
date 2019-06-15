@@ -7,10 +7,12 @@
   "description": "A car sales app",
   "main": "server/index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production babel-node server/index.js",
-    "dev": "cross-env NODE_ENV=development nodemon --exec babel-node server/index.js",
+    "start": "cross-env NODE_ENV=production DEBUG=http,database babel-node server/index.js",
+    "dev": "cross-env NODE_ENV=development DEBUG=http,database nodemon --exec babel-node server/index.js",
     "test": "cross-env NODE_ENV=test nyc mocha --require @babel/register --exit",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "db:reset": "cross-env DEBUG=http,database babel-node server/api/database/reset.js",
+    "db:migrate": "cross-env DEBUG=http,database babel-node server/api/database/migrate.js"
   },
   "devDependencies": {
     "chai": "^4.2.0",
@@ -36,6 +38,7 @@
     "core-js": "^3.1.1",
     "cors": "^2.8.5",
     "cross-env": "^5.2.0",
+    "debug": "^4.1.1",
     "dotenv": "^8.0.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
@@ -46,6 +49,7 @@
     "morgan": "^1.9.1",
     "multer": "^1.4.1",
     "nodemailer": "^6.2.1",
+    "pg": "^7.11.0",
     "swagger-ui-express": "^4.0.6",
     "validator": "^10.11.0"
   },
