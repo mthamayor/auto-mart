@@ -23,12 +23,10 @@ import dummyOrders, {
 import dummyUsers, {
   getUser,
   getUserByEmail,
-  addUser,
   removeAllUsers,
   setAdmin,
   changePassword,
-  getLastUser,
-} from './dummyUsers';
+} from './usersModel';
 
 import dummyFlags, {
   addFlag, getAllFlags, getFlag, getLastFlag,
@@ -62,11 +60,9 @@ const ordersHelper = {
 const usersHelper = {
   getUser,
   removeAllUsers,
-  addUser,
   getUserByEmail,
   setAdmin,
   changePassword,
-  getLastUser,
 };
 
 const flagsHelper = {

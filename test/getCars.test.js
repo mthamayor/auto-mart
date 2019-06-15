@@ -22,40 +22,32 @@ describe('Users GET car endpoint test', () => {
   let car4;
 
   const fileUrl = `${__dirname}/__mock__/__img__/toyota-avalon.jpg`;
-  before((done) => {
-    usersHelper.removeAllUsers();
+  before(async () => {
+    await usersHelper.removeAllUsers();
     // create multiple users
-    chai
+    const res = await chai
       .request(app)
       .post('/api/v1/auth/signup')
       .type('form')
-      .send(mockUser.validUser)
-      .end((err, res) => {
-        user1 = res.body.data;
-        done();
-      });
+      .send(mockUser.validUser);
+    user1 = res.body.data;
   });
-  before((done) => {
-    chai
+  before(async () => {
+    const res = await chai
       .request(app)
       .post('/api/v1/auth/signup')
       .type('form')
-      .send(mockUser.validUser2)
-      .end((err, res) => {
-        user2 = res.body.data;
-        done();
-      });
+      .send(mockUser.validUser2);
+    user2 = res.body.data;
   });
   // Make user 2 an admin
-  before((done) => {
-    chai
+  before(async () => {
+    const res = await chai
       .request(app)
       .post(`/api/v1/auth/${user2.id}/admin`)
       .type('form')
-      .end((err, res) => {
-        user2 = res.body.data;
-        done();
-      });
+      .send();
+    user2 = res.body.data;
   });
   // Create multiple purchase orders from user 1
   before((done) => {
@@ -526,9 +518,8 @@ describe('Users GET car endpoint test', () => {
     });
   });
   // Clean up db after all test suites
-  after((done) => {
-    usersHelper.removeAllUsers();
+  after(async () => {
+    await usersHelper.removeAllUsers();
     carsHelper.clearCars();
-    done();
   });
 });

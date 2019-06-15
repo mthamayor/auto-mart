@@ -11,7 +11,7 @@ import config from './api/config';
 
 dotenv.config();
 
-const log = debug('http');
+const log = debug('automart');
 
 const app = express();
 // create a write stream (in append mode)

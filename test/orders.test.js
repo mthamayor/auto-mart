@@ -18,30 +18,24 @@ describe('Users order endpoint test', () => {
   let carCreated;
   let carCreated2;
   // create multiple users
-  before((done) => {
+  before(async () => {
     carsHelper.clearCars();
-    usersHelper.removeAllUsers();
+    await usersHelper.removeAllUsers();
 
-    chai
+    const res = await chai
       .request(app)
       .post('/api/v1/auth/signup')
       .type('form')
-      .send(mockUser.validUser)
-      .end((err, res) => {
-        user1 = res.body.data;
-        done();
-      });
+      .send(mockUser.validUser);
+    user1 = res.body.data;
   });
-  before((done) => {
-    chai
+  before(async () => {
+    const res = await chai
       .request(app)
       .post('/api/v1/auth/signup')
       .type('form')
-      .send(mockUser.validUser2)
-      .end((err, res) => {
-        user2 = res.body.data;
-        done();
-      });
+      .send(mockUser.validUser2);
+    user2 = res.body.data;
   });
   before((done) => {
     // user 1 creates an ad
@@ -102,10 +96,9 @@ describe('Users order endpoint test', () => {
   });
 
   // Clean up db after all test suites
-  after((done) => {
-    usersHelper.removeAllUsers();
+  after(async () => {
+    await usersHelper.removeAllUsers();
     carsHelper.clearCars();
-    done();
   });
   describe('route POST /api/v1/order', () => {
     it('should raise 400 error with invalid or no car id', (done) => {

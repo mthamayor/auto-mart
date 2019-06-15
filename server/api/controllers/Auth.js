@@ -1,7 +1,11 @@
 import crypto from 'crypto';
-import { dummyUsers, usersHelper, passwordHelper } from '../models';
+import debug from 'debug';
+import { usersHelper, passwordHelper } from '../models';
 import { ResponseHandler, HelperFunctions } from '../utils';
 import customMailer from '../config/mailer';
+import { query } from '../config/pool';
+
+const log = debug('automart');
 
 /**
  * @class Auth
@@ -16,7 +20,7 @@ class Auth {
    * @param {object} res - Response object
    * @returns {object} - JSON Response
    */
-  static signUp(req, res) {
+  static async signUp(req, res) {
     let {
       email, firstName, lastName, address, password,
     } = req.body;
@@ -30,43 +34,38 @@ class Auth {
 
     const hash = HelperFunctions.hashPassword(password);
 
-    const id = dummyUsers.length === 0 ? 1 : usersHelper.getLastUser().id + 1;
-
-    usersHelper.addUser({
-      id,
-      email,
-      firstName,
-      lastName,
-      address,
-      isAdmin: false,
-      password: hash,
-    });
-
-    // Retreive data from db
-    const user = usersHelper.getUser(id);
+    const queryText = {
+      name: 'insert-user',
+      text: 'INSERT INTO users(email, first_name, last_name, address, password) '
+        + 'VALUES($1, $2, $3, $4, $5) '
+        + 'RETURNING id, email, first_name, last_name, address, is_admin',
+      values: [email, firstName, lastName, address, hash],
+    };
+    let queryResult;
+    try {
+      queryResult = await query(queryText);
+    } catch (err) {
+      log(err.stack);
+      ResponseHandler.error(res, 500, 'internal server error');
+      return;
+    }
+    const data = queryResult.rows[0];
 
     // Create a jwt token and send along with the data
     const options = { expiresIn: '1d' };
     const secret = process.env.JWT_SECRET || 'jwtSecret';
 
     const signingData = {
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      address: user.address,
-      isAdmin: user.isAdmin,
+      id: data.id,
+      firstName: data.first_name,
+      lastName: data.last_name,
+      email: data.email,
+      address: data.address,
+      isAdmin: data.is_admin,
     };
 
-    const data = {
-      token: HelperFunctions.signToken(signingData, secret, options),
-      id: user.id,
-      first_name: user.firstName,
-      last_name: user.lastName,
-      email: user.email,
-      address: user.address,
-      isAdmin: user.isAdmin,
-    };
+    data.token = HelperFunctions.signToken(signingData, secret, options);
+
     ResponseHandler.success(res, 201, data);
   }
 
@@ -77,34 +76,26 @@ class Auth {
    * @param {object} res - Response object
    * @returns {object} - JSON Response
    */
-  static signIn(req, res) {
+  static async signIn(req, res) {
     const { email } = req.body;
 
     // Retreive data from db
-    const user = usersHelper.getUserByEmail(email);
+    const data = await usersHelper.getUserByEmail(email);
 
     // Create a jwt token and send along with the data
     const options = { expiresIn: '1d' };
     const secret = process.env.JWT_SECRET || 'jwtSecret';
 
     const signingData = {
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      address: user.address,
-      isAdmin: user.isAdmin,
+      id: data.id,
+      firstName: data.first_name,
+      lastName: data.last_name,
+      email: data.email,
+      address: data.address,
+      isAdmin: data.is_admin,
     };
 
-    const data = {
-      token: HelperFunctions.signToken(signingData, secret, options),
-      id: user.id,
-      first_name: user.firstName,
-      last_name: user.lastName,
-      email: user.email,
-      address: user.address,
-      isAdmin: user.isAdmin,
-    };
+    data.token = HelperFunctions.signToken(signingData, secret, options);
 
     ResponseHandler.success(res, 200, data);
   }
@@ -116,32 +107,24 @@ class Auth {
    * @param {object} res - Response object
    * @returns {object} - JSON Response
    */
-  static setAdmin(req, res) {
+  static async setAdmin(req, res) {
     let userId = req.params.user_id;
     userId = parseInt(userId, 10);
-    usersHelper.setAdmin(userId);
+    await usersHelper.setAdmin(userId);
     // Retreive data from db
-    const user = usersHelper.getUser(userId);
+    const data = await usersHelper.getUser(userId);
     // Create a jwt token and send along with the data
     const options = { expiresIn: '1d' };
     const secret = process.env.JWT_SECRET || 'jwtSecret';
     const signingData = {
-      id: user.id,
-      first_name: user.firstName,
-      last_name: user.lastName,
-      email: user.email,
-      address: user.address,
-      isAdmin: user.isAdmin,
+      id: data.id,
+      firstName: data.first_name,
+      lastName: data.last_name,
+      email: data.email,
+      address: data.address,
+      isAdmin: data.is_admin,
     };
-    const data = {
-      token: HelperFunctions.signToken(signingData, secret, options),
-      id: user.id,
-      first_name: user.firstName,
-      last_name: user.lastName,
-      email: user.email,
-      address: user.address,
-      isAdmin: user.isAdmin,
-    };
+    data.token = HelperFunctions.signToken(signingData, secret, options);
 
     ResponseHandler.success(res, 200, data);
   }
@@ -195,13 +178,13 @@ class Auth {
    * @param {object} res - Response object
    * @returns {object} - JSON Response
    */
-  static resetPassword(req, res) {
+  static async resetPassword(req, res) {
     let { email, newPassword } = req.body;
 
     email = email.trim();
     newPassword = newPassword.trim();
     const hash = HelperFunctions.hashPassword(newPassword);
-    usersHelper.changePassword(email, hash);
+    await usersHelper.changePassword(email, hash);
     passwordHelper.removeRequest(email);
 
     ResponseHandler.success(res, 200, 'Password successfully changed');

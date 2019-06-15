@@ -21,7 +21,7 @@ class AuthValidator {
    * @param {object} res - Response object
    * @param {function} next - Passes control to next middleware
    */
-  static signUp(req, res, next) {
+  static async signUp(req, res, next) {
     const {
       email, firstName, lastName, address, password,
     } = req.body;
@@ -52,11 +52,10 @@ class AuthValidator {
     }
 
     // Check if user already exists
-    if (usersHelper.getUserByEmail(email) !== -1) {
+    if (await usersHelper.getUserByEmail(email) !== -1) {
       ResponseHandler.error(res, 409, 'user already exists');
       return;
     }
-
     next();
   }
 
@@ -67,7 +66,7 @@ class AuthValidator {
    * @param {object} res - Response object
    * @param {function} next - Passes control to next middleware
    */
-  static signIn(req, res, next) {
+  static async signIn(req, res, next) {
     const { email, password } = req.body;
 
     if (email === undefined || !validator.isEmail(email)) {
@@ -81,13 +80,13 @@ class AuthValidator {
     }
 
     // Check if user does not exist
-    if (usersHelper.getUserByEmail(email) === -1) {
+    if (await usersHelper.getUserByEmail(email) === -1) {
       ResponseHandler.error(res, 404, 'user does not exist');
       return;
     }
 
     // Check if password matches
-    const user = usersHelper.getUserByEmail(email);
+    const user = await usersHelper.getUserByEmail(email);
     const passwordMatch = bcrypt.compareSync(password, user.password);
 
     if (!passwordMatch) {
@@ -97,9 +96,9 @@ class AuthValidator {
     next();
   }
 
-  static setAdmin(req, res, next) {
+  static async setAdmin(req, res, next) {
     const id = req.params.user_id;
-    if (usersHelper.getUser(parseInt(id, 10)) === -1) {
+    if (await usersHelper.getUser(parseInt(id, 10)) === -1) {
       ResponseHandler.error(res, 404, 'user does not exist');
       return;
     }
@@ -113,14 +112,14 @@ class AuthValidator {
    * @param {object} res - Response object
    * @param {function} next - Passes control to next middleware
    */
-  static forgotPassword(req, res, next) {
+  static async forgotPassword(req, res, next) {
     const { email } = req.body;
     if (!validator.isEmail(email)) {
       ResponseHandler.error(res, 400, 'email is invalid');
       return;
     }
     // check if user exists
-    const user = usersHelper.getUserByEmail(email.trim());
+    const user = await usersHelper.getUserByEmail(email.trim());
 
     if (user === -1) {
       ResponseHandler.error(res, 404, 'user not found');
@@ -136,7 +135,7 @@ class AuthValidator {
    * @param {object} res - Response object
    * @param {function} next - Passes control to next middleware
    */
-  static resetPassword(req, res, next) {
+  static async resetPassword(req, res, next) {
     const { newPassword, token } = req.body;
     if (newPassword === undefined || newPassword.trim() === '') {
       ResponseHandler.error(res, 400, 'new password is undefined');
