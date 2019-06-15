@@ -1,6 +1,6 @@
 /**
- * user validator controller
- * Handles every user Validator related tasks
+ * Auth validator controller
+ * Handles every Auth validator related tasks
  */
 
 import validator from 'validator';
