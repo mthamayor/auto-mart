@@ -38,8 +38,8 @@ describe('Users GET car endpoint test', () => {
     user2 = res.body.data;
   });
   // Create  adverts from user 1
-  before((done) => {
-    chai
+  before(async () => {
+    const res = await chai
       .request(app)
       .post('/api/v1/car')
       .set('Authorization', `Bearer ${user1.token}`)
@@ -50,14 +50,11 @@ describe('Users GET car endpoint test', () => {
       .field('model', 'lx350')
       .field('manufacturer', 'lexus')
       .field('bodyType', 'jeep')
-      .field('name', 'Lexus 350 2014 model')
-      .end((err, res) => {
-        car1 = res.body.data;
-        done();
-      });
+      .field('name', 'Lexus 350 2014 model');
+    car1 = res.body.data;
   });
-  before((done) => {
-    chai
+  before(async () => {
+    const res = await chai
       .request(app)
       .post('/api/v1/car')
       .set('Authorization', `Bearer ${user1.token}`)
@@ -68,28 +65,22 @@ describe('Users GET car endpoint test', () => {
       .field('model', 'LE2015')
       .field('manufacturer', 'toyota')
       .field('bodyType', 'car')
-      .field('name', 'Toyota baseus LE2015 with AC')
-      .end((err, res) => {
-        car2 = res.body.data;
-        done();
-      });
+      .field('name', 'Toyota baseus LE2015 with AC');
+    car2 = res.body.data;
   });
 
   // Mark car2 as sold
-  before((done) => {
-    chai
+  before(async () => {
+    await chai
       .request(app)
       .patch(`/api/v1/car/${car2.id}/status`)
       .set('Authorization', `Bearer ${user1.token}`)
       .type('form')
-      .send()
-      .end(() => {
-        done();
-      });
+      .send();
   });
   after(async () => {
     await usersHelper.removeAllUsers();
-    carsHelper.clearCars();
+    await carsHelper.clearCars();
   });
 
   describe('Flag POST api/v1/flag', () => {

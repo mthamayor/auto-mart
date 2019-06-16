@@ -19,7 +19,7 @@ describe('Users order endpoint test', () => {
   let carCreated2;
   // create multiple users
   before(async () => {
-    carsHelper.clearCars();
+    await carsHelper.clearCars();
     await usersHelper.removeAllUsers();
 
     const res = await chai
@@ -37,10 +37,10 @@ describe('Users order endpoint test', () => {
       .send(mockUser.validUser2);
     user2 = res.body.data;
   });
-  before((done) => {
+  before(async () => {
     // user 1 creates an ad
     const fileUrl = `${__dirname}/__mock__/__img__/toyota-avalon.jpg`;
-    chai
+    const res = await chai
       .request(app)
       .post('/api/v1/car')
       .set('Authorization', `Bearer ${user1.token}`)
@@ -53,18 +53,15 @@ describe('Users order endpoint test', () => {
       .field('manufacturer', mockCars.validManufacturer)
       .field('bodyType', mockCars.validBodyType)
       .field('name', mockCars.validName)
-      .field('email', user1.email)
-      .end((err, res) => {
-        carCreated = res.body.data;
-        done();
-      });
+      .field('email', user1.email);
+    carCreated = res.body.data;
   });
 
   // create a sold advert
-  before((done) => {
+  before(async () => {
     // user 1 creates second advert
     const fileUrl = `${__dirname}/__mock__/__img__/toyota-avalon.jpg`;
-    chai
+    const res = await chai
       .request(app)
       .post('/api/v1/car')
       .set('Authorization', `Bearer ${user1.token}`)
@@ -77,28 +74,22 @@ describe('Users order endpoint test', () => {
       .field('manufacturer', mockCars.validManufacturer)
       .field('bodyType', mockCars.validBodyType)
       .field('name', mockCars.validName)
-      .field('email', user1.email)
-      .end((err, res) => {
-        carCreated2 = res.body.data;
-        done();
-      });
+      .field('email', user1.email);
+    carCreated2 = res.body.data;
   });
-  before((done) => {
-    chai
+  before(async () => {
+    await chai
       .request(app)
       .patch(`/api/v1/car/${carCreated2.id}/status`)
       .set('Authorization', `Bearer ${user1.token}`)
       .type('form')
-      .send()
-      .end(() => {
-        done();
-      });
+      .send();
   });
 
   // Clean up db after all test suites
   after(async () => {
     await usersHelper.removeAllUsers();
-    carsHelper.clearCars();
+    await carsHelper.clearCars();
   });
   describe('route POST /api/v1/order', () => {
     it('should raise 400 error with invalid or no car id', (done) => {
@@ -160,7 +151,7 @@ describe('Users order endpoint test', () => {
         .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send({
-          carId: mockOrders.nonExistingAdId,
+          carId: 1837381,
           priceOffered: mockOrders.validPriceOffered,
         })
         .end((err, res) => {
@@ -239,7 +230,7 @@ describe('Users order endpoint test', () => {
         .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send({
-          carId: mockOrders.validCarId,
+          carId: carCreated.id,
           priceOffered: mockOrders.validPriceOffered,
         })
         .end((err, res) => {
@@ -261,7 +252,7 @@ describe('Users order endpoint test', () => {
         .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send({
-          carId: mockOrders.validCarId,
+          carId: carCreated.id,
           priceOffered: mockOrders.validPriceOffered,
         })
         .end((err, res) => {

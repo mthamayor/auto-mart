@@ -14,7 +14,7 @@ export const orders = `
     id SERIAL PRIMARY KEY,
     buyer INT NOT NULL,
     car_id INT NOT NULL,
-    price_offered VARCHAR(128) NOT NULL,
+    price_offered NUMERIC NOT NULL,
     created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status VARCHAR(16) DEFAULT 'pending',
     FOREIGN KEY (buyer) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE

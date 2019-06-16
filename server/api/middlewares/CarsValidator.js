@@ -126,7 +126,7 @@ class CarsValidator {
    * @param {object} res - Response object
    * @param {function} next - Passes control to next middleware
    */
-  static markAsSold(req, res, next) {
+  static async markAsSold(req, res, next) {
     const carId = req.params.car_id;
 
     const authData = req.authToken;
@@ -146,7 +146,7 @@ class CarsValidator {
       return;
     }
 
-    const findCar = carsHelper.getCar(parseInt(carId, 10));
+    const findCar = await carsHelper.getCar(parseInt(carId, 10));
 
     if (findCar === -1) {
       ResponseHandler.error(res, 404, 'car advert does not exist');
@@ -199,7 +199,7 @@ class CarsValidator {
    * @param {object} res - Response object
    * @param {function} next - Passes control to next middleware
    */
-  static getAvailableCar(req, res, next) {
+  static async getAvailableCar(req, res, next) {
     const carId = req.params.car_id;
 
     if (carId.trim() === '' || !validator.isNumeric(carId)) {
@@ -207,7 +207,7 @@ class CarsValidator {
       return;
     }
 
-    const car = carsHelper.getAvailableCar(parseInt(carId, 10));
+    const car = await carsHelper.getAvailableCar(parseInt(carId, 10));
 
     if (car === -1) {
       ResponseHandler.error(res, 404, 'car does not exist');
@@ -250,7 +250,7 @@ class CarsValidator {
     }
 
     if (bodyType !== undefined && bodyType.trim() !== '') {
-      filterParams.push({ name: 'bodyType', value: bodyType });
+      filterParams.push({ name: 'body_type', value: bodyType });
     }
 
     if (

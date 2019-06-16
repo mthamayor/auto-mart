@@ -1,5 +1,9 @@
-import { dummyCars, carsHelper } from '../models';
+import debug from 'debug';
+import { carsHelper } from '../models';
 import { ResponseHandler } from '../utils';
+import { query } from '../config/pool';
+
+const log = debug('database');
 
 /**
  * @class Cars
@@ -14,7 +18,7 @@ class Cars {
    * @param {object} res - Response object
    * @returns {object} - JSON Response
    */
-  static createAd(req, res) {
+  static async createAd(req, res) {
     const {
       state,
       price,
@@ -25,42 +29,43 @@ class Cars {
       imageUrlList,
     } = req.body;
 
-    const createdOn = Date.now();
-
-    const status = 'available';
-
-    const id = dummyCars.length === 0 ? 1 : carsHelper.getLastCar().id + 1;
-
     const authData = req.authToken.data;
 
-    carsHelper.addCar({
-      id,
-      owner: authData.id,
-      createdOn,
-      manufacturer,
-      status,
-      state,
-      price: parseFloat(price, 10),
-      model,
-      name,
-      bodyType,
-      imageUrlList,
-    });
+    const queryText = {
+      name: 'insert-car',
+      text:
+        'INSERT INTO cars(owner, manufacturer, state, price, model, name, body_type, image_urls) '
+        + 'VALUES($1, $2, $3, $4, $5, $6, $7, $8) '
+        + 'RETURNING *',
+      values: [
+        authData.id, manufacturer, state,
+        parseFloat(price, 10), model, name,
+        bodyType, imageUrlList],
+    };
 
-    const car = carsHelper.getCar(id);
+    let queryResult;
+    try {
+      queryResult = await query(queryText);
+      // eslint-disable-next-line prefer-destructuring
+      queryResult = queryResult.rows[0];
+    } catch (err) {
+      log(err.stack);
+      ResponseHandler.error(res, 500, 'internal server error');
+      return;
+    }
 
     const data = {
-      id: car.id,
-      created_on: car.createdOn,
-      name: car.name,
-      owner: car.owner,
-      manufacturer: car.manufacturer,
-      model: car.model,
-      price: car.price,
-      state: car.state,
-      status: car.status,
-      body_type: car.bodyType,
-      image_urls: car.imageUrlList,
+      id: queryResult.id,
+      created_on: queryResult.created_on,
+      name: queryResult.name,
+      owner: queryResult.owner,
+      manufacturer: queryResult.manufacturer,
+      model: queryResult.model,
+      price: queryResult.price,
+      state: queryResult.state,
+      status: queryResult.status,
+      body_type: queryResult.body_type,
+      image_urls: queryResult.image_urls,
     };
 
     ResponseHandler.success(res, 201, data);
@@ -73,24 +78,24 @@ class Cars {
    * @param {object} res - Response object
    * @returns {object} - JSON Response
    */
-  static markAsSold(req, res) {
+  static async markAsSold(req, res) {
     let id = req.params.car_id;
     id = parseInt(id, 10);
 
-    carsHelper.markAsSold(id);
-
-    const car = carsHelper.getCar(id);
+    const queryResult = await carsHelper.markAsSold(id);
 
     const data = {
-      id: car.id,
-      owner: car.owner,
-      created_on: car.createdOn,
-      manufacturer: car.manufacturer,
-      model: car.model,
-      price: car.price,
-      state: car.state,
-      status: car.status,
-      image_urls: car.imageUrlList,
+      id: queryResult.id,
+      created_on: queryResult.created_on,
+      name: queryResult.name,
+      owner: queryResult.owner,
+      manufacturer: queryResult.manufacturer,
+      model: queryResult.model,
+      price: queryResult.price,
+      state: queryResult.state,
+      status: queryResult.status,
+      body_type: queryResult.body_type,
+      image_urls: queryResult.image_urls,
     };
 
     ResponseHandler.success(res, 201, data);
@@ -103,7 +108,7 @@ class Cars {
    * @param {object} res - Response object
    * @returns {object} - JSON Response
    */
-  static updateCarPice(req, res) {
+  static async updateCarPice(req, res) {
     let id = req.params.car_id;
 
     let { newPrice } = req.body;
@@ -112,22 +117,20 @@ class Cars {
 
     newPrice = parseFloat(newPrice);
 
-    carsHelper.updateCarPrice(id, newPrice);
-
-    const car = carsHelper.getCar(id);
+    const queryResult = await carsHelper.updateCarPrice(id, newPrice);
 
     const data = {
-      id: car.id,
-      created_on: car.createdOn,
-      name: car.name,
-      owner: car.owner,
-      manufacturer: car.manufacturer,
-      model: car.model,
-      price: car.price,
-      state: car.state,
-      status: car.status,
-      body_type: car.bodyType,
-      image_urls: car.imageUrlList,
+      id: queryResult.id,
+      created_on: queryResult.created_on,
+      name: queryResult.name,
+      owner: queryResult.owner,
+      manufacturer: queryResult.manufacturer,
+      model: queryResult.model,
+      price: queryResult.price,
+      state: queryResult.state,
+      status: queryResult.status,
+      body_type: queryResult.body_type,
+      image_urls: queryResult.image_urls,
     };
 
     ResponseHandler.success(res, 201, data);
@@ -140,54 +143,54 @@ class Cars {
    * @param {object} res - Response object
    * @returns {object} - JSON Response
    */
-  static getAvailableCar(req, res) {
+  static async getAvailableCar(req, res) {
     let carId = req.params.car_id;
 
     carId = parseInt(carId, 10);
 
-    const car = carsHelper.getAvailableCar(carId);
+    const queryResult = await carsHelper.getAvailableCar(carId);
 
     const data = {
-      id: car.id,
-      created_on: car.createdOn,
-      name: car.name,
-      owner: car.owner,
-      manufacturer: car.manufacturer,
-      model: car.model,
-      price: car.price,
-      state: car.state,
-      status: car.status,
-      body_type: car.bodyType,
-      image_urls: car.imageUrlList,
+      id: queryResult.id,
+      created_on: queryResult.created_on,
+      name: queryResult.name,
+      owner: queryResult.owner,
+      manufacturer: queryResult.manufacturer,
+      model: queryResult.model,
+      price: queryResult.price,
+      state: queryResult.state,
+      status: queryResult.status,
+      body_type: queryResult.body_type,
+      image_urls: queryResult.image_urls,
     };
 
     ResponseHandler.success(res, 200, data);
   }
 
   /**
-   * @method deletePassword
+   * @method deleteCar
    * @description - Deletes an advert
    * @param {object} req - Request object
    * @param {object} res - Response object
    * @returns {object} - JSON Response
    */
-  static deleteCar(req, res) {
+  static async deleteCar(req, res) {
     let carId = req.params.car_id;
 
     carId = parseInt(carId, 10);
 
-    carsHelper.deleteCar(carId);
+    await carsHelper.deleteCar(carId);
 
     ResponseHandler.success(res, 200, 'Car Ad successfully deleted');
   }
 
-  static filterCars(req, res) {
+  static async filterCars(req, res) {
     const { filterParams, filterPriceParams } = req;
 
-    let filteredCars = carsHelper.filterCars(filterParams);
+    let filteredCars = await carsHelper.filterCars(filterParams);
 
     if (filterPriceParams !== undefined) {
-      filteredCars = carsHelper.filterPrice(filteredCars, filterPriceParams);
+      filteredCars = await carsHelper.filterPrice(filteredCars, filterPriceParams);
     }
 
     const data = [];
@@ -195,16 +198,16 @@ class Cars {
     filteredCars.forEach((car) => {
       const returnData = {
         id: car.id,
-        owner: car.owner,
-        created_on: car.createdOn,
-        manufacturer: car.manufacturer,
-        status: car.status,
-        state: car.state,
-        price: car.price,
-        model: car.model,
+        created_on: car.created_on,
         name: car.name,
-        body_type: car.bodyType,
-        image_urls: car.imageUrlList,
+        owner: car.owner,
+        manufacturer: car.manufacturer,
+        model: car.model,
+        price: car.price,
+        state: car.state,
+        status: car.status,
+        body_type: car.body_type,
+        image_urls: car.image_urls,
       };
       data.push(returnData);
     });

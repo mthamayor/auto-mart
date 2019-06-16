@@ -19,7 +19,7 @@ class PurchaseOrdersValidator {
    * @param {object} res - Response object
    * @param {function} next - Passes control to next middleware
    */
-  static createPurchaseOrder(req, res, next) {
+  static async createPurchaseOrder(req, res, next) {
     const { carId, priceOffered } = req.body;
     const authData = req.authToken.data;
     const buyer = authData.id;
@@ -42,7 +42,7 @@ class PurchaseOrdersValidator {
       return;
     }
 
-    const findCar = carsHelper.getCar(parseInt(carId, 10));
+    const findCar = await carsHelper.getCar(parseInt(carId, 10));
 
     if (findCar.owner === buyer) {
       ResponseHandler.error(

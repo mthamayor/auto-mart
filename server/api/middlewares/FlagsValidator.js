@@ -15,7 +15,7 @@ class FlagsValidator {
    * @param {object} res - Response object
    * @param {function} next - Passes control to next middleware
    */
-  static createFlag(req, res, next) {
+  static async createFlag(req, res, next) {
     const { carId, reason, description } = req.body;
 
     const authData = req.authToken.data;
@@ -40,7 +40,7 @@ class FlagsValidator {
       return;
     }
 
-    const car = carsHelper.getCar(parseInt(carId, 10));
+    const car = await carsHelper.getCar(parseInt(carId, 10));
 
     if (car === -1) {
       ResponseHandler.error(res, 404, 'car to flag was not found');
