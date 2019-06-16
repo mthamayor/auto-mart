@@ -9,7 +9,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production DEBUG=automart,database babel-node server/index.js",
     "dev": "cross-env NODE_ENV=development DEBUG=automart,database nodemon --exec babel-node server/index.js",
-    "test": "cross-env NODE_ENV=test nyc mocha --require @babel/register --exit",
+    "test": "cross-env NODE_ENV=test nyc mocha --require @babel/register --timeout 20000 --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "db:reset": "cross-env DEBUG=automart,database babel-node server/api/database/reset.js",
     "db:migrate": "cross-env DEBUG=automart,database babel-node server/api/database/migrate.js"

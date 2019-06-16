@@ -221,7 +221,7 @@ describe('Users GET car endpoint test', () => {
         .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send({
-          carId: 6,
+          carId: 12223,
           reason: 'Fraudulent seller',
           description: 'The seller once duped me',
         })
@@ -318,11 +318,6 @@ describe('Users GET car endpoint test', () => {
 
           assert.strictEqual(status, 201, 'Status should be 201');
 
-          assert.strictEqual(
-            data.id,
-            1,
-            'flag id should be 1',
-          );
           assert.strictEqual(data.car_id, car1.id, `car_id should be ${car1.id}`);
           assert.strictEqual(
             data.user_id,
