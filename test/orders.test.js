@@ -17,6 +17,7 @@ describe('Users order endpoint test', () => {
   let user2;
   let carCreated;
   let carCreated2;
+  let order1;
   // create multiple users
   before(async () => {
     await carsHelper.clearCars();
@@ -223,8 +224,8 @@ describe('Users order endpoint test', () => {
           done();
         });
     });
-    it('should raise 201 with valid inputs', (done) => {
-      chai
+    it('should raise 201 with valid inputs', async () => {
+      const res = await chai
         .request(app)
         .post('/api/v1/order')
         .set('Authorization', `Bearer ${user2.token}`)
@@ -232,21 +233,20 @@ describe('Users order endpoint test', () => {
         .send({
           carId: carCreated.id,
           priceOffered: mockOrders.validPriceOffered,
-        })
-        .end((err, res) => {
-          const { data, status } = res.body;
-          expect(res).to.have.status(201);
-          expect(data).to.have.property('id');
-          expect(data).to.have.property('car_id');
-          expect(data).to.have.property('created_on');
-          expect(data).to.have.property('price_offered');
-
-          assert.strictEqual(status, 201, 'Status code should be 201');
-          done();
         });
+      const { data, status } = res.body;
+      expect(res).to.have.status(201);
+      expect(data).to.have.property('id');
+      expect(data).to.have.property('car_id');
+      expect(data).to.have.property('created_on');
+      expect(data).to.have.property('price_offered');
+
+      order1 = data;
+      assert.strictEqual(status, 201, 'Status code should be 201');
+      assert.strictEqual(data.price_offered, mockOrders.validPriceOffered, 'Price should be equal');
     });
-    it('should raise 409 with valid duplicate purchase order', (done) => {
-      chai
+    it('should raise 409 with valid duplicate purchase order', async () => {
+      const res = await chai
         .request(app)
         .post('/api/v1/order')
         .set('Authorization', `Bearer ${user2.token}`)
@@ -254,19 +254,16 @@ describe('Users order endpoint test', () => {
         .send({
           carId: carCreated.id,
           priceOffered: mockOrders.validPriceOffered,
-        })
-        .end((err, res) => {
-          const { error, status } = res.body;
-
-          expect(res).to.have.status(409);
-          assert.strictEqual(status, 409, 'Status code should be 201');
-          assert.strictEqual(
-            error,
-            'you already created a purchase order',
-            'you already created a purchase order',
-          );
-          done();
         });
+      const { error, status } = res.body;
+
+      expect(res).to.have.status(409);
+      assert.strictEqual(status, 409, 'Status code should be 409');
+      assert.strictEqual(
+        error,
+        'you already created a purchase order',
+        'you already created a purchase order',
+      );
     });
   });
   describe('route POST /api/v1/order/:order_id/price', () => {
@@ -298,7 +295,7 @@ describe('Users order endpoint test', () => {
     it('should raise 400 error with invalid or no new price', (done) => {
       chai
         .request(app)
-        .patch('/api/v1/order/1/price')
+        .patch(`/api/v1/order/${order1.id}/price`)
         .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send()
@@ -321,7 +318,7 @@ describe('Users order endpoint test', () => {
     it('should raise 403 error when trying to edit another user\'s order', (done) => {
       chai
         .request(app)
-        .patch('/api/v1/order/1/price')
+        .patch(`/api/v1/order/${order1.id}/price`)
         .set('Authorization', `Bearer ${user1.token}`)
         .type('form')
         .send({
@@ -368,30 +365,39 @@ describe('Users order endpoint test', () => {
           done();
         });
     });
-    it('should raise 204 when order is successfully edited', (done) => {
-      chai
+    it('should raise 201 when order is successfully edited', async () => {
+      const res = await chai
         .request(app)
-        .patch('/api/v1/order/1/price')
+        .patch(`/api/v1/order/${order1.id}/price`)
         .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send({
           newPrice: mockOrders.validNewPrice,
-        })
-        .end((err, res) => {
-          expect(res).to.have.status(201);
-          const { data } = res.body;
-          expect(data).to.have.property('id');
-          expect(data).to.have.property('car_id');
-          expect(data).to.have.property('status');
-          expect(data).to.have.property('old_price_offered');
-          expect(data).to.have.property('new_price_offered');
-          assert.strictEqual(
-            res.body.status,
-            201,
-            'Status code should be 201',
-          );
-          done();
         });
+      expect(res).to.have.status(201);
+      const { data } = res.body;
+      expect(data).to.have.property('id');
+      expect(data).to.have.property('car_id');
+      expect(data).to.have.property('status');
+      expect(data).to.have.property('old_price_offered');
+      expect(data).to.have.property('new_price_offered');
+      assert.strictEqual(
+        res.body.status,
+        201,
+        'Status code should be 201',
+      );
+
+      assert.strictEqual(
+        data.old_price_offered,
+        order1.price_offered,
+        'Old price offered does not match',
+      );
+
+      assert.strictEqual(
+        data.new_price_offered,
+        mockOrders.validNewPrice,
+        'New price offered does not match',
+      );
     });
   });
 });

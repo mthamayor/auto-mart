@@ -9,14 +9,12 @@ import {
   filterPrice,
 } from './carsModel';
 
-import dummyOrders, {
+import {
   editPurchaseOrder,
-  addPurchaseOrder,
   getOrder,
   getOrderByBuyer,
   clearOrders,
-  getLastOrder,
-} from './dummyOrders';
+} from './ordersModel';
 
 import {
   getUser,
@@ -45,12 +43,10 @@ const carsHelper = {
 };
 
 const ordersHelper = {
-  addPurchaseOrder,
   getOrder,
   getOrderByBuyer,
   editPurchaseOrder,
   clearOrders,
-  getLastOrder,
 };
 
 const usersHelper = {
@@ -70,7 +66,6 @@ const passwordHelper = {
 };
 
 export {
-  dummyOrders,
   dummyFlags, carsHelper, ordersHelper,
   usersHelper, flagsHelper, passwordHelper,
 };
