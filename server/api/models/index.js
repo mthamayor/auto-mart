@@ -1,5 +1,4 @@
-import dummyCars, {
-  addCar,
+import {
   getCar,
   getAvailableCar,
   markAsSold,
@@ -8,8 +7,7 @@ import dummyCars, {
   deleteCar,
   filterCars,
   filterPrice,
-  getLastCar,
-} from './dummyCars';
+} from './carsModel';
 
 import dummyOrders, {
   editPurchaseOrder,
@@ -20,7 +18,7 @@ import dummyOrders, {
   getLastOrder,
 } from './dummyOrders';
 
-import dummyUsers, {
+import {
   getUser,
   getUserByEmail,
   removeAllUsers,
@@ -36,7 +34,6 @@ import passwordReset, {
 } from './passwordReset';
 
 const carsHelper = {
-  addCar,
   getCar,
   getAvailableCar,
   markAsSold,
@@ -45,7 +42,6 @@ const carsHelper = {
   deleteCar,
   filterCars,
   filterPrice,
-  getLastCar,
 };
 
 const ordersHelper = {
@@ -74,7 +70,7 @@ const passwordHelper = {
 };
 
 export {
-  dummyCars, dummyUsers, dummyOrders,
+  dummyOrders,
   dummyFlags, carsHelper, ordersHelper,
   usersHelper, flagsHelper, passwordHelper,
 };

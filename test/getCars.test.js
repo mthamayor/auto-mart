@@ -49,9 +49,9 @@ describe('Users GET car endpoint test', () => {
       .send();
     user2 = res.body.data;
   });
-  // Create multiple purchase orders from user 1
-  before((done) => {
-    chai
+  // Create multiple cars orders from user 1
+  before(async () => {
+    const res = await chai
       .request(app)
       .post('/api/v1/car')
       .set('Authorization', `Bearer ${user1.token}`)
@@ -62,14 +62,11 @@ describe('Users GET car endpoint test', () => {
       .field('model', 'lx350')
       .field('manufacturer', 'lexus')
       .field('bodyType', 'jeep')
-      .field('name', 'Lexus 350 2014 model')
-      .end((err, res) => {
-        car1 = res.body.data;
-        done();
-      });
+      .field('name', 'Lexus 350 2014 model');
+    car1 = res.body.data;
   });
-  before((done) => {
-    chai
+  before(async () => {
+    const res = await chai
       .request(app)
       .post('/api/v1/car')
       .set('Authorization', `Bearer ${user1.token}`)
@@ -80,14 +77,11 @@ describe('Users GET car endpoint test', () => {
       .field('model', 'LE2015')
       .field('manufacturer', 'toyota')
       .field('bodyType', 'car')
-      .field('name', 'Toyota baseus LE2015 with AC')
-      .end((err, res) => {
-        car2 = res.body.data;
-        done();
-      });
+      .field('name', 'Toyota baseus LE2015 with AC');
+    car2 = res.body.data;
   });
-  before((done) => {
-    chai
+  before(async () => {
+    const res = await chai
       .request(app)
       .post('/api/v1/car')
       .set('Authorization', `Bearer ${user1.token}`)
@@ -98,14 +92,11 @@ describe('Users GET car endpoint test', () => {
       .field('model', mockCars.validModel)
       .field('manufacturer', mockCars.validManufacturer)
       .field('bodyType', mockCars.validBodyType)
-      .field('name', mockCars.validName)
-      .end((err, res) => {
-        car3 = res.body.data;
-        done();
-      });
+      .field('name', mockCars.validName);
+    car3 = res.body.data;
   });
-  before((done) => {
-    chai
+  before(async () => {
+    const res = await chai
       .request(app)
       .post('/api/v1/car')
       .set('Authorization', `Bearer ${user1.token}`)
@@ -116,25 +107,19 @@ describe('Users GET car endpoint test', () => {
       .field('model', '2010')
       .field('manufacturer', 'hyundai')
       .field('bodyType', 'car')
-      .field('name', 'Hyundai Utility family bus')
-      .end((err, res) => {
-        car4 = res.body.data;
-        done();
-      });
+      .field('name', 'Hyundai Utility family bus');
+    car4 = res.body.data;
   });
   // Mark car4 as sold
-  before((done) => {
-    chai
+  before(async () => {
+    const res = await chai
       .request(app)
       .patch(`/api/v1/car/${car4.id}/status`)
       .set('Authorization', `Bearer ${user1.token}`)
       .type('form')
-      .send()
-      .end((err, res) => {
-        const { data } = res.body;
-        car4 = data;
-        done();
-      });
+      .send();
+    const { data } = res.body;
+    car4 = data;
   });
 
   describe('Users GET api/v1/car', () => {
@@ -203,80 +188,73 @@ describe('Users GET car endpoint test', () => {
           done();
         });
     });
-    it('should raise 200 when all cars are successfully returned', (done) => {
-      chai
+    it('should raise 200 when all cars are successfully returned', async () => {
+      const res = await chai
         .request(app)
         .get('/api/v1/car')
         .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
-        .send()
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body).to.have.property('status');
-          expect(res.body).to.have.property('data');
+        .send();
+      expect(res).to.have.status(200);
+      expect(res.body).to.have.property('status');
+      expect(res.body).to.have.property('data');
 
-          const { data, status } = res.body;
-          expect(data).to.be.an('array');
-          expect(data).to.have.length(4);
+      const { data, status } = res.body;
+      expect(data).to.be.an('array');
+      expect(data).to.have.length(4);
 
-          assert.strictEqual(status, 200, 'Status should be 200');
+      assert.strictEqual(status, 200, 'Status should be 200');
 
-          const returnedCar1 = data[0];
-          assert.strictEqual(
-            returnedCar1.status,
-            car1.status,
-            `Status should be ${car1.status}`,
-          );
+      const returnedCar1 = data[0];
+      assert.strictEqual(
+        returnedCar1.status,
+        car1.status,
+        `Status should be ${car1.status}`,
+      );
 
-          const returnedCar2 = data[1];
-          assert.strictEqual(
-            returnedCar2.status,
-            car2.status,
-            `Status should be ${car2.status}`,
-          );
+      const returnedCar2 = data[1];
+      assert.strictEqual(
+        returnedCar2.status,
+        car2.status,
+        `Status should be ${car2.status}`,
+      );
 
 
-          const returnedCar3 = data[2];
-          assert.strictEqual(
-            returnedCar3.status,
-            car3.status,
-            `Status should be ${car3.status}`,
-          );
+      const returnedCar3 = data[2];
+      assert.strictEqual(
+        returnedCar3.status,
+        car3.status,
+        `Status should be ${car3.status}`,
+      );
 
-          const returnedCar4 = data[3];
-          assert.strictEqual(
-            returnedCar4.status,
-            car4.status,
-            `Status should be ${car4.status}`,
-          );
-
-          done();
-        });
+      const returnedCar4 = data[3];
+      assert.strictEqual(
+        returnedCar4.status,
+        car4.status,
+        `Status should be ${car4.status}`,
+      );
     });
   });
   describe('Users GET api/v1/car?status=available', () => {
-    it('should raise 200 when the available cars are successfully returned', (done) => {
-      chai
+    it('should raise 200 when the available cars are successfully returned', async () => {
+      const res = await chai
         .request(app)
         .get('/api/v1/car?status=available')
         .type('form')
-        .send()
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body).to.have.property('status');
-          expect(res.body).to.have.property('data');
+        .send();
 
-          const { data, status } = res.body;
-          expect(data).to.be.an('array');
-          expect(data).to.have.length(3);
+      expect(res).to.have.status(200);
+      expect(res.body).to.have.property('status');
+      expect(res.body).to.have.property('data');
 
-          for (let i = 0; i < data.length; i += 1) {
-            expect(data[i].status).to.eql('available');
-          }
+      const { data, status } = res.body;
+      expect(data).to.be.an('array');
+      expect(data).to.have.length(3);
 
-          assert.strictEqual(status, 200, 'Status should be 200');
-          done();
-        });
+      for (let i = 0; i < data.length; i += 1) {
+        expect(data[i].status).to.eql('available');
+      }
+      assert.strictEqual(status, 200, 'Status should be 200');
     });
   });
 
@@ -380,146 +358,130 @@ describe('Users GET car endpoint test', () => {
           done();
         });
     });
-    it('should raise 200 when the available cars are successfully returned', (done) => {
+    it('should raise 200 when the available cars are successfully returned', async () => {
       const maxPrice = 1200000;
       const minPrice = 450000;
-      chai
+      const res = await chai
         .request(app)
         .get(`/api/v1/car?status=available&min_price=${minPrice}&max_price=${maxPrice}`)
         .type('form')
-        .send()
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body).to.have.property('status');
-          expect(res.body).to.have.property('data');
+        .send();
+      expect(res).to.have.status(200);
+      expect(res.body).to.have.property('status');
+      expect(res.body).to.have.property('data');
 
-          const { data, status } = res.body;
-          expect(data).to.be.an('array');
-          expect(data).to.have.length(2);
+      const { data, status } = res.body;
+      expect(data).to.be.an('array');
+      expect(data).to.have.length(2);
 
-          for (let i = 0; i < data.length; i += 1) {
-            const carX = data[i];
-            expect(carX.status).to.eql('available');
-            expect(carX.price).to.be.at.least(minPrice);
-            expect(carX.price).to.be.at.most(maxPrice);
-          }
+      for (let i = 0; i < data.length; i += 1) {
+        const carX = data[i];
+        expect(carX.status).to.eql('available');
+        expect(parseFloat(carX.price, 10)).to.be.at.least(minPrice);
+        expect(parseFloat(carX.price, 10)).to.be.at.most(maxPrice);
+      }
 
-          assert.strictEqual(status, 200, 'Status should be 200');
-          done();
-        });
+      assert.strictEqual(status, 200, 'Status should be 200');
     });
   });
 
   describe('Users GET api/v1/car?status=available&state=new', () => {
-    it('should raise 200 when the available new cars are successfully returned', (done) => {
-      chai
+    it('should raise 200 when the available new cars are successfully returned', async () => {
+      const res = await chai
         .request(app)
         .get('/api/v1/car?status=available&state=new')
         .type('form')
-        .send()
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body).to.have.property('status');
-          expect(res.body).to.have.property('data');
+        .send();
+      expect(res).to.have.status(200);
+      expect(res.body).to.have.property('status');
+      expect(res.body).to.have.property('data');
 
-          const { data, status } = res.body;
-          expect(data).to.be.an('array');
-          expect(data).to.have.length(2);
+      const { data, status } = res.body;
+      expect(data).to.be.an('array');
+      expect(data).to.have.length(2);
 
-          for (let i = 0; i < data.length; i += 1) {
-            expect(data[i].state).to.eql('new');
-            expect(data[i].status).to.eql('available');
-          }
+      for (let i = 0; i < data.length; i += 1) {
+        expect(data[i].state).to.eql('new');
+        expect(data[i].status).to.eql('available');
+      }
 
-          assert.strictEqual(status, 200, 'Status should be 200');
-          done();
-        });
+      assert.strictEqual(status, 200, 'Status should be 200');
     });
   });
 
   describe('Users GET api/v1/car?status=available&state=used', () => {
-    it('should raise 200 when the available used cars are successfully returned', (done) => {
-      chai
+    it('should raise 200 when the available used cars are successfully returned', async () => {
+      const res = await chai
         .request(app)
         .get('/api/v1/car?status=available&state=used')
         .type('form')
-        .send()
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body).to.have.property('status');
-          expect(res.body).to.have.property('data');
+        .send();
+      expect(res).to.have.status(200);
+      expect(res.body).to.have.property('status');
+      expect(res.body).to.have.property('data');
 
-          const { data, status } = res.body;
-          expect(data).to.be.an('array');
-          expect(data).to.have.length(1);
+      const { data, status } = res.body;
+      expect(data).to.be.an('array');
+      expect(data).to.have.length(1);
 
-          for (let i = 0; i < data.length; i += 1) {
-            expect(data[i].state).to.eql('used');
-            expect(data[i].status).to.eql('available');
-          }
+      for (let i = 0; i < data.length; i += 1) {
+        expect(data[i].state).to.eql('used');
+        expect(data[i].status).to.eql('available');
+      }
 
-          assert.strictEqual(status, 200, 'Status should be 200');
-          done();
-        });
+      assert.strictEqual(status, 200, 'Status should be 200');
     });
   });
 
   describe('Users GET api/v1/car?status=available&manufacturer=XXXValue', () => {
     const manufacturer = 'toyota';
-    it('should raise 200 when the available used cars are successfully returned', (done) => {
-      chai
+    it('should raise 200 when the available used cars are successfully returned', async () => {
+      const res = await chai
         .request(app)
         .get(`/api/v1/car?status=available&manufacturer=${manufacturer}`)
         .type('form')
-        .send()
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body).to.have.property('status');
-          expect(res.body).to.have.property('data');
+        .send();
+      expect(res).to.have.status(200);
+      expect(res.body).to.have.property('status');
+      expect(res.body).to.have.property('data');
 
-          const { data, status } = res.body;
-          expect(data).to.be.an('array');
-          expect(data).to.have.length(2);
+      const { data, status } = res.body;
+      expect(data).to.be.an('array');
+      expect(data).to.have.length(2);
 
-          for (let i = 0; i < data.length; i += 1) {
-            expect(data[i].manufacturer).to.eql(manufacturer);
-            expect(data[i].status).to.eql('available');
-          }
+      for (let i = 0; i < data.length; i += 1) {
+        expect(data[i].manufacturer).to.eql(manufacturer);
+        expect(data[i].status).to.eql('available');
+      }
 
-          assert.strictEqual(status, 200, 'Status should be 200');
-          done();
-        });
+      assert.strictEqual(status, 200, 'Status should be 200');
     });
   });
   describe('Users GET api/v1/car?body_type=bodyType', () => {
     const bodyType = 'car';
-    it('should raise 200 when the available used cars are successfully returned', (done) => {
-      chai
+    it('should raise 200 when the available used cars are successfully returned', async () => {
+      const res = await chai
         .request(app)
         .get(`/api/v1/car?body_type=${bodyType}`)
         .set('Authorization', `${user2.token}`)
         .type('form')
-        .send()
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body).to.have.property('status');
-          expect(res.body).to.have.property('data');
+        .send();
+      expect(res).to.have.status(200);
+      expect(res.body).to.have.property('status');
+      expect(res.body).to.have.property('data');
 
-          const { data, status } = res.body;
-          expect(data).to.be.an('array');
-          expect(data).to.have.length(3);
-          for (let i = 0; i < data.length; i += 1) {
-            expect(data[i].body_type).to.eql(bodyType);
-          }
-
-          assert.strictEqual(status, 200, 'Status should be 200');
-          done();
-        });
+      const { data, status } = res.body;
+      expect(data).to.be.an('array');
+      expect(data).to.have.length(3);
+      for (let i = 0; i < data.length; i += 1) {
+        expect(data[i].body_type).to.eql(bodyType);
+      }
+      assert.strictEqual(status, 200, 'Status should be 200');
     });
   });
   // Clean up db after all test suites
   after(async () => {
     await usersHelper.removeAllUsers();
-    carsHelper.clearCars();
+    await carsHelper.clearCars();
   });
 });

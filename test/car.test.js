@@ -12,9 +12,10 @@ import mockUser from './__mock__/mockUser';
 
 chai.use(chaiHttp);
 
-describe('Users car endpoint test', () => {
+describe('Car endpoint test', () => {
   let user1;
   let user2;
+  let car1;
   const fileUrl = `${__dirname}/__mock__/__img__/toyota-avalon.jpg`;
   before(async () => {
     await usersHelper.removeAllUsers();
@@ -38,7 +39,7 @@ describe('Users car endpoint test', () => {
   // Clean up db after all test suites
   after(async () => {
     await usersHelper.removeAllUsers();
-    carsHelper.clearCars();
+    await carsHelper.clearCars();
   });
 
   describe('route POST /api/v1/car', () => {
@@ -343,8 +344,8 @@ describe('Users car endpoint test', () => {
           done();
         });
     });
-    it('should raise 201 and successfully create the ad', (done) => {
-      chai
+    it('should raise 201 and successfully create the ad', async () => {
+      const res = await chai
         .request(app)
         .post('/api/v1/car')
         .set('Authorization', `Bearer ${user1.token}`)
@@ -355,49 +356,44 @@ describe('Users car endpoint test', () => {
         .field('model', mockCars.validModel)
         .field('manufacturer', mockCars.validManufacturer)
         .field('bodyType', mockCars.validBodyType)
-        .field('name', mockCars.validName)
-        .end((err, res) => {
-          expect(res).to.have.status(201);
-          expect(res.body).to.have.property('status');
-          expect(res.body).to.have.property('data');
+        .field('name', mockCars.validName);
+      expect(res).to.have.status(201);
+      expect(res.body).to.have.property('status');
+      expect(res.body).to.have.property('data');
 
-          const { data } = res.body;
-          expect(data).to.have.property('id');
-          expect(data).to.have.property('created_on');
-          expect(data).to.have.property('image_urls');
-          expect(data).to.have.property('status');
-          expect(data).to.have.property('state');
+      const { data } = res.body;
+      expect(data).to.have.property('id');
+      expect(data).to.have.property('created_on');
+      expect(data).to.have.property('image_urls');
+      expect(data).to.have.property('status');
+      expect(data).to.have.property('state');
+      const {
+        manufacturer, model, price,
+      } = data;
 
-          const {
-            manufacturer, model, price,
-          } = data;
-
-          assert.strictEqual(
-            manufacturer,
-            mockCars.validManufacturer,
-            'manufacturer should be valid',
-          );
-          assert.strictEqual(
-            model,
-            mockCars.validModel,
-            'model should be valid',
-          );
-          assert.strictEqual(
-            price,
-            mockCars.validPrice,
-            'price should be valid',
-          );
-          done();
-        });
+      assert.strictEqual(
+        manufacturer,
+        mockCars.validManufacturer,
+        'manufacturer should be valid',
+      );
+      assert.strictEqual(
+        model,
+        mockCars.validModel,
+        'model should be valid',
+      );
+      assert.strictEqual(
+        price,
+        mockCars.validPrice,
+        'price should be valid',
+      );
     });
   });
   describe('route POST /api/v1/car/:car_id/status', () => {
-    before((done) => {
-      carsHelper.clearCars();
-      done();
+    before(async () => {
+      await carsHelper.clearCars();
     });
-    before((done) => {
-      chai
+    before(async () => {
+      const res = await chai
         .request(app)
         .post('/api/v1/car')
         .set('Authorization', `Bearer ${user1.token}`)
@@ -408,10 +404,8 @@ describe('Users car endpoint test', () => {
         .field('model', mockCars.validModel)
         .field('manufacturer', mockCars.validManufacturer)
         .field('bodyType', mockCars.validBodyType)
-        .field('name', mockCars.validName)
-        .end(() => {
-          done();
-        });
+        .field('name', mockCars.validName);
+      car1 = res.body.data;
     });
     it('should raise 400 error when carId is invalid', (done) => {
       chai
@@ -438,7 +432,7 @@ describe('Users car endpoint test', () => {
     it('should raise 404 error if car advert does not exist', (done) => {
       chai
         .request(app)
-        .patch('/api/v1/car/2/status')
+        .patch('/api/v1/car/2183739/status')
         .set('Authorization', `Bearer ${user1.token}`)
         .type('form')
         .send()
@@ -460,7 +454,7 @@ describe('Users car endpoint test', () => {
     it('should raise 403 error if trying to edit another user\'s ad', (done) => {
       chai
         .request(app)
-        .patch('/api/v1/car/1/status')
+        .patch(`/api/v1/car/${car1.id}/status`)
         .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send()
@@ -479,29 +473,26 @@ describe('Users car endpoint test', () => {
           done();
         });
     });
-    it('should raise 201 when ad is successfully marked as sold', (done) => {
-      chai
+    it('should raise 201 when ad is successfully marked as sold', async () => {
+      const res = await chai
         .request(app)
-        .patch('/api/v1/car/1/status')
+        .patch(`/api/v1/car/${car1.id}/status`)
         .set('Authorization', `Bearer ${user1.token}`)
         .type('form')
-        .send()
-        .end((err, res) => {
-          expect(res).to.have.status(201);
-          const { status, data } = res.body;
-          assert.strictEqual(status, 201, 'Status code should be 201');
-          assert.strictEqual(
-            data.status,
-            'sold',
-            'Car status should be sold',
-          );
-          done();
-        });
+        .send();
+      expect(res).to.have.status(201);
+      const { status, data } = res.body;
+      assert.strictEqual(status, 201, 'Status code should be 201');
+      assert.strictEqual(
+        data.status,
+        'sold',
+        'Car status should be sold',
+      );
     });
     it('should raise 409 error if trying to edit sold car', (done) => {
       chai
         .request(app)
-        .patch('/api/v1/car/1/status')
+        .patch(`/api/v1/car/${car1.id}/status`)
         .set('Authorization', `Bearer ${user1.token}`)
         .type('form')
         .send()
@@ -523,9 +514,9 @@ describe('Users car endpoint test', () => {
     });
   });
   describe('route POST /api/v1/car/:car_id/price', () => {
-    before((done) => {
-      carsHelper.clearCars();
-      chai
+    before(async () => {
+      await carsHelper.clearCars();
+      const res = await chai
         .request(app)
         .post('/api/v1/car')
         .set('Authorization', `Bearer ${user1.token}`)
@@ -536,15 +527,13 @@ describe('Users car endpoint test', () => {
         .field('model', mockCars.validModel)
         .field('manufacturer', mockCars.validManufacturer)
         .field('bodyType', mockCars.validBodyType)
-        .field('name', mockCars.validName)
-        .end(() => {
-          done();
-        });
+        .field('name', mockCars.validName);
+      car1 = res.body.data;
     });
     it('should raise 400 error newPrice is undefined', (done) => {
       chai
         .request(app)
-        .patch('/api/v1/car/1/price')
+        .patch(`/api/v1/car/${car1.id}/price`)
         .set('Authorization', `Bearer ${user1.token}`)
         .type('form')
         .send()
@@ -566,7 +555,7 @@ describe('Users car endpoint test', () => {
     it('should raise 201 when price is successfully updated', (done) => {
       chai
         .request(app)
-        .patch('/api/v1/car/1/price')
+        .patch(`/api/v1/car/${car1.id}/price`)
         .set('Authorization', `Bearer ${user1.token}`)
         .type('form')
         .send({
@@ -585,9 +574,9 @@ describe('Users car endpoint test', () => {
     });
   });
   describe('route GET /api/v1/car/:car_id/', () => {
-    before((done) => {
-      carsHelper.clearCars();
-      chai
+    before(async () => {
+      await carsHelper.clearCars();
+      const res = await chai
         .request(app)
         .post('/api/v1/car')
         .set('Authorization', `Bearer ${user1.token}`)
@@ -598,10 +587,8 @@ describe('Users car endpoint test', () => {
         .field('model', mockCars.validModel)
         .field('manufacturer', mockCars.validManufacturer)
         .field('bodyType', mockCars.validBodyType)
-        .field('name', mockCars.validName)
-        .end(() => {
-          done();
-        });
+        .field('name', mockCars.validName);
+      car1 = res.body.data;
     });
     it('should raise 400 error car_id is invalid', (done) => {
       chai
@@ -645,38 +632,34 @@ describe('Users car endpoint test', () => {
           done();
         });
     });
-    it('should raise 200 when the car was successfully retrieved', (done) => {
-      chai
+    it('should raise 200 when the car was successfully retrieved', async () => {
+      const res = await chai
         .request(app)
-        .get('/api/v1/car/1')
+        .get(`/api/v1/car/${car1.id}`)
         .type('form')
-        .send()
-        .end((err, res) => {
-          const { data, status } = res.body;
-          expect(res).to.have.status(200);
-          expect(data).to.have.property('id');
-          expect(data).to.have.property('owner');
-          expect(data).to.have.property('created_on');
-          expect(data).to.have.property('status');
-          expect(data).to.have.property('price');
-          expect(data).to.have.property('model');
-          expect(data).to.have.property('state');
-          expect(data).to.have.property('image_urls');
-          expect(data).to.have.property('body_type');
-          assert.strictEqual(
-            status,
-            200,
-            'Status code should be 200',
-          );
-
-          done();
-        });
+        .send();
+      const { data, status } = res.body;
+      expect(res).to.have.status(200);
+      expect(data).to.have.property('id');
+      expect(data).to.have.property('owner');
+      expect(data).to.have.property('created_on');
+      expect(data).to.have.property('status');
+      expect(data).to.have.property('price');
+      expect(data).to.have.property('model');
+      expect(data).to.have.property('state');
+      expect(data).to.have.property('image_urls');
+      expect(data).to.have.property('body_type');
+      assert.strictEqual(
+        status,
+        200,
+        'Status code should be 200',
+      );
     });
   });
   describe('route DELETE /api/v1/car/:car_id/', () => {
-    before((done) => {
-      carsHelper.clearCars();
-      chai
+    before(async () => {
+      await carsHelper.clearCars();
+      const res = await chai
         .request(app)
         .post('/api/v1/car')
         .set('Authorization', `Bearer ${user1.token}`)
@@ -687,10 +670,8 @@ describe('Users car endpoint test', () => {
         .field('model', mockCars.validModel)
         .field('manufacturer', mockCars.validManufacturer)
         .field('bodyType', mockCars.validBodyType)
-        .field('name', mockCars.validName)
-        .end(() => {
-          done();
-        });
+        .field('name', mockCars.validName);
+      car1 = res.body.data;
     });
     // set user 1 as admin
     before(async () => {
@@ -705,7 +686,7 @@ describe('Users car endpoint test', () => {
     it('should raise 401 if user is not an admin', (done) => {
       chai
         .request(app)
-        .delete('/api/v1/car/1')
+        .delete(`/api/v1/car/${car1.id}`)
         .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send()
@@ -751,7 +732,7 @@ describe('Users car endpoint test', () => {
     it('should raise 404 error if car does not exist', (done) => {
       chai
         .request(app)
-        .delete('/api/v1/car/2')
+        .delete('/api/v1/car/103402')
         .set('Authorization', `Bearer ${user1.token}`)
         .type('form')
         .send()
@@ -770,27 +751,24 @@ describe('Users car endpoint test', () => {
           done();
         });
     });
-    it('should raise 200 when the car was successfully deleted', (done) => {
-      chai
+    it('should raise 200 when the car was successfully deleted', async () => {
+      const res = await chai
         .request(app)
-        .delete('/api/v1/car/1')
+        .delete(`/api/v1/car/${car1.id}`)
         .set('Authorization', `Bearer ${user1.token}`)
         .type('form')
-        .send()
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body).to.have.property('status');
-          expect(res.body).to.have.property('data');
+        .send();
+      expect(res).to.have.status(200);
+      expect(res.body).to.have.property('status');
+      expect(res.body).to.have.property('data');
 
-          const { data, status } = res.body;
-          assert.strictEqual(status, 200, 'delete status should be 200');
-          assert.strictEqual(
-            data,
-            'Car Ad successfully deleted',
-            'Car Ad successfully deleted',
-          );
-          done();
-        });
+      const { data, status } = res.body;
+      assert.strictEqual(status, 200, 'delete status should be 200');
+      assert.strictEqual(
+        data,
+        'Car Ad successfully deleted',
+        'Car Ad successfully deleted',
+      );
     });
   });
 });

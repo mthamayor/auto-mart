@@ -5,6 +5,7 @@ services:
   - postgresql
 before_script:
   - psql -c 'create database auto_mart;' -U postgres
+  - npm run db:reset
   - npm run db:migrate
 after_success:
   - npm run coverage

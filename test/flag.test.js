@@ -38,8 +38,8 @@ describe('Users GET car endpoint test', () => {
     user2 = res.body.data;
   });
   // Create  adverts from user 1
-  before((done) => {
-    chai
+  before(async () => {
+    const res = await chai
       .request(app)
       .post('/api/v1/car')
       .set('Authorization', `Bearer ${user1.token}`)
@@ -50,14 +50,11 @@ describe('Users GET car endpoint test', () => {
       .field('model', 'lx350')
       .field('manufacturer', 'lexus')
       .field('bodyType', 'jeep')
-      .field('name', 'Lexus 350 2014 model')
-      .end((err, res) => {
-        car1 = res.body.data;
-        done();
-      });
+      .field('name', 'Lexus 350 2014 model');
+    car1 = res.body.data;
   });
-  before((done) => {
-    chai
+  before(async () => {
+    const res = await chai
       .request(app)
       .post('/api/v1/car')
       .set('Authorization', `Bearer ${user1.token}`)
@@ -68,28 +65,22 @@ describe('Users GET car endpoint test', () => {
       .field('model', 'LE2015')
       .field('manufacturer', 'toyota')
       .field('bodyType', 'car')
-      .field('name', 'Toyota baseus LE2015 with AC')
-      .end((err, res) => {
-        car2 = res.body.data;
-        done();
-      });
+      .field('name', 'Toyota baseus LE2015 with AC');
+    car2 = res.body.data;
   });
 
   // Mark car2 as sold
-  before((done) => {
-    chai
+  before(async () => {
+    await chai
       .request(app)
       .patch(`/api/v1/car/${car2.id}/status`)
       .set('Authorization', `Bearer ${user1.token}`)
       .type('form')
-      .send()
-      .end(() => {
-        done();
-      });
+      .send();
   });
   after(async () => {
     await usersHelper.removeAllUsers();
-    carsHelper.clearCars();
+    await carsHelper.clearCars();
   });
 
   describe('Flag POST api/v1/flag', () => {
@@ -230,7 +221,7 @@ describe('Users GET car endpoint test', () => {
         .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send({
-          carId: 6,
+          carId: 12223,
           reason: 'Fraudulent seller',
           description: 'The seller once duped me',
         })
@@ -327,11 +318,6 @@ describe('Users GET car endpoint test', () => {
 
           assert.strictEqual(status, 201, 'Status should be 201');
 
-          assert.strictEqual(
-            data.id,
-            1,
-            'flag id should be 1',
-          );
           assert.strictEqual(data.car_id, car1.id, `car_id should be ${car1.id}`);
           assert.strictEqual(
             data.user_id,
