@@ -7,12 +7,12 @@
   "description": "A car sales app",
   "main": "server/index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production DEBUG=http,database babel-node server/index.js",
-    "dev": "cross-env NODE_ENV=development DEBUG=http,database nodemon --exec babel-node server/index.js",
+    "start": "cross-env NODE_ENV=production DEBUG=automart,database babel-node server/index.js",
+    "dev": "cross-env NODE_ENV=development DEBUG=automart,database nodemon --exec babel-node server/index.js",
     "test": "cross-env NODE_ENV=test nyc mocha --require @babel/register --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "db:reset": "cross-env DEBUG=http,database babel-node server/api/database/reset.js",
-    "db:migrate": "cross-env DEBUG=http,database babel-node server/api/database/migrate.js"
+    "db:reset": "cross-env DEBUG=automart,database babel-node server/api/database/reset.js",
+    "db:migrate": "cross-env DEBUG=automart,database babel-node server/api/database/migrate.js"
   },
   "devDependencies": {
     "chai": "^4.2.0",

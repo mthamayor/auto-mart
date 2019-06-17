@@ -16,36 +16,29 @@ describe('Users car endpoint test', () => {
   let user1;
   let user2;
   const fileUrl = `${__dirname}/__mock__/__img__/toyota-avalon.jpg`;
-  before((done) => {
-    usersHelper.removeAllUsers();
+  before(async () => {
+    await usersHelper.removeAllUsers();
     // create multiple users
-    chai
+    const res = await chai
       .request(app)
       .post('/api/v1/auth/signup')
       .type('form')
-      .send(mockUser.validUser)
-      .end((err, res) => {
-        user1 = res.body.data;
-        done();
-      });
+      .send(mockUser.validUser);
+    user1 = res.body.data;
   });
-  before((done) => {
-    chai
+  before(async () => {
+    const res = await chai
       .request(app)
       .post('/api/v1/auth/signup')
       .type('form')
-      .send(mockUser.validUser2)
-      .end((err, res) => {
-        user2 = res.body.data;
-        done();
-      });
+      .send(mockUser.validUser2);
+    user2 = res.body.data;
   });
 
   // Clean up db after all test suites
-  after((done) => {
-    usersHelper.removeAllUsers();
+  after(async () => {
+    await usersHelper.removeAllUsers();
     carsHelper.clearCars();
-    done();
   });
 
   describe('route POST /api/v1/car', () => {
@@ -700,16 +693,13 @@ describe('Users car endpoint test', () => {
         });
     });
     // set user 1 as admin
-    before((done) => {
-      chai
+    before(async () => {
+      const res = await chai
         .request(app)
         .post(`/api/v1/auth/${user1.id}/admin`)
         .type('form')
-        .send()
-        .end((err, res) => {
-          user1 = res.body.data;
-          done();
-        });
+        .send();
+      user1 = res.body.data;
     });
 
     it('should raise 401 if user is not an admin', (done) => {

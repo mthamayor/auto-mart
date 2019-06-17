@@ -12,47 +12,45 @@ chai.use(chaiHttp);
 
 describe('Users auth endpoint test', () => {
   let token;
+  before(async () => {
+    await usersHelper.removeAllUsers();
+  });
   // Clean up db after all test suites
-  after((done) => {
-    usersHelper.removeAllUsers();
-    done();
+  after(async () => {
+    await usersHelper.removeAllUsers();
   });
   describe('route POST /api/v1/auth/signup', () => {
-    it('should return 201 status & should create a user with correct params', (done) => {
-      chai
+    it('should return 201 status & should create a user with correct params', async () => {
+      const res = await chai
         .request(app)
         .post('/api/v1/auth/signup')
         .type('form')
-        .send(mockUser.validUser)
-        .end((err, res) => {
-          const { validUser } = mockUser;
-          assert.strictEqual(
-            res.body.data.first_name,
-            validUser.firstName,
-            'First name sent is correct',
-          );
-          assert.strictEqual(
-            res.body.data.last_name,
-            validUser.lastName,
-            'Last name sent is correct',
-          );
-          assert.strictEqual(
-            res.body.data.address,
-            validUser.address,
-            'Address sent is correct',
-          );
-          assert.strictEqual(
-            res.body.data.email,
-            validUser.email,
-            'Email sent is correct',
-          );
+        .send(mockUser.validUser);
+      const { validUser } = mockUser;
+      assert.strictEqual(
+        res.body.data.first_name,
+        validUser.firstName,
+        'First name sent is correct',
+      );
+      assert.strictEqual(
+        res.body.data.last_name,
+        validUser.lastName,
+        'Last name sent is correct',
+      );
+      assert.strictEqual(
+        res.body.data.address,
+        validUser.address,
+        'Address sent is correct',
+      );
+      assert.strictEqual(
+        res.body.data.email,
+        validUser.email,
+        'Email sent is correct',
+      );
 
-          expect(res).to.have.status(201);
+      expect(res).to.have.status(201);
 
-          expect(res.body.data).to.have.property('token');
-
-          done();
-        });
+      expect(res.body.data).to.have.property('token');
     });
 
     it('should raise 400 error with invalid or no password parameter', (done) => {
@@ -202,44 +200,40 @@ describe('Users auth endpoint test', () => {
 
   // signin test
   describe('route POST /api/v1/auth/signin', () => {
-    it('should return 200 status & should return a user', (done) => {
-      chai
+    it('should return 200 status & should return a user', async () => {
+      const res = await chai
         .request(app)
         .post('/api/v1/auth/signin')
         .type('form')
         .send({
           email: mockUser.email,
           password: mockUser.password,
-        })
-        .end((err, res) => {
-          const { validUser } = mockUser;
-          assert.strictEqual(
-            res.body.data.first_name,
-            validUser.firstName,
-            'First name returned is correct',
-          );
-          assert.strictEqual(
-            res.body.data.last_name,
-            validUser.lastName,
-            'Last name returned is correct',
-          );
-          assert.strictEqual(
-            res.body.data.address,
-            validUser.address,
-            'Address returned is correct',
-          );
-          assert.strictEqual(
-            res.body.data.email,
-            validUser.email,
-            'Email returned is correct',
-          );
-
-          expect(res).to.have.status(200);
-
-          expect(res.body.data).to.have.property('token');
-
-          done();
         });
+      const { validUser } = mockUser;
+      assert.strictEqual(
+        res.body.data.first_name,
+        validUser.firstName,
+        'First name returned is correct',
+      );
+      assert.strictEqual(
+        res.body.data.last_name,
+        validUser.lastName,
+        'Last name returned is correct',
+      );
+      assert.strictEqual(
+        res.body.data.address,
+        validUser.address,
+        'Address returned is correct',
+      );
+      assert.strictEqual(
+        res.body.data.email,
+        validUser.email,
+        'Email returned is correct',
+      );
+
+      expect(res).to.have.status(200);
+
+      expect(res.body.data).to.have.property('token');
     });
 
     it('should raise 400 error with no password parameter', (done) => {
@@ -353,21 +347,18 @@ describe('Users auth endpoint test', () => {
 
   // forgot password test
   describe('route POST /api/v1/auth/forgot', () => {
-    it('should return 200 status & should return a user', (done) => {
-      chai
+    it('should return 200 status & should return a user', async () => {
+      const res = await chai
         .request(app)
         .post('/api/v1/auth/forgot')
         .type('form')
         .send({
           email: mockUser.email,
-        })
-        .end((err, res) => {
-          const { data } = res.body;
-          ({ token } = data);
-          expect(res).to.have.status(200);
-          expect(data).to.have.property('token');
-          done();
         });
+      const { data } = res.body;
+      ({ token } = data);
+      expect(res).to.have.status(200);
+      expect(data).to.have.property('token');
     });
 
     it('should raise 400 error with invalid email', (done) => {
@@ -501,33 +492,31 @@ describe('Users auth endpoint test', () => {
           done();
         });
     });
-    it('should return 200 status when password is successfully changed', (done) => {
-      chai
+    it('should return 200 status when password is successfully changed', async () => {
+      const res = await chai
         .request(app)
         .post('/api/v1/auth/reset')
         .type('form')
         .send({
           token,
           newPassword: 'ANIMASHAUN321',
-        })
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          expect(res.body).to.have.property('status');
-          expect(res.body).to.have.property('data');
-
-          const { status, data } = res.body;
-          assert.strictEqual(
-            status,
-            200,
-            'Expected status to be 200',
-          );
-          assert.strictEqual(
-            data,
-            'Password successfully changed',
-            'Expected password to be successfully changed',
-          );
-          done();
         });
+
+      expect(res).to.have.status(200);
+      expect(res.body).to.have.property('status');
+      expect(res.body).to.have.property('data');
+
+      const { status, data } = res.body;
+      assert.strictEqual(
+        status,
+        200,
+        'Expected status to be 200',
+      );
+      assert.strictEqual(
+        data,
+        'Password successfully changed',
+        'Expected password to be successfully changed',
+      );
     });
   });
 });
