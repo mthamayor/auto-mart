@@ -4,13 +4,13 @@ import debug from 'debug';
 import db from './db';
 
 const env = process.env.NODE_ENV || 'development';
-
 const log = debug('database');
-
 const connectionString = db[env];
+const ssl = env === 'production';
 
 const pool = new Pool({
   connectionString,
+  ssl,
 });
 
 pool.on('connect', () => {
