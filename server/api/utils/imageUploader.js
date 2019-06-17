@@ -1,5 +1,7 @@
-import faker from 'faker';
+import debug from 'debug';
 import uploader from '../config/cloudinary';
+
+const log = debug('automart');
 
 /**
  * @function imageUploader
@@ -9,10 +11,7 @@ import uploader from '../config/cloudinary';
  */
 const imageUploader = async (image) => {
   let imageUrl = '';
-  if (process.env.NODE_ENV !== 'production') {
-    imageUrl = faker.image.imageUrl();
-    return imageUrl;
-  }
+
   const imageFilePath = image.path;
 
   await uploader.upload(imageFilePath, (err, result) => {
@@ -21,6 +20,12 @@ const imageUploader = async (image) => {
     }
     imageUrl = result.secure_url;
   });
+
+  if (process.env.NODE_ENV !== 'production') {
+    uploader.destroy(imageUrl, (result) => {
+      log(result);
+    });
+  }
 
   return imageUrl;
 };
