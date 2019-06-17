@@ -7,7 +7,7 @@ import chaiHttp from 'chai-http';
 import app from '../server';
 import mockUser from './__mock__/mockUser';
 import mockOrders from './__mock__/mockOrders';
-import { usersHelper, carsHelper } from '../server/api/models';
+import { usersHelper, carsHelper, ordersHelper } from '../server/api/models';
 import mockCars from './__mock__/mockCars';
 
 chai.use(chaiHttp);
@@ -91,6 +91,7 @@ describe('Users order endpoint test', () => {
   after(async () => {
     await usersHelper.removeAllUsers();
     await carsHelper.clearCars();
+    await ordersHelper.clearOrders();
   });
   describe('route POST /api/v1/order', () => {
     it('should raise 400 error with invalid or no car id', (done) => {

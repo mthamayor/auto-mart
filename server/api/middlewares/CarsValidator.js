@@ -28,17 +28,12 @@ class CarsValidator {
    */
   static createAd(req, res, next) {
     upload(req, res, async (err) => {
-      if (err instanceof multer.MulterError) {
+      if (err || err instanceof multer.MulterError) {
         // A Multer error occurred when uploading.
         ResponseHandler.error(res, 415, 'Images uploaded are not valid');
         return;
       }
 
-      if (err) {
-        // An unknown error occurred when uploading.
-        ResponseHandler.error(res, 500, err.message);
-        return;
-      }
       // Everything went fine.
 
       const imgFiles = req.files;

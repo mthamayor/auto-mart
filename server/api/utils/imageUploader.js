@@ -9,18 +9,23 @@ import uploader from '../config/cloudinary';
  */
 const imageUploader = async (image) => {
   let imageUrl = '';
-  if (process.env.NODE_ENV !== 'production') {
-    imageUrl = faker.image.imageUrl();
-    return imageUrl;
-  }
-  const imageFilePath = image.path;
 
-  await uploader.upload(imageFilePath, (err, result) => {
-    if (err) {
-      imageUrl = -1;
+  const imageFilePath = image.path;
+  let imagePublicId = '';
+
+  try {
+    await uploader.upload(imageFilePath, (err, result) => {
+      imageUrl = result.secure_url;
+      imagePublicId = result.public_id;
+    });
+
+    // delete images after upload if test environment
+    if (process.env.NODE_ENV === 'test') {
+      await uploader.destroy(imagePublicId);
     }
-    imageUrl = result.secure_url;
-  });
+  } catch (err) {
+    ({ imageUrl } = faker.image.imageUrl());
+  }
 
   return imageUrl;
 };

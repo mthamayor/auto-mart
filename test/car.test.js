@@ -17,6 +17,7 @@ describe('Car endpoint test', () => {
   let user2;
   let car1;
   const fileUrl = `${__dirname}/__mock__/__img__/toyota-avalon.jpg`;
+
   before(async () => {
     await usersHelper.removeAllUsers();
     // create multiple users
