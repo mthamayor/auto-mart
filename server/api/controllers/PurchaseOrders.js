@@ -1,5 +1,9 @@
-import { dummyOrders, ordersHelper, carsHelper } from '../models';
+import debug from 'debug';
+import { ordersHelper, carsHelper } from '../models';
 import { ResponseHandler } from '../utils';
+import { query } from '../config/pool';
+
+const log = debug('automart');
 
 /**
  * @class PurchaseOrders
@@ -14,35 +18,44 @@ class PurchaseOrders {
    * @param {object} res - Response object
    * @returns {object} - JSON Response
    */
-  static createOrder(req, res) {
+  static async createOrder(req, res) {
     let { carId, priceOffered } = req.body;
     const authData = req.authToken.data;
     carId = parseInt(carId, 10);
     priceOffered = parseFloat(priceOffered);
-    const status = 'pending';
-    const createdOn = Date.now();
 
-    const id = dummyOrders.length === 0 ? 1 : ordersHelper.getLastOrder().id + 1;
+    const queryText = {
+      name: 'insert-order',
+      text:
+        'INSERT INTO orders(buyer, car_id, price_offered) '
+        + 'VALUES($1, $2, $3) '
+        + 'RETURNING *',
+      values: [
+        authData.id, carId, priceOffered,
+      ],
+    };
 
-    ordersHelper.addPurchaseOrder({
-      id,
-      buyer: authData.id,
-      carId,
-      priceOffered,
-      createdOn,
-      status,
-    });
+    let queryResult;
+    try {
+      queryResult = await query(queryText);
+      // eslint-disable-next-line prefer-destructuring
+      queryResult = queryResult.rows[0];
+    } catch (err) {
+      log(err.stack);
+      ResponseHandler.error(res, 500, 'internal server error');
+      return;
+    }
 
-    const car = carsHelper.getCar(carId);
+    const car = await carsHelper.getCar(carId);
 
     const data = {
-      id,
-      buyer: authData.id,
-      car_id: parseInt(carId, 10),
-      created_on: createdOn,
-      status,
+      id: queryResult.id,
+      buyer: queryResult.buyer,
+      car_id: queryResult.car_id,
+      status: queryResult.status,
       price: car.price,
-      price_offered: priceOffered,
+      price_offered: queryResult.price_offered,
+      created_on: queryResult.created_on,
     };
 
     ResponseHandler.success(res, 201, data);
@@ -55,7 +68,7 @@ class PurchaseOrders {
    * @param {object} res - Response object
    * @returns {object} - JSON Response
    */
-  static updatePurchaseOrder(req, res) {
+  static async updatePurchaseOrder(req, res) {
     let orderId = req.params.order_id;
 
     orderId = parseInt(orderId, 10);
@@ -64,18 +77,18 @@ class PurchaseOrders {
 
     newPrice = parseFloat(newPrice);
 
-    let order = ordersHelper.getOrder(orderId);
+    let order = await ordersHelper.getOrder(orderId);
 
-    const oldPrice = order.priceOffered;
+    const oldPrice = order.price_offered;
 
-    order = ordersHelper.editPurchaseOrder(orderId, newPrice);
+    order = await ordersHelper.editPurchaseOrder(orderId, newPrice);
 
     const data = {
       id: order.id,
-      car_id: order.carId,
+      car_id: order.car_id,
       status: order.status,
       old_price_offered: oldPrice,
-      new_price_offered: order.priceOffered,
+      new_price_offered: order.price_offered,
     };
 
     ResponseHandler.success(res, 201, data);

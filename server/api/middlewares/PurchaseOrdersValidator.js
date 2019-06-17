@@ -62,7 +62,7 @@ class PurchaseOrdersValidator {
       return;
     }
 
-    const purchaseOrder = ordersHelper.getOrderByBuyer(buyer);
+    const purchaseOrder = await ordersHelper.getOrderByBuyer(buyer);
     if (purchaseOrder !== -1) {
       ResponseHandler.error(res, 409, 'you already created a purchase order');
       return;
@@ -77,7 +77,7 @@ class PurchaseOrdersValidator {
    * @param {object} res - Response object
    * @param {function} next - Passes control to next middleware
    */
-  static updatePurchaseOrder(req, res, next) {
+  static async updatePurchaseOrder(req, res, next) {
     const orderId = req.params.order_id;
     const authData = req.authToken.data;
     const buyer = authData.id;
@@ -101,7 +101,7 @@ class PurchaseOrdersValidator {
       return;
     }
 
-    const findOrder = ordersHelper.getOrder(parseInt(orderId, 10));
+    const findOrder = await ordersHelper.getOrder(parseInt(orderId, 10));
 
     if (findOrder === -1) {
       ResponseHandler.error(res, 404, 'purchase order does not exist');
