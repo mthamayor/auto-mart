@@ -36,7 +36,8 @@ class Auth {
 
     const queryText = {
       name: 'insert-user',
-      text: 'INSERT INTO users(email, first_name, last_name, address, password) '
+      text:
+        'INSERT INTO users(email, first_name, last_name, address, password) '
         + 'VALUES($1, $2, $3, $4, $5) '
         + 'RETURNING id, email, first_name, last_name, address, is_admin',
       values: [email, firstName, lastName, address, hash],
@@ -188,6 +189,43 @@ class Auth {
     passwordHelper.removeRequest(email);
 
     ResponseHandler.success(res, 200, 'Password successfully changed');
+  }
+
+  /**
+   * @method reset
+   * @description - Requests password change for a user
+   * @param {object} req - Request object
+   * @param {object} res - Response object
+   * @returns {object} - JSON Response
+   */
+  static async reset(req, res) {
+    const { email } = req.params;
+    const { newPassword } = req.body;
+
+    if (
+      (newPassword !== undefined)
+    ) {
+      const hash = HelperFunctions.hashPassword(newPassword);
+      await usersHelper.changePassword(email, hash);
+      ResponseHandler.success(res, 204);
+      return;
+    }
+    const password = crypto.randomBytes(8).toString('hex');
+    const hash = HelperFunctions.hashPassword(password);
+    await usersHelper.changePassword(email, hash);
+
+    const mailOptions = {
+      to: email,
+      from: process.env.GMAIL,
+      subject: 'AutoMart Password Reset',
+      text:
+        'You are receiving this because you requested to reset your password\n\n'
+        + `new password: ${password}\n\n`,
+    };
+
+    customMailer.sendMail(mailOptions, () => {
+      ResponseHandler.success(res, 204);
+    });
   }
 }
 

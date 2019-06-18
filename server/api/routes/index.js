@@ -5,6 +5,7 @@ import carsRouter from './carsRouter';
 import ordersRouter from './ordersRouter';
 import flagsRouter from './flagsRouter';
 import docsRouter from './docsRouter';
+import usersRouter from './usersRouter';
 
 
 const route = express.Router();
@@ -20,6 +21,8 @@ route.get('/api/v1', (req, res) => {
 });
 
 route.use('/api/v1/auth', authRouter);
+
+route.use('/api/v1/users', usersRouter);
 
 route.use('/api/v1/car', carsRouter);
 

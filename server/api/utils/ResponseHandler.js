@@ -11,7 +11,7 @@ class ResponseHandler {
    * @param {integer} status - Response status code
    * @param {object} data - Data to be passed to client
    */
-  static success(res, status, data) {
+  static success(res, status, data = undefined) {
     res.status(status).json({
       status,
       data,

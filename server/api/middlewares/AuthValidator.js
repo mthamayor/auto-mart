@@ -52,7 +52,7 @@ class AuthValidator {
     }
 
     // Check if user already exists
-    if (await usersHelper.getUserByEmail(email) !== -1) {
+    if ((await usersHelper.getUserByEmail(email)) !== -1) {
       ResponseHandler.error(res, 409, 'user already exists');
       return;
     }
@@ -80,7 +80,7 @@ class AuthValidator {
     }
 
     // Check if user does not exist
-    if (await usersHelper.getUserByEmail(email) === -1) {
+    if ((await usersHelper.getUserByEmail(email)) === -1) {
       ResponseHandler.error(res, 404, 'user does not exist');
       return;
     }
@@ -98,7 +98,7 @@ class AuthValidator {
 
   static async setAdmin(req, res, next) {
     const id = req.params.user_id;
-    if (await usersHelper.getUser(parseInt(id, 10)) === -1) {
+    if ((await usersHelper.getUser(parseInt(id, 10))) === -1) {
       ResponseHandler.error(res, 404, 'user does not exist');
       return;
     }
@@ -159,6 +159,57 @@ class AuthValidator {
     }
 
     req.body.email = passwordRequest.email;
+
+    next();
+  }
+
+  /**
+   * @method reset
+   * @description - Validates reset password parameters
+   * @param {object} req - Request object
+   * @param {object} res - Response object
+   * @param {function} next - Passes control to next middleware
+   */
+  static async reset(req, res, next) {
+    const { email } = req.params;
+    const { password, newPassword } = req.body;
+
+    if (email === undefined || !validator.isEmail(email)) {
+      ResponseHandler.error(res, 400, 'email is undefined or invalid');
+      return;
+    }
+
+    const user = await usersHelper.getUserByEmail(email);
+    if (user === -1) {
+      ResponseHandler.error(res, 404, 'user not found');
+      return;
+    }
+
+    if (
+      (password !== undefined || newPassword !== undefined)
+    ) {
+      if (password === undefined || password.trim() === '') {
+        ResponseHandler.error(res, 400, 'password is undefined');
+        return;
+      }
+
+      if (newPassword === undefined || newPassword.trim() === '') {
+        ResponseHandler.error(res, 400, 'new password is undefined');
+        return;
+      }
+
+      if (!HelperFunctions.validPassword(newPassword)) {
+        ResponseHandler.error(res, 400, 'new password is not valid');
+        return;
+      }
+
+      const passwordMatch = bcrypt.compareSync(password, user.password);
+
+      if (!passwordMatch) {
+        ResponseHandler.error(res, 401, 'invalid password provided');
+        return;
+      }
+    }
 
     next();
   }
