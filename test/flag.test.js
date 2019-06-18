@@ -1,5 +1,5 @@
 /**
- * Unit tests for the GET cars endpoint
+ * Unit tests for the Flags endpoint
  */
 
 import chai, { expect, assert } from 'chai';
