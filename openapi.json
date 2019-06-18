@@ -154,7 +154,8 @@
               }
             }
           }
-        }
+        },
+        "deprecated" : true
       }
     },
     "/auth/reset" : {
@@ -198,6 +199,61 @@
           },
           "404" : {
             "description" : "Not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      }
+    },
+    "/users/{email}/reset_password" : {
+      "post" : {
+        "tags" : [ "users" ],
+        "summary" : "Users can reset their password",
+        "parameters" : [ {
+          "name" : "email",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/ResetPassword"
+        },
+        "responses" : {
+          "204" : {
+            "description" : "Password changed successfully"
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -1042,6 +1098,19 @@
           }
         }
       },
+      "ResetPassword" : {
+        "type" : "object",
+        "properties" : {
+          "password" : {
+            "type" : "string",
+            "description" : "Your present password"
+          },
+          "newPassword" : {
+            "type" : "string",
+            "description" : "Your new password"
+          }
+        }
+      },
       "Flag" : {
         "type" : "object",
         "properties" : {
@@ -1205,13 +1274,16 @@
             "type" : "integer",
             "format" : "int64"
           },
+          "email" : {
+            "type" : "string"
+          },
           "first_name" : {
             "type" : "string"
           },
           "last_name" : {
             "type" : "string"
           },
-          "email" : {
+          "address" : {
             "type" : "string"
           },
           "isAdmin" : {
@@ -1340,7 +1412,7 @@
           },
           "status" : {
             "type" : "string",
-            "enum" : [ "available", "sold" ]
+            "enum" : [ "pending", "accepted", "rejected" ]
           }
         }
       }
@@ -1456,6 +1528,20 @@
               "$ref" : "#/components/schemas/Reset"
             },
             "example" : {
+              "newPassword" : "ALT2343LSDF"
+            }
+          }
+        }
+      },
+      "ResetPassword" : {
+        "description" : "Reset password or change password",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ResetPassword"
+            },
+            "example" : {
+              "password" : "MAYOR_LSDH",
               "newPassword" : "ALT2343LSDF"
             }
           }

@@ -206,7 +206,7 @@ class AuthValidator {
       const passwordMatch = bcrypt.compareSync(password, user.password);
 
       if (!passwordMatch) {
-        ResponseHandler.error(res, 401, 'invalid password provided');
+        ResponseHandler.error(res, 403, 'invalid password provided');
         return;
       }
     }
