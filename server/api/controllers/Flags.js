@@ -1,5 +1,8 @@
-import { flagsHelper } from '../models';
+import debug from 'debug';
 import { HelperFunctions, ResponseHandler } from '../utils';
+import { query } from '../config/pool';
+
+const log = debug('automart');
 
 /**
  * @class Flags
@@ -14,36 +17,38 @@ class Flags {
    * @param {object} res - Response object
    * @returns {object} - JSON Response
    */
-  static createFlag(req, res) {
+  static async createFlag(req, res) {
     const { carId, reason, description } = req.body;
 
     const authData = req.authToken.data;
     const reporter = authData.id;
 
-    const fetchFlags = flagsHelper.getAllFlags();
-
-    let id;
-    if (fetchFlags.length === 0) {
-      id = 1;
-    } else {
-      id = flagsHelper.getLastFlag().id + 1;
+    const queryText = {
+      name: 'insert-flag',
+      text:
+        'INSERT INTO flags(user_id, car_id, reason, description) '
+        + 'VALUES($1, $2, $3, $4) '
+        + 'RETURNING *',
+      values: [
+        reporter,
+        parseInt(carId, 10),
+        HelperFunctions.replaceAllWhitespace(reason),
+        HelperFunctions.replaceAllWhitespace(description)],
+    };
+    let queryResult;
+    try {
+      queryResult = await query(queryText);
+    } catch (err) {
+      log(err.stack);
+      ResponseHandler.error(res, 500, 'internal server error');
+      return;
     }
-
-    flagsHelper.addFlag({
-      id,
-      userId: reporter,
-      carId: parseInt(carId, 10),
-      reason: HelperFunctions.replaceAllWhitespace(reason),
-      description: HelperFunctions.replaceAllWhitespace(description),
-      createdOn: Date.now(),
-    });
-
-    const flag = flagsHelper.getFlag(id);
+    const flag = queryResult.rows[0];
 
     const data = {
       id: flag.id,
-      user_id: flag.userId,
-      car_id: flag.carId,
+      user_id: flag.user_id,
+      car_id: flag.car_id,
       reason: flag.reason,
       description: flag.description,
     };
