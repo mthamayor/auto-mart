@@ -114,7 +114,7 @@ describe('Users Reset Password endpoint test', () => {
       );
     });
 
-    it('should raise 401 if password does not match', async () => {
+    it('should raise 403 if password does not match', async () => {
       const res = await chai
         .request(app)
         .post(`/api/v1/users/${user1.email}/reset_password`)
@@ -123,12 +123,12 @@ describe('Users Reset Password endpoint test', () => {
           password: 'KHADS9_DSFJ',
           newPassword: 'MTHA.049382',
         });
-      expect(res).to.have.status(401);
+      expect(res).to.have.status(403);
       expect(res.body).to.have.property('status');
       expect(res.body).to.have.property('error');
 
       const { error, status } = res.body;
-      assert.strictEqual(status, 401, 'Status should be 401');
+      assert.strictEqual(status, 403, 'Status should be 403');
       assert.strictEqual(
         error,
         'invalid password provided',
