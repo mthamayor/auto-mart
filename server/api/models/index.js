@@ -24,9 +24,9 @@ import {
   changePassword,
 } from './usersModel';
 
-import dummyFlags, {
-  addFlag, getAllFlags, getFlag, getLastFlag,
-} from './flags';
+
+import { clearFlags } from './flagsModel';
+
 import passwordReset, {
   getRequest, addRequest, removeRequest, getRequestWithToken,
 } from './passwordReset';
@@ -58,7 +58,7 @@ const usersHelper = {
 };
 
 const flagsHelper = {
-  addFlag, getAllFlags, getFlag, getLastFlag,
+  clearFlags,
 };
 
 const passwordHelper = {
@@ -66,6 +66,6 @@ const passwordHelper = {
 };
 
 export {
-  dummyFlags, carsHelper, ordersHelper,
+  carsHelper, ordersHelper,
   usersHelper, flagsHelper, passwordHelper,
 };

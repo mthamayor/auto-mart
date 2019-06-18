@@ -5,7 +5,7 @@
 import chai, { expect, assert } from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../server';
-import { usersHelper, carsHelper } from '../server/api/models';
+import { usersHelper, carsHelper, flagsHelper } from '../server/api/models';
 import mockUser from './__mock__/mockUser';
 
 chai.use(chaiHttp);
@@ -81,6 +81,7 @@ describe('Users GET car endpoint test', () => {
   after(async () => {
     await usersHelper.removeAllUsers();
     await carsHelper.clearCars();
+    await flagsHelper.clearFlags();
   });
 
   describe('Flag POST api/v1/flag', () => {
