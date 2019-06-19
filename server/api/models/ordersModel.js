@@ -11,11 +11,12 @@ export const getOrder = async (id) => {
   return queryResult.rows[0] || -1;
 };
 
-export const getOrderByBuyer = async (buyer) => {
+
+export const getOrderByBuyer = async (buyer, carId) => {
   const queryText = {
     name: 'get-order-buyer',
-    text: 'SELECT * FROM orders WHERE buyer = $1',
-    values: [buyer],
+    text: 'SELECT * FROM orders WHERE buyer = $1 AND car_id = $2',
+    values: [buyer, carId],
   };
   const queryResult = await query(queryText);
 
@@ -25,8 +26,8 @@ export const getOrderByBuyer = async (buyer) => {
 export const editPurchaseOrder = async (id, newPrice) => {
   const queryText = {
     name: 'edit-purchase-order',
-    text: 'UPDATE orders SET price_offered = $1 WHERE id = $2 RETURNING *',
-    values: [newPrice, id],
+    text: 'UPDATE orders SET price_offered = $1, status = $2 WHERE id = $3 RETURNING *',
+    values: [newPrice, 'pending', id],
   };
   const queryResult = await query(queryText);
 

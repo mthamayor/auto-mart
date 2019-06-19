@@ -30,9 +30,7 @@ class PurchaseOrders {
         'INSERT INTO orders(buyer, car_id, price_offered) '
         + 'VALUES($1, $2, $3) '
         + 'RETURNING *',
-      values: [
-        authData.id, carId, priceOffered,
-      ],
+      values: [authData.id, carId, priceOffered],
     };
 
     let queryResult;
@@ -92,6 +90,92 @@ class PurchaseOrders {
     };
 
     ResponseHandler.success(res, 201, data);
+  }
+
+  /**
+   * @method acceptOrder
+   * @description -  Accepts a purchase order
+   * @param {object} req - Request object
+   * @param {object} res - Response object
+   * @returns {object} - JSON Response
+   */
+  static async acceptOrder(req, res) {
+    let orderId = req.params.order_id;
+    orderId = parseInt(orderId, 10);
+
+    const queryText = {
+      name: 'accept-order',
+      text: 'UPDATE orders SET status = $1 WHERE id = $2 RETURNING *',
+      values: ['accepted', orderId],
+    };
+
+    let queryResult;
+    let car;
+    try {
+      queryResult = await query(queryText);
+      // eslint-disable-next-line prefer-destructuring
+      queryResult = queryResult.rows[0];
+      car = await carsHelper.markAsSold(queryResult.car_id);
+    } catch (err) {
+      log(err.stack);
+      ResponseHandler.error(res, 500, 'internal server error');
+      return;
+    }
+
+    const data = {
+      id: queryResult.id,
+      buyer: queryResult.buyer,
+      car_id: queryResult.car_id,
+      status: queryResult.status,
+      price: car.price,
+      price_offered: queryResult.price_offered,
+      created_on: queryResult.created_on,
+    };
+
+    ResponseHandler.success(res, 200, data);
+  }
+
+  /**
+   * @method rejectOrder
+   * @description -  Rejects a purchase order
+   * @param {object} req - Request object
+   * @param {object} res - Response object
+   * @returns {object} - JSON Response
+   */
+  static async rejectOrder(req, res) {
+    let orderId = req.params.order_id;
+    orderId = parseInt(orderId, 10);
+
+    const queryText = {
+      name: 'accept-order',
+      text: 'UPDATE orders SET status = $1 WHERE id = $2 RETURNING *',
+      values: ['rejected', orderId],
+    };
+
+    let queryResult;
+    try {
+      queryResult = await query(queryText);
+      // eslint-disable-next-line prefer-destructuring
+      queryResult = queryResult.rows[0];
+    } catch (err) {
+      log(err.stack);
+      ResponseHandler.error(res, 500, 'internal server error');
+      return;
+    }
+
+    const car = await carsHelper.getCar(queryResult.car_id);
+
+    const data = {
+      id: queryResult.id,
+      buyer: queryResult.buyer,
+      car_id: queryResult.car_id,
+      status: queryResult.status,
+      price: car.price,
+      price_offered: queryResult.price_offered,
+      created_on: queryResult.created_on,
+    };
+
+    ResponseHandler.success(res, 200, data);
   }
 }
 

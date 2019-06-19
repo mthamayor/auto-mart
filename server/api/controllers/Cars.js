@@ -137,18 +137,18 @@ class Cars {
   }
 
   /**
-   * @method getAvailableCar
-   * @description - Fetches a specific available car
+   * @method getCar
+   * @description - Fetches a car
    * @param {object} req - Request object
    * @param {object} res - Response object
    * @returns {object} - JSON Response
    */
-  static async getAvailableCar(req, res) {
+  static async getCar(req, res) {
     let carId = req.params.car_id;
 
     carId = parseInt(carId, 10);
 
-    const queryResult = await carsHelper.getAvailableCar(carId);
+    const queryResult = await carsHelper.getCar(carId);
 
     const data = {
       id: queryResult.id,

@@ -62,7 +62,7 @@ class PurchaseOrdersValidator {
       return;
     }
 
-    const purchaseOrder = await ordersHelper.getOrderByBuyer(buyer);
+    const purchaseOrder = await ordersHelper.getOrderByBuyer(buyer, parseInt(carId, 10));
     if (purchaseOrder !== -1) {
       ResponseHandler.error(res, 409, 'you already created a purchase order');
       return;
@@ -115,6 +115,57 @@ class PurchaseOrdersValidator {
 
     if (findOrder.status !== 'pending') {
       ResponseHandler.error(res, 403, 'the transaction is not pending');
+      return;
+    }
+
+    next();
+  }
+
+  /**
+   * @method createPurchaseOrder
+   * @description - Validates create purchase orders parameters
+   * @param {object} req - Request object
+   * @param {object} res - Response object
+   * @param {function} next - Passes control to next middleware
+   */
+  static async orderResponse(req, res, next) {
+    const orderId = req.params.order_id;
+    const authData = req.authToken.data;
+    const user = parseInt(authData.id, 10);
+
+    if (
+      orderId === undefined
+      || orderId.trim() === ''
+      || !validator.isNumeric(orderId)
+    ) {
+      ResponseHandler.error(res, 400, 'order id is undefined or invalid');
+      return;
+    }
+
+    const findOrder = await ordersHelper.getOrder(parseInt(orderId, 10));
+
+    if (findOrder === -1) {
+      ResponseHandler.error(
+        res,
+        404,
+        'order not found',
+      );
+      return;
+    }
+
+    const findCar = await carsHelper.getCar(findOrder.car_id);
+
+    if (findCar.owner !== user) {
+      ResponseHandler.error(
+        res,
+        403,
+        'only the owner of the ad can accept or reject purchase orders',
+      );
+      return;
+    }
+
+    if (findCar.status !== 'available') {
+      ResponseHandler.error(res, 403, 'car has already been sold');
       return;
     }
 

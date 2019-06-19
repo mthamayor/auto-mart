@@ -30,15 +30,15 @@ carsRouter.patch(
 
 carsRouter.get(
   '/:car_id/',
-  CarsValidator.getAvailableCar,
-  Cars.getAvailableCar,
+  CarsValidator.getCar,
+  Cars.getCar,
 );
 
 carsRouter.delete(
   '/:car_id/',
   Authorization.verifyToken,
   Authorization.isAdmin,
-  CarsValidator.getAvailableCar,
+  CarsValidator.getCar,
   Cars.deleteCar,
 );
 

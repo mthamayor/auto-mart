@@ -188,13 +188,13 @@ class CarsValidator {
   }
 
   /**
-   * @method getAvailableCar
-   * @description - validates available car parameter
+   * @method getCar
+   * @description - validates get car parameter
    * @param {object} req - Request object
    * @param {object} res - Response object
    * @param {function} next - Passes control to next middleware
    */
-  static async getAvailableCar(req, res, next) {
+  static async getCar(req, res, next) {
     const carId = req.params.car_id;
 
     if (carId.trim() === '' || !validator.isNumeric(carId)) {
@@ -202,7 +202,7 @@ class CarsValidator {
       return;
     }
 
-    const car = await carsHelper.getAvailableCar(parseInt(carId, 10));
+    const car = await carsHelper.getCar(parseInt(carId, 10));
 
     if (car === -1) {
       ResponseHandler.error(res, 404, 'car does not exist');
