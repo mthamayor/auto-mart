@@ -401,4 +401,151 @@ describe('Users order endpoint test', () => {
       );
     });
   });
+  describe('route POST /api/v1/order/:order_id/reject', () => {
+    it('should raise 400 error with invalid param order_id', (done) => {
+      chai
+        .request(app)
+        .patch('/api/v1/order/1s/reject')
+        .set('Authorization', `Bearer ${user1.token}`)
+        .type('form')
+        .send()
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+
+          assert.strictEqual(
+            res.body.status,
+            400,
+            'Status code should be 400',
+          );
+          assert.strictEqual(
+            res.body.error,
+            'order id is undefined or invalid',
+            'order id is undefined or invalid',
+          );
+          done();
+        });
+    });
+
+    it('should raise 403 error when not owner of car ad', (done) => {
+      chai
+        .request(app)
+        .patch(`/api/v1/order/${order1.id}/reject`)
+        .set('Authorization', `Bearer ${user2.token}`)
+        .type('form')
+        .send()
+        .end((err, res) => {
+          expect(res).to.have.status(403);
+
+          assert.strictEqual(
+            res.body.status,
+            403,
+            'Status code should be 403',
+          );
+          assert.strictEqual(
+            res.body.error,
+            'only the owner of the ad can accept or reject purchase orders',
+            'only the owner of the ad can accept or reject purchase orders',
+          );
+          done();
+        });
+    });
+    it('should raise 404 error when purchase order does not exist', (done) => {
+      chai
+        .request(app)
+        .patch('/api/v1/order/10101/reject')
+        .set('Authorization', `Bearer ${user1.token}`)
+        .type('form')
+        .send()
+        .end((err, res) => {
+          expect(res).to.have.status(404);
+
+          assert.strictEqual(
+            res.body.status,
+            404,
+            'Status code should be 404',
+          );
+          assert.strictEqual(
+            res.body.error,
+            'order not found',
+            'order not found',
+          );
+          done();
+        });
+    });
+    it('should raise 200 when order is successfully rejected', async () => {
+      const res = await chai
+        .request(app)
+        .patch(`/api/v1/order/${order1.id}/reject`)
+        .set('Authorization', `Bearer ${user1.token}`)
+        .type('form')
+        .send();
+      expect(res).to.have.status(200);
+      const { data } = res.body;
+      expect(data).to.have.property('id');
+      expect(data).to.have.property('buyer');
+      expect(data).to.have.property('car_id');
+      expect(data).to.have.property('status');
+      expect(data).to.have.property('price');
+      expect(data).to.have.property('price_offered');
+      expect(data).to.have.property('created_on');
+      assert.strictEqual(res.body.status, 200, 'Status code should be 200');
+
+      assert.strictEqual(
+        data.status,
+        'rejected',
+        'purchase order status should be rejected',
+      );
+
+      assert.strictEqual(data.buyer, user2.id, 'Buyer should be equal');
+    });
+  });
+  describe('route PATCH /api/v1/order/:order_id/accept', () => {
+    it('should raise 200 when order is successfully accepted', async () => {
+      const res = await chai
+        .request(app)
+        .patch(`/api/v1/order/${order1.id}/accept`)
+        .set('Authorization', `Bearer ${user1.token}`)
+        .type('form')
+        .send();
+      expect(res).to.have.status(200);
+      const { data } = res.body;
+      expect(data).to.have.property('id');
+      expect(data).to.have.property('buyer');
+      expect(data).to.have.property('car_id');
+      expect(data).to.have.property('status');
+      expect(data).to.have.property('price');
+      expect(data).to.have.property('price_offered');
+      expect(data).to.have.property('created_on');
+      assert.strictEqual(res.body.status, 200, 'Status code should be 200');
+
+      assert.strictEqual(
+        data.status,
+        'accepted',
+        'purchase order status should be accepted',
+      );
+
+      assert.strictEqual(data.buyer, user2.id, 'Buyer should be equal');
+    });
+
+    it('should raise 403 when order is sold', async () => {
+      const res = await chai
+        .request(app)
+        .patch(`/api/v1/order/${order1.id}/accept`)
+        .set('Authorization', `Bearer ${user1.token}`)
+        .type('form')
+        .send();
+      expect(res).to.have.status(403);
+
+      assert.strictEqual(
+        res.body.status,
+        403,
+        'Status code should be 403',
+      );
+      assert.strictEqual(
+        res.body.error,
+        'car has already been sold',
+        'car has already been sold',
+      );
+    });
+  });
 });

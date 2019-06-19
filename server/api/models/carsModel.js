@@ -21,15 +21,6 @@ export const getAllCars = async () => {
   return queryResult.rows;
 };
 
-export const getAvailableCar = async (id) => {
-  const queryText = {
-    name: 'fetch-available-car',
-    text: 'SELECT * FROM cars WHERE id = $1 AND status = $2',
-    values: [id, 'available'],
-  };
-  const queryResult = await query(queryText);
-  return queryResult.rows[0] || -1;
-};
 export const getAvailableCars = async () => {
   const queryText = {
     name: 'fetch-available-cars',

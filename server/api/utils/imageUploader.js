@@ -1,5 +1,8 @@
 import faker from 'faker';
+import debug from 'debug';
 import uploader from '../config/cloudinary';
+
+const log = debug('automart');
 
 /**
  * @function imageUploader
@@ -24,7 +27,8 @@ const imageUploader = async (image) => {
       await uploader.destroy(imagePublicId);
     }
   } catch (err) {
-    ({ imageUrl } = faker.image.imageUrl());
+    log(err);
+    imageUrl = faker.image.imageUrl();
   }
 
   return imageUrl;

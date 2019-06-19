@@ -23,4 +23,16 @@ ordersRouter.patch('/:order_id/price',
   PurchaseOrdersValidator.updatePurchaseOrder,
   PurchaseOrders.updatePurchaseOrder);
 
+// // Protected route
+ordersRouter.patch('/:order_id/accept',
+  Authorization.verifyToken,
+  PurchaseOrdersValidator.orderResponse,
+  PurchaseOrders.acceptOrder);
+
+// Protected route
+ordersRouter.patch('/:order_id/reject',
+  Authorization.verifyToken,
+  PurchaseOrdersValidator.orderResponse,
+  PurchaseOrders.rejectOrder);
+
 export default ordersRouter;

@@ -38,10 +38,13 @@ export const query = async (queryText) => {
    * @param {array} queries - Array of query strings
    */
 export const transaction = async (...queries) => {
+  // update to return values from all query
+  const returnQueries = [];
   try {
     await pool.query('BEGIN');
     for (let i = 0; i < queries.length; i += 1) {
-      await pool.query(queries[i]);
+      const res = await pool.query(queries[i]);
+      returnQueries.push(res);
     }
     await pool.query('COMMIT');
   } catch (err) {
@@ -52,5 +55,6 @@ export const transaction = async (...queries) => {
       `error occured performing db transaction \n error details: \n ${err.stack}`,
     );
   }
+  return returnQueries;
 };
 export default pool;
