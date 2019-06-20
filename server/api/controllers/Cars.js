@@ -215,8 +215,8 @@ class Cars {
   }
 
   /**
-   * @method getCar
-   * @description - Fetches a car
+   * @method getCarByOwner
+   * @description - Fetches an owner's cars
    * @param {object} req - Request object
    * @param {object} res - Response object
    * @returns {object} - JSON Response

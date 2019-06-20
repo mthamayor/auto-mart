@@ -548,4 +548,57 @@ describe('Users order endpoint test', () => {
       );
     });
   });
+  describe('Users GET api/v1/order/user/my-orders', () => {
+    it('should raise 401 when authorization token not provided', async () => {
+      const res = await chai
+        .request(app)
+        .get('/api/v1/order/user/my-orders')
+        .type('form')
+        .send();
+      expect(res).to.have.status(401);
+      expect(res.body).to.have.property('status');
+      expect(res.body).to.have.property('error');
+      const { status, error } = res.body;
+      assert.strictEqual(status, 401, 'Status should be 401');
+      assert.strictEqual(
+        error,
+        'authorization token not provided',
+        'authorization token not provided',
+      );
+    });
+
+    it('should raise 401 when wrong authorization token is provided', async () => {
+      const res = await chai
+        .request(app)
+        .get('/api/v1/order/user/my-orders')
+        .set('Authorization', 'Bearer dfaslfdsoaeoes')
+        .type('form')
+        .send();
+      expect(res).to.have.status(401);
+      expect(res.body).to.have.property('status');
+      expect(res.body).to.have.property('error');
+      const { status, error } = res.body;
+      assert.strictEqual(status, 401, 'Status should be 401');
+      assert.strictEqual(
+        error,
+        'user not authenticated, invalid authorization token provided',
+        'user not authenticated, invalid authorization token provided',
+      );
+    });
+
+    it("should raise 200 when the user's orders are successfully returned", async () => {
+      const res = await chai
+        .request(app)
+        .get('/api/v1/order/user/my-orders')
+        .set('Authorization', `Bearer ${user2.token}`)
+        .type('form')
+        .send();
+      expect(res).to.have.status(200);
+      expect(res.body).to.have.property('status');
+      expect(res.body).to.have.property('data');
+      const { data, status } = res.body;
+      expect(data).to.be.an('array');
+      assert.strictEqual(status, 200, 'Status should be 200');
+    });
+  });
 });

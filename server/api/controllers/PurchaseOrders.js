@@ -177,6 +177,23 @@ class PurchaseOrders {
 
     ResponseHandler.success(res, 200, data);
   }
+
+  /**
+   * @method getOrdersByBuyer
+   * @description - Fetches all user's purchase orders
+   * @param {object} req - Request object
+   * @param {object} res - Response object
+   * @returns {object} - JSON Response
+   */
+  static async getOrdersByBuyer(req, res) {
+    const authData = req.authToken.data;
+
+    const queryResult = await ordersHelper.getOrdersByBuyer(authData.id);
+
+    const data = queryResult;
+
+    ResponseHandler.success(res, 200, data);
+  }
 }
 
 export default PurchaseOrders;
