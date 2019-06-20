@@ -4,6 +4,7 @@
 import express from 'express';
 import { Cars } from '../controllers';
 import { Authorization, CarsValidator } from '../middlewares';
+import Flags from '../controllers/Flags';
 
 const carsRouter = express.Router();
 
@@ -46,5 +47,14 @@ carsRouter.get('/',
   Authorization.adminSearch,
   CarsValidator.filterCars,
   Cars.filterCars);
+
+// Admins can view all flags for posted AD
+carsRouter.get(
+  '/:car_id/flags',
+  Authorization.verifyToken,
+  Authorization.isAdmin,
+  CarsValidator.getCar,
+  Flags.getCarFlags,
+);
 
 export default carsRouter;
