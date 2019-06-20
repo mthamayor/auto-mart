@@ -35,4 +35,11 @@ ordersRouter.patch('/:order_id/reject',
   PurchaseOrdersValidator.orderResponse,
   PurchaseOrders.rejectOrder);
 
+// Users can get all their cars
+ordersRouter.get(
+  '/user/my-orders',
+  Authorization.verifyToken,
+  PurchaseOrders.getOrdersByBuyer,
+);
+
 export default ordersRouter;

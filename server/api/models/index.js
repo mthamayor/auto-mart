@@ -13,6 +13,7 @@ import {
   editPurchaseOrder,
   getOrder,
   getOrderByBuyer,
+  getOrdersByBuyer,
   clearOrders,
 } from './ordersModel';
 
@@ -47,6 +48,7 @@ const ordersHelper = {
   getOrderByBuyer,
   editPurchaseOrder,
   clearOrders,
+  getOrdersByBuyer,
 };
 
 const usersHelper = {
