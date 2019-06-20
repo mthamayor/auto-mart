@@ -1,6 +1,6 @@
 import {
   getCar,
-  getAvailableCar,
+  getCarsByOwner,
   markAsSold,
   updateCarPrice,
   clearCars,
@@ -33,7 +33,7 @@ import passwordReset, {
 
 const carsHelper = {
   getCar,
-  getAvailableCar,
+  getCarsByOwner,
   markAsSold,
   clearCars,
   updateCarPrice,

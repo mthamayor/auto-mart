@@ -8,12 +8,13 @@ import Flags from '../controllers/Flags';
 
 const carsRouter = express.Router();
 
-// Protected route
+// Users can create ad
 carsRouter.post('/',
   Authorization.verifyToken,
   CarsValidator.createAd,
   Cars.createAd);
 
+// Users can mark their adverts as sold
 carsRouter.patch(
   '/:car_id/status',
   Authorization.verifyToken,
@@ -21,6 +22,7 @@ carsRouter.patch(
   Cars.markAsSold,
 );
 
+// Users can update price of their adverts
 carsRouter.patch(
   '/:car_id/price',
   Authorization.verifyToken,
@@ -29,12 +31,14 @@ carsRouter.patch(
   Cars.updateCarPice,
 );
 
+// Users can get a particular car
 carsRouter.get(
   '/:car_id/',
   CarsValidator.getCar,
   Cars.getCar,
 );
 
+// Admins can delete cars
 carsRouter.delete(
   '/:car_id/',
   Authorization.verifyToken,
@@ -43,6 +47,7 @@ carsRouter.delete(
   Cars.deleteCar,
 );
 
+// Admin can get all cars
 carsRouter.get('/',
   Authorization.adminSearch,
   CarsValidator.filterCars,
@@ -56,5 +61,8 @@ carsRouter.get(
   CarsValidator.getCar,
   Flags.getCarFlags,
 );
+
+// Users can get all their cars
+carsRouter.get('/user/my-cars', Authorization.verifyToken, Cars.getCarsByOwner);
 
 export default carsRouter;
