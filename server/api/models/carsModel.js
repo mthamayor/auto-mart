@@ -11,6 +11,17 @@ export const getCar = async (id) => {
   return queryResult.rows[0] || -1;
 };
 
+export const getCarsByOwner = async (userId) => {
+  const queryText = {
+    name: 'fetch-car-by-owner',
+    text: 'SELECT * FROM cars WHERE owner = $1',
+    values: [userId],
+  };
+  const queryResult = await query(queryText);
+
+  return queryResult.rows;
+};
+
 export const getAllCars = async () => {
   const queryText = {
     name: 'fetch-all-cars',

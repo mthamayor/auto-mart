@@ -1,9 +1,6 @@
-import debug from 'debug';
 import { carsHelper } from '../models';
 import { ResponseHandler } from '../utils';
 import { query } from '../config/pool';
-
-const log = debug('database');
 
 /**
  * @class Cars
@@ -38,21 +35,20 @@ class Cars {
         + 'VALUES($1, $2, $3, $4, $5, $6, $7, $8) '
         + 'RETURNING *',
       values: [
-        authData.id, manufacturer, state,
-        parseFloat(price, 10), model, name,
-        bodyType, imageUrlList],
+        authData.id,
+        manufacturer,
+        state,
+        parseFloat(price, 10),
+        model,
+        name,
+        bodyType,
+        imageUrlList,
+      ],
     };
 
-    let queryResult;
-    try {
-      queryResult = await query(queryText);
-      // eslint-disable-next-line prefer-destructuring
-      queryResult = queryResult.rows[0];
-    } catch (err) {
-      log(err.stack);
-      ResponseHandler.error(res, 500, 'internal server error');
-      return;
-    }
+    let queryResult = await query(queryText);
+    // eslint-disable-next-line prefer-destructuring
+    queryResult = queryResult.rows[0];
 
     const data = {
       id: queryResult.id,
@@ -190,7 +186,10 @@ class Cars {
     let filteredCars = await carsHelper.filterCars(filterParams);
 
     if (filterPriceParams !== undefined) {
-      filteredCars = await carsHelper.filterPrice(filteredCars, filterPriceParams);
+      filteredCars = await carsHelper.filterPrice(
+        filteredCars,
+        filterPriceParams,
+      );
     }
 
     const data = [];
@@ -211,6 +210,23 @@ class Cars {
       };
       data.push(returnData);
     });
+
+    ResponseHandler.success(res, 200, data);
+  }
+
+  /**
+   * @method getCar
+   * @description - Fetches a car
+   * @param {object} req - Request object
+   * @param {object} res - Response object
+   * @returns {object} - JSON Response
+   */
+  static async getCarsByOwner(req, res) {
+    const authData = req.authToken.data;
+
+    const queryResult = await carsHelper.getCarsByOwner(authData.id);
+
+    const data = queryResult;
 
     ResponseHandler.success(res, 200, data);
   }
