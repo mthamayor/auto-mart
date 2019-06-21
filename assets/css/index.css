@@ -155,6 +155,15 @@ body {
 .p-small {
   padding: 10px;
 }
+.p-medium {
+  padding: 20px;
+}
+.p-large {
+  padding: 30px;
+}
+.m-large{
+  padding: 30px;
+}
 .pb {
   padding-bottom: 10px;
 }
