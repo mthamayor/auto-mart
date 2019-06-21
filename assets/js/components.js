@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const footer = `
   <div class = "footer">
     <div>
