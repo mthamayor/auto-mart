@@ -741,6 +741,128 @@
         } ]
       }
     },
+    "/car/{car_id}/flags" : {
+      "get" : {
+        "tags" : [ "car" ],
+        "summary" : "Admins can get all flags on an ad",
+        "parameters" : [ {
+          "name" : "car_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FlagsResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Not an admin",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Advert not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/car/user/my-cars" : {
+      "get" : {
+        "tags" : [ "car" ],
+        "summary" : "Users can get all their adverts",
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CarsResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
     "/order" : {
       "post" : {
         "tags" : [ "order" ],
@@ -885,6 +1007,211 @@
           },
           "404" : {
             "description" : "Order not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/order/{order_id}/accept" : {
+      "patch" : {
+        "tags" : [ "order" ],
+        "summary" : "Users can accept purchase orders",
+        "parameters" : [ {
+          "name" : "order_id",
+          "in" : "path",
+          "description" : "The order to be accepted",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreatePurchaseOrderResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Cannot accept other user advert",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Advert not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/order/{order_id}/reject" : {
+      "patch" : {
+        "tags" : [ "order" ],
+        "summary" : "Users can reject purchase orders",
+        "parameters" : [ {
+          "name" : "order_id",
+          "in" : "path",
+          "description" : "The order to be rejected",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreatePurchaseOrderResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Cannot reject other user advert",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Advert not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/order/user/my-orders" : {
+      "get" : {
+        "tags" : [ "order" ],
+        "summary" : "Users can get all their orders",
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FetchPurchaseOrdersResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -1233,6 +1560,20 @@
           }
         }
       },
+      "FetchPurchaseOrdersResponse" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "integer"
+          },
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CreatePurchaseOrderResponse_data"
+            }
+          }
+        }
+      },
       "EditPurchaseOrderResponse" : {
         "type" : "object",
         "properties" : {
@@ -1247,20 +1588,25 @@
       "FlagResponse" : {
         "type" : "object",
         "properties" : {
-          "id" : {
+          "status" : {
             "type" : "integer"
           },
-          "user_id" : {
+          "data" : {
+            "$ref" : "#/components/schemas/FlagResponse_data"
+          }
+        }
+      },
+      "FlagsResponse" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
             "type" : "integer"
           },
-          "car_id" : {
-            "type" : "integer"
-          },
-          "reason" : {
-            "type" : "string"
-          },
-          "description" : {
-            "type" : "string"
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/FlagResponse_data"
+            }
           }
         }
       },
@@ -1389,6 +1735,9 @@
           },
           "price_offered" : {
             "type" : "number"
+          },
+          "created_on" : {
+            "type" : "string"
           }
         }
       },
@@ -1413,6 +1762,26 @@
           "status" : {
             "type" : "string",
             "enum" : [ "pending", "accepted", "rejected" ]
+          }
+        }
+      },
+      "FlagResponse_data" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "user_id" : {
+            "type" : "integer"
+          },
+          "car_id" : {
+            "type" : "integer"
+          },
+          "reason" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
           }
         }
       }
