@@ -50,7 +50,7 @@ const loggedNav = `
         </ul>
       </li>
       <li><a href="./search-cars.html">View Cars</a></li>
-      <li><a href="#">Sign out</a></li>
+      <li id ="sign-out-button" class="cursor-pointer"><a>Sign out</a></li>
     </ul>
     <span class="links"><a href="search-cars.html"><i class="lni-search"></i>Search</a></span>
     <span class="menu-toggle"><i class="menu-toggle-icon lni-menu"></i></span>

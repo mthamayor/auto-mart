@@ -2,9 +2,16 @@
 /* eslint-disable no-undef */
 const signUpForm = document.querySelector('#sign-up-form');
 
-const getUser = JSON.parse(localStorage.getItem('user'));
+const getUser = localStorage.getItem('user');
 
-if (getUser !== null && getUser !== undefined) {
+if (
+  !(
+    getUser === null
+    || getUser === undefined
+    || getUser === 'undefined'
+    || getUser === 'null'
+  )
+) {
   window.location.replace('dashboard.html');
 }
 
@@ -22,12 +29,17 @@ const createAccount = (payload) => {
       Populator.hideAsyncNotification();
       if (response.error) {
         Populator.showStickyNotification('error', response.error);
+        return;
       }
       Populator.showNotification('Sign up successful, logging in');
       localStorage.setItem('user', JSON.stringify(response.data));
       window.location.replace('dashboard.html');
     })
     .catch((err) => {
+      Populator.hideAsyncNotification();
+      Populator.showNotification(
+        'Internet error occured. please try again',
+      );
       console.log(err);
     });
 };
@@ -40,13 +52,8 @@ signUpForm.addEventListener('submit', (event) => {
   const address = signUpForm.address.value;
   const password = signUpForm.password.value;
 
-  /*
-  https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
-  */
-  const validMailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
   // Validation starts here
-  if (!validMailRegex.test(String(email).toLowerCase())) {
+  if (!Helpers.isEmail(String(email).toLowerCase())) {
     Populator.showStickyNotification('error', 'Please enter a valid email');
     return;
   }
