@@ -394,6 +394,12 @@ input[type='file'] {
 .color-green {
   color: green;
 }
+.color-red{
+  color: red
+}
+.color-black{
+  color: black;
+}
 
 .words .header {
   text-transform: uppercase;
@@ -874,7 +880,7 @@ Seller index container starts here
   border-radius: 2px;
   position: fixed;
   left: 50%;
-  top: 150px;
+  top: 100px;
   visibility: hidden;
 }
 #notification {
@@ -887,6 +893,30 @@ Seller index container starts here
   background-color: var(--dark-brown);
   color: white;
 }
+#sticky-loading{
+  width: 350px;
+  margin-left: -190px;
+  padding: 14px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  text-align: center;
+  border-radius: 2px;
+  position: fixed;
+  left: 50%;
+  top: 100px;
+  visibility: hidden;
+  background-color: white;
+  color: var(--primary);
+  z-index: 1040;
+  padding-right: 20px;
+}
+
+#sticky-loading i{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
 .spinner-icon {
   display: inline-block;
   width: 8px;
@@ -916,12 +946,12 @@ Seller index container starts here
   -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
   animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
-#async-loading.show {
+#async-loading.show, #sticky-loading.show {
   visibility: visible;
   -webkit-animation: fadein 0.3s;
   animation: fadein 0.3s;
 }
-#async-loading.hide {
+#async-loading.hide, #sticky-loading.hide {
   visibility: visible;
   -webkit-animation: fadeout 0.3s;
   animation: fadeout 0.3s;

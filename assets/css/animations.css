@@ -2,21 +2,21 @@
 /* Animations to fade the notification in and out */
 @-webkit-keyframes fadein {
   from {top: 0; opacity: 0;} 
-  to {top: 150px; opacity: 1;}
+  to {top: 100px; opacity: 1;}
 }
 
 @keyframes fadein {
   from {top: 0; opacity: 0;}
-  to {top: 150px; opacity: 1;}
+  to {top: 100px; opacity: 1;}
 }
 
 @-webkit-keyframes fadeout {
-  from {top: 150px; opacity: 1;} 
+  from {top: 100px; opacity: 1;} 
   to {top: 0; opacity: 0;}
 }
 
 @keyframes fadeout {
-  from {top: 150px; opacity: 1;}
+  from {top: 100px; opacity: 1;}
   to {top: 0; opacity: 0;}
 }
 

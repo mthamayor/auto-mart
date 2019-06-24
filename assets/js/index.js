@@ -29,10 +29,12 @@ class Populator {
       notificationContainer.className = 'show';
 
       setTimeout(() => {
-        notificationContainer.className = notificationContainer.className.replace('show', '');
+        notificationContainer.className = notificationContainer.className.replace(
+          'show',
+          '',
+        );
         notificationContainer.textContent = '';
-      },
-      3000);
+      }, 3000);
     } catch (ex) {
       console.log('the image with id was not found');
     }
@@ -40,7 +42,9 @@ class Populator {
 
   static showAsyncNotification() {
     try {
-      const asyncNotificationContainer = document.querySelector('#async-loading');
+      const asyncNotificationContainer = document.querySelector(
+        '#async-loading',
+      );
 
       asyncNotificationContainer.className = 'show';
     } catch (ex) {
@@ -50,14 +54,66 @@ class Populator {
 
   static hideAsyncNotification() {
     try {
-      const asyncNotificationContainer = document.querySelector('#async-loading');
+      const asyncNotificationContainer = document.querySelector(
+        '#async-loading',
+      );
       asyncNotificationContainer.className = 'hide';
       setTimeout(() => {
         asyncNotificationContainer.className = '';
-      },
-      300);
+      }, 300);
     } catch (ex) {
       console.log('Error removing async notification');
+    }
+  }
+
+  static showStickyNotification(
+    type = 'normal',
+    message = 'no message specified',
+  ) {
+    try {
+      const stickyNotificationContainer = document.querySelector(
+        '#sticky-loading',
+      );
+      let spanColor;
+      switch (type) {
+        case 'error':
+          spanColor = 'color-red';
+          break;
+        case 'success':
+          spanColor = 'color-green';
+          break;
+        default:
+          spanColor = 'color-black';
+      }
+      stickyNotificationContainer.innerHTML = `
+        <span class=${spanColor}>${message}</span>
+        <i id="close" class="lni-close ${spanColor}"></i>
+      `;
+      stickyNotificationContainer.classList.add('show');
+
+      const closeBtn = document.querySelector('#close');
+
+      closeBtn.addEventListener('click', () => {
+        this.hideStickyNotification();
+      });
+    } catch (ex) {
+      console.log(ex);
+    }
+  }
+
+  static hideStickyNotification() {
+    try {
+      const stickyNotificationContainer = document.querySelector(
+        '#sticky-loading',
+      );
+      stickyNotificationContainer.classList.remove('show');
+      stickyNotificationContainer.classList.add('hide');
+      setTimeout(() => {
+        stickyNotificationContainer.classList.remove('hide');
+        stickyNotificationContainer.classList.remove('show');
+      }, 300);
+    } catch (ex) {
+      console.log('Error removing sticky notification');
     }
   }
 
@@ -99,6 +155,16 @@ class Helpers {
   static isEmail(email) {
     const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return regex.test(email.toLowerCase());
+  }
+
+  /*
+  https://www.w3resource.com/javascript-exercises/javascript-string-exercise-9.php
+  */
+  static capitalizeWords(word) {
+    return word.replace(
+      /\w\S*/g,
+      txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(),
+    );
   }
 }
 
