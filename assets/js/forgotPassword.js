@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const forgotPasswordForm = document.querySelector('#forgot-password-form');
 
 forgotPasswordForm.addEventListener('submit', (event) => {
