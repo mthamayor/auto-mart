@@ -1,0 +1,1943 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Auto Mart",
+    "description" : "This is the documentation of AutoMart andela project. You can find the API at\n[https://mthamayor-auto-mart.herokuapp.com](https://mthamayor-auto-mart.herokuapp.com)\n",
+    "contact" : {
+      "email" : "anifowosehabeeb@gmail.com"
+    },
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://mthamayor-auto-mart.herokuapp.com/api/v1",
+    "description" : "Production server (uses live data)"
+  }, {
+    "url" : "http://localhost:3000/api/v1",
+    "description" : "Development server (npm run dev)"
+  } ],
+  "tags" : [ {
+    "name" : "Repo",
+    "description" : "Open source project",
+    "externalDocs" : {
+      "description" : "Find out more",
+      "url" : "https://github.com/mthamayor/auto-mart"
+    }
+  } ],
+  "paths" : {
+    "/auth/signup" : {
+      "post" : {
+        "tags" : [ "auth" ],
+        "summary" : "Create new user",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/User"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "User created successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SignResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid or undefined input",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "User already exists",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/signin" : {
+      "post" : {
+        "tags" : [ "auth" ],
+        "summary" : "Existing users can signin",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Signin"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SignResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Invalid login credentials",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/forgot" : {
+      "post" : {
+        "tags" : [ "auth" ],
+        "summary" : "Existing users can request password reset",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Forgot"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ForgotResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      }
+    },
+    "/auth/reset" : {
+      "post" : {
+        "tags" : [ "auth" ],
+        "summary" : "Existing users can reset password",
+        "parameters" : [ {
+          "name" : "token",
+          "in" : "query",
+          "description" : "token sent to email",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Reset"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResetResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      }
+    },
+    "/users/{email}/reset_password" : {
+      "post" : {
+        "tags" : [ "users" ],
+        "summary" : "Users can reset their password",
+        "parameters" : [ {
+          "name" : "email",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/ResetPassword"
+        },
+        "responses" : {
+          "204" : {
+            "description" : "Password changed successfully"
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/car" : {
+      "get" : {
+        "tags" : [ "car" ],
+        "summary" : "Users can view posted ads",
+        "parameters" : [ {
+          "name" : "max_price",
+          "in" : "query",
+          "description" : "Filter with upper price of car",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "number"
+          }
+        }, {
+          "name" : "min_price",
+          "in" : "query",
+          "description" : "Filter with lower price of car",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "number"
+          }
+        }, {
+          "name" : "bodyType",
+          "in" : "query",
+          "description" : "Filter with body type of car",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "manufacturer",
+          "in" : "query",
+          "description" : "Filter with manufacturer of car",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "state",
+          "in" : "query",
+          "description" : "Filter with state of car (New or Used)",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "Filter with status of car (Available or Sold)",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CarsResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Not an admin",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "car" ],
+        "summary" : "Users can create a car sale ad",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/CreateAd"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateAdResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "502" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/car/{car_id}" : {
+      "get" : {
+        "tags" : [ "car" ],
+        "summary" : "Users can get specific car ad by id",
+        "parameters" : [ {
+          "name" : "car_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CarResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Advert not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "car" ],
+        "summary" : "Admins can delete specific car ad by id",
+        "parameters" : [ {
+          "name" : "car_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeleteCarResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Not an admin",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Advert not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/car/{car_id}/price" : {
+      "patch" : {
+        "tags" : [ "car" ],
+        "summary" : "Users can update price of their Ad",
+        "parameters" : [ {
+          "name" : "car_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/NewPrice"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CarResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Cannot delete other user advert",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Advert not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/car/{car_id}/status" : {
+      "patch" : {
+        "tags" : [ "car" ],
+        "summary" : "Users can mark their ad as sold",
+        "parameters" : [ {
+          "name" : "car_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CarResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Cannot edit other user advert",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Advert not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/car/{car_id}/flags" : {
+      "get" : {
+        "tags" : [ "car" ],
+        "summary" : "Admins can get all flags on an ad",
+        "parameters" : [ {
+          "name" : "car_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FlagsResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Not an admin",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Advert not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/car/user/my-cars" : {
+      "get" : {
+        "tags" : [ "car" ],
+        "summary" : "Users can get all their adverts",
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CarsResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/order" : {
+      "post" : {
+        "tags" : [ "order" ],
+        "summary" : "Users can create purchase orders",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/PurchaseOrder"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreatePurchaseOrderResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Purchase order not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Purchase order already created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/order/{order_id}/price" : {
+      "patch" : {
+        "tags" : [ "order" ],
+        "summary" : "Users can update price of their purchase orders",
+        "parameters" : [ {
+          "name" : "order_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/NewPrice"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EditPurchaseOrderResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Cannot edit other user purchase order",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Order not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/order/{order_id}/accept" : {
+      "patch" : {
+        "tags" : [ "order" ],
+        "summary" : "Users can accept purchase orders",
+        "parameters" : [ {
+          "name" : "order_id",
+          "in" : "path",
+          "description" : "The order to be accepted",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreatePurchaseOrderResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Cannot accept other user advert",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Advert not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/order/{order_id}/reject" : {
+      "patch" : {
+        "tags" : [ "order" ],
+        "summary" : "Users can reject purchase orders",
+        "parameters" : [ {
+          "name" : "order_id",
+          "in" : "path",
+          "description" : "The order to be rejected",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreatePurchaseOrderResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Cannot reject other user advert",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Advert not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/order/user/my-orders" : {
+      "get" : {
+        "tags" : [ "order" ],
+        "summary" : "Users can get all their orders",
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FetchPurchaseOrdersResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/flag" : {
+      "post" : {
+        "tags" : [ "flag" ],
+        "summary" : "Users can flag adverts",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Flag"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FlagResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Advert not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "User" : {
+        "type" : "object",
+        "properties" : {
+          "firstName" : {
+            "type" : "string",
+            "description" : "User first name"
+          },
+          "lastName" : {
+            "type" : "string",
+            "description" : "User last name"
+          },
+          "email" : {
+            "type" : "string",
+            "description" : "User email"
+          },
+          "address" : {
+            "type" : "string",
+            "description" : "User address"
+          },
+          "password" : {
+            "type" : "string",
+            "description" : "User password(at least 8 characters)"
+          }
+        }
+      },
+      "Signin" : {
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "description" : "User email"
+          },
+          "password" : {
+            "type" : "string",
+            "description" : "User password"
+          }
+        }
+      },
+      "CreateAd" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "Car full name/description"
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "State of the car (new or used)"
+          },
+          "price" : {
+            "type" : "number",
+            "description" : "Price of the car"
+          },
+          "manufacturer" : {
+            "type" : "string",
+            "description" : "Manufacturer of the car (Toyota, Camry, Lexus etc)"
+          },
+          "model" : {
+            "type" : "string",
+            "description" : "Model of the car (LX350, LE2015 etc)"
+          },
+          "bodyType" : {
+            "type" : "string",
+            "description" : "Body type of the car (Car, Bus etc)"
+          },
+          "imageArray" : {
+            "type" : "string",
+            "description" : "Attach images of the car",
+            "format" : "binary"
+          }
+        }
+      },
+      "NewPrice" : {
+        "type" : "object",
+        "properties" : {
+          "newPrice" : {
+            "type" : "number",
+            "description" : "New price (or offerer price) of the item"
+          }
+        }
+      },
+      "PurchaseOrder" : {
+        "type" : "object",
+        "properties" : {
+          "carId" : {
+            "type" : "integer",
+            "description" : "ID of the car of the purchase order"
+          },
+          "priceOffered" : {
+            "type" : "number",
+            "description" : "The price buyer is offering"
+          }
+        }
+      },
+      "Forgot" : {
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "description" : "Token will be sent to the email to reset password"
+          }
+        }
+      },
+      "Reset" : {
+        "type" : "object",
+        "properties" : {
+          "newPassword" : {
+            "type" : "string",
+            "description" : "Your new password"
+          }
+        }
+      },
+      "ResetPassword" : {
+        "type" : "object",
+        "properties" : {
+          "password" : {
+            "type" : "string",
+            "description" : "Your present password"
+          },
+          "newPassword" : {
+            "type" : "string",
+            "description" : "Your new password"
+          }
+        }
+      },
+      "Flag" : {
+        "type" : "object",
+        "properties" : {
+          "carId" : {
+            "type" : "integer",
+            "description" : "ID of the car you are reporting"
+          },
+          "reason" : {
+            "type" : "string",
+            "description" : "brief heading of your report"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "full description of your report"
+          }
+        }
+      },
+      "Error" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "integer"
+          },
+          "error" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ForgotResponse" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "integer"
+          },
+          "data" : {
+            "type" : "string",
+            "default" : "Password reset successful"
+          }
+        }
+      },
+      "ResetResponse" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "integer"
+          },
+          "data" : {
+            "type" : "string",
+            "default" : "Password successfully changed"
+          }
+        }
+      },
+      "SignResponse" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "integer"
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/SignResponse_data"
+          }
+        }
+      },
+      "CarResponse" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "integer"
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/CarResponse_data"
+          }
+        }
+      },
+      "CarsResponse" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "integer"
+          },
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CarResponse_data"
+            }
+          }
+        }
+      },
+      "DeleteCarResponse" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "integer"
+          },
+          "data" : {
+            "type" : "string",
+            "default" : "Car Ad successfully deleted"
+          }
+        }
+      },
+      "CreateAdResponse" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "integer"
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/CreateAdResponse_data"
+          }
+        }
+      },
+      "CreatePurchaseOrderResponse" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "integer"
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/CreatePurchaseOrderResponse_data"
+          }
+        }
+      },
+      "FetchPurchaseOrdersResponse" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "integer"
+          },
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CreatePurchaseOrderResponse_data"
+            }
+          }
+        }
+      },
+      "EditPurchaseOrderResponse" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "integer"
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/EditPurchaseOrderResponse_data"
+          }
+        }
+      },
+      "FlagResponse" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "integer"
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/FlagResponse_data"
+          }
+        }
+      },
+      "FlagsResponse" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "integer"
+          },
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/FlagResponse_data"
+            }
+          }
+        }
+      },
+      "SignResponse_data" : {
+        "type" : "object",
+        "properties" : {
+          "token" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "first_name" : {
+            "type" : "string"
+          },
+          "last_name" : {
+            "type" : "string"
+          },
+          "address" : {
+            "type" : "string"
+          },
+          "isAdmin" : {
+            "type" : "boolean",
+            "default" : false
+          }
+        }
+      },
+      "CarResponse_data" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "created_on" : {
+            "type" : "integer"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "owner" : {
+            "type" : "integer"
+          },
+          "manufacturer" : {
+            "type" : "string"
+          },
+          "model" : {
+            "type" : "string"
+          },
+          "price" : {
+            "type" : "number"
+          },
+          "state" : {
+            "type" : "string",
+            "enum" : [ "new", "used" ]
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "available", "sold" ]
+          },
+          "body_type" : {
+            "type" : "string"
+          },
+          "image_urls" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "CreateAdResponse_data" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "owner" : {
+            "type" : "string"
+          },
+          "created_on" : {
+            "type" : "integer"
+          },
+          "manufacturer" : {
+            "type" : "string"
+          },
+          "price" : {
+            "type" : "number"
+          },
+          "state" : {
+            "type" : "string",
+            "enum" : [ "new", "used" ]
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "available", "sold" ]
+          },
+          "image_url" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "CreatePurchaseOrderResponse_data" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "buyer" : {
+            "type" : "integer"
+          },
+          "car_id" : {
+            "type" : "integer"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "price" : {
+            "type" : "number"
+          },
+          "price_offered" : {
+            "type" : "number"
+          },
+          "created_on" : {
+            "type" : "string"
+          }
+        }
+      },
+      "EditPurchaseOrderResponse_data" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "car_id" : {
+            "type" : "integer"
+          },
+          "created_on" : {
+            "type" : "integer"
+          },
+          "old_price_offered" : {
+            "type" : "number"
+          },
+          "new_price_offered" : {
+            "type" : "number"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "pending", "accepted", "rejected" ]
+          }
+        }
+      },
+      "FlagResponse_data" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "user_id" : {
+            "type" : "integer"
+          },
+          "car_id" : {
+            "type" : "integer"
+          },
+          "reason" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "requestBodies" : {
+      "User" : {
+        "description" : "User details that will be created",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/User"
+            },
+            "example" : {
+              "firstName" : "Anifowose",
+              "lastName" : "Habeeb",
+              "email" : "anifowosehabeeb@gmail.com",
+              "address" : "Ganmo Street, Ilorin",
+              "password" : "MTHA.294821"
+            }
+          }
+        },
+        "required" : true
+      },
+      "Signin" : {
+        "description" : "User that should be returned",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Signin"
+            },
+            "example" : {
+              "email" : "anifowosehabeeb@gmail.com",
+              "password" : "MTHA.294821"
+            }
+          }
+        },
+        "required" : true
+      },
+      "CreateAd" : {
+        "description" : "Car advert that should be created",
+        "content" : {
+          "multipart/form-data" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/CreateAd"
+            },
+            "example" : {
+              "name" : "Audi Cruizer",
+              "state" : "New",
+              "price" : 11000000,
+              "manufacturer" : "Audi",
+              "model" : "LX450",
+              "bodyType" : "car",
+              "imageArray" : "Files"
+            },
+            "encoding" : {
+              "imageArray" : {
+                "contentType" : "image/jpg, image/jpeg, image/png, image/webp",
+                "style" : "form"
+              }
+            }
+          }
+        },
+        "required" : true
+      },
+      "NewPrice" : {
+        "description" : "New price",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/NewPrice"
+            },
+            "example" : {
+              "newPrice" : 9000000
+            }
+          }
+        },
+        "required" : true
+      },
+      "PurchaseOrder" : {
+        "description" : "Purchase order",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/PurchaseOrder"
+            },
+            "example" : {
+              "carId" : 1,
+              "priceOffered" : 5000000
+            }
+          }
+        },
+        "required" : true
+      },
+      "Forgot" : {
+        "description" : "Request password reset",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Forgot"
+            },
+            "example" : {
+              "email" : "anifowosehabeeb@gmail.com"
+            }
+          }
+        },
+        "required" : true
+      },
+      "Reset" : {
+        "description" : "Reset password",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Reset"
+            },
+            "example" : {
+              "newPassword" : "ALT2343LSDF"
+            }
+          }
+        }
+      },
+      "ResetPassword" : {
+        "description" : "Reset password or change password",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ResetPassword"
+            },
+            "example" : {
+              "password" : "MAYOR_LSDH",
+              "newPassword" : "ALT2343LSDF"
+            }
+          }
+        }
+      },
+      "Flag" : {
+        "description" : "Flag advert",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Flag"
+            },
+            "example" : {
+              "carId" : 1,
+              "reason" : "Fraudulent seller",
+              "description" : "This seller once duped me in the past"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "bearerAuth" : {
+        "type" : "http",
+        "scheme" : "bearer",
+        "bearerFormat" : "JWT"
+      }
+    }
+  }
+}

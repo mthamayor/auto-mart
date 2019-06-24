@@ -1,9 +1,11 @@
-//Handle form submission
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
+// Handle form submission
 
 const searchForm = document.querySelector('#search-form');
 //  form-fields
 
-searchForm.addEventListener('submit', event => {
+searchForm.addEventListener('submit', (event) => {
   event.preventDefault();
   const manufacturer = searchForm['manufacturer-filter'].value;
   const lowerPrice = searchForm['lower-price'].value;
@@ -13,18 +15,18 @@ searchForm.addEventListener('submit', event => {
 
   // Form validation
 
-  if (isNaN(lowerPrice)) {
+  if (Number.isNaN(lowerPrice)) {
     Populator.showNotification('Please enter a valid lower price');
     return;
   }
 
-  if (isNaN(higherPrice)) {
+  if (Number.isNaN(higherPrice)) {
     Populator.showNotification('Please enter a valid higherPrice');
     return;
   }
-  if (parseInt(lowerPrice) > parseInt(higherPrice)) {
+  if (parseInt(lowerPrice, 10) > parseInt(higherPrice, 10)) {
     Populator.showNotification(
-      'Lower price cannot be greater than higher price'
+      'Lower price cannot be greater than higher price',
     );
     return;
   }
@@ -39,7 +41,7 @@ searchForm.addEventListener('submit', event => {
   }
 
   // Form validation ends here
-  //Api calls
+  // Api calls
   Populator.showAsyncNotification();
 
   setTimeout(() => {

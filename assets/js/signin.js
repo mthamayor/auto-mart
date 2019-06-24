@@ -1,9 +1,10 @@
+/* eslint-disable no-undef */
 const signInForm = document.querySelector('#sign-in-form');
 
-signInForm.addEventListener('submit', event => {
+signInForm.addEventListener('submit', (event) => {
   event.preventDefault();
-  const email = signInForm['email'].value;
-  const password = signInForm['password'].value;
+  const email = signInForm.email.value;
+  const password = signInForm.password.value;
 
   // Form validation
   if (email.length <= 0) {
@@ -17,7 +18,7 @@ signInForm.addEventListener('submit', event => {
   }
   // Form validation ends here
 
-  //Api calls
+  // Api calls
   Populator.showAsyncNotification();
 
   setTimeout(() => {
