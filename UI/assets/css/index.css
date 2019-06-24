@@ -65,6 +65,27 @@ body {
 .text-center{
   text-align: center;
 }
+.badge{
+  float: right;
+  border-radius:5px;
+  padding: 5px;
+}
+.badge-success{
+  background: green;
+  color: white;
+}
+.badge-gold{
+  background: gold;
+  color: black;
+}
+.badge-brown{
+  background: brown;
+  color: white;
+}
+.badge-danger{
+  background: red;
+  color: white;
+}
 .caret {
   position: absolute;
   right: 0px;
@@ -133,6 +154,15 @@ body {
 }
 .p-small {
   padding: 10px;
+}
+.p-medium {
+  padding: 20px;
+}
+.p-large {
+  padding: 30px;
+}
+.m-large{
+  padding: 30px;
 }
 .pb {
   padding-bottom: 10px;
@@ -248,6 +278,9 @@ li {
 }
 .side-content {
   min-width: 350px;
+}
+.bg-primary{
+  background: var(--primary);
 }
 .main-bg {
   position: relative;
@@ -408,17 +441,44 @@ footer .header {
 footer li {
   margin-bottom: 10px;
 }
+
+.line-height-small{
+  line-height: 1.5;
+}
+
+.index-icon{
+  font-size: 3rem;
+}
+
 .icons,
 .line-icon {
   font-size: 1rem;
   margin-right: 5px;
 }
+
 .line-icon {
   color: var(--primary);
 }
+
 .divider {
   border-bottom: 0.9px solid var(--divider);
 }
+
+.divider2{
+  border-bottom: 0.9px solid var(--primary);
+  width: 150px;
+}
+
+.index-section-container{
+  width: 300px;
+  font-weight: 100
+}
+
+.index-section-words{
+  font-size: 0.8rem;
+  margin-top: 3rem
+}
+
 .space-top-bottom {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -444,7 +504,7 @@ footer li {
   font-size: 30px;
 }
 .section-image {
-  width: 150px;
+  width: 100px;
   height: 100%;
 }
 .small-screen-divider {
@@ -785,6 +845,14 @@ button,
 }
 /* Search car container ends here */
 
+/*
+Seller index container starts here
+*/
+.seller-car{
+  max-width: 1000px;
+  min-height: 300px;
+}
+
 /*  */
 @media only screen and (max-width: 1000px) {
   .car-container {
@@ -1001,5 +1069,9 @@ button,
   }
   .flex-sm-column{
     flex-direction: column;
+  }
+
+  .links > li {
+    margin-right: 0px;
   }
 }
