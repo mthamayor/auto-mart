@@ -29,7 +29,7 @@
 
     <!-- notifications -->
     <div id="notification"></div>
-    <div id="page-loading" class="hide">
+    <div id="page-loading">
       <div class="d-flex justify-content-center align-items-center h-100">
         <div class="spinner-icon spinner-big spin-animation"></div>
       </div>
@@ -38,6 +38,7 @@
       <div class="spinner-icon spin-animation mr"></div>
       Please Wait
     </div>
+    <div id="sticky-loading" class="shadow"></div>
     <!-- notifications ends here -->
 
     <!-- Navigation container -->
@@ -54,22 +55,48 @@
               class="search-input-container d-flex flex-1 align-items-center"
             >
               <input
-                list="car-type"
+                id="manufacturer-input"
+                list="car-manufacturer"
                 type="text"
                 class="search-input suffix"
                 placeholder="Manufacturer"
                 name="manufacturer-filter"
               />
-              <datalist id="car-type">
+              <datalist id="car-manufacturer">
+                <option value="Toyota"> </option>
+                <option value="Lexus"> </option>
+                <option value="Ford"> </option>
+                <option value="Honda"> </option>
+              </datalist>
+
+              <i id="clear-manufacturer" class="caret cursor-pointer lni-close"></i>
+            </div>
+          </div>
+
+          <div class="search-box">
+            <p>Select body type:</p>
+            <div
+              class="search-input-container d-flex flex-1 align-items-center"
+            >
+              <input
+                id="body-type-input"
+                list="body-type"
+                type="text"
+                class="search-input suffix"
+                placeholder="Body type"
+                name="body-type-filter"
+              />
+              <datalist id="body-type">
                 <option value="Car"> </option>
                 <option value="Bus"> </option>
                 <option value="Trailer"> </option>
                 <option value="Motorcycle"> </option>
               </datalist>
 
-              <i class="caret cursor-pointer lni-close"></i>
+              <i id="clear-body-type" class="caret cursor-pointer lni-close"></i>
             </div>
           </div>
+
           <div class="divider mt"></div>
 
           <p>Filter price:</p>
@@ -98,7 +125,7 @@
             <select name="vehicle-status" class="search-input suffix">
               <option value="">All</option>
               <option value="sold">Sold</option>
-              <option value="unsold">Unsold</option>
+              <option value="available">Available</option>
             </select>
             <i class="caret lni-chevron-down"></i>
           </div>
@@ -110,69 +137,12 @@
 
         <!-- Car list container -->
         <div class="cars-container">
-          <p class="section-header capitalized">All Cars</p>
+          <p id="car-header" class="section-header capitalized">All Cars</p>
           <div
+            id="car-container"
             class="d-flex car-list-section justify-content-center align-items-center"
           >
-            <a href="google.com" class="car-container d-flex mb mt shadow">
-              <div
-                class="flex-1 d-flex p-small align-items-center search-img-container"
-              >
-                <img
-                  class="search-img img-responsive"
-                  src="assets/img/cars/toyota-avalon.webp"
-                />
-              </div>
-              <div class="search-description-container flex-1 pl pr">
-                <h4 class="font-slabo mb">Toyota Avalon 2019 LE</h4>
-                <div class="divider mb"></div>
-                <div class="capitalized mb">
-                  Condition: <span class="uppercase">New</span>
-                </div>
-                <div class="capitalized mb">
-                  Status: <span class="uppercase">Sold</span>
-                </div>
-                <div class="capitalized mb">
-                  Type: <span class="uppercase">Car</span>
-                </div>
-                <div class="capitalized mb">
-                  Manufacturer: <span class="uppercase">Toyota</span>
-                </div>
-                <div class="font-weight-bold capitalized mb">
-                  Price: <span class="">₦<span>4,000,000</span></span>
-                </div>
-              </div>
-            </a>
-
-            <a href="google.com" class="car-container d-flex mb mt shadow">
-              <div
-                class="flex-1 d-flex p-small align-items-center search-img-container"
-              >
-                <img
-                  class="search-img img-responsive"
-                  src="assets/img/cars/lexus-es350.webp"
-                />
-              </div>
-              <div class="search-description-container flex-1 pl pr">
-                <h4 class="font-slabo mb">Lexus ES-350</h4>
-                <div class="divider mb"></div>
-                <div class="capitalized mb">
-                  Condition: <span class="uppercase">Used</span>
-                </div>
-                <div class="capitalized mb">
-                  Status: <span class="uppercase">Unsold</span>
-                </div>
-                <div class="capitalized mb">
-                  Type: <span class="uppercase">Car</span>
-                </div>
-                <div class="capitalized mb">
-                  Manufacturer: <span class="uppercase">Lexus</span>
-                </div>
-                <div class="font-weight-bold capitalized mb">
-                  Price: <span class="">₦<span>1,000,000</span></span>
-                </div>
-              </div>
-            </a>
+          
           </div>
         </div>
       </div>

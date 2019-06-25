@@ -197,7 +197,7 @@ body {
 .nav {
   left: 0;
   top: 0;
-  z-index: 1000;
+  z-index: 1100;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -848,10 +848,12 @@ button,
   margin-left: 20px;
   margin-right: 20px;
   flex-basis: 45%;
+  max-width: 450px;
 }
 .search-img-container {
   overflow: hidden;
   height: 150px;
+  position: relative;
 }
 .search-description-container {
   border-left: 1px solid var(--divider);
@@ -897,17 +899,18 @@ Seller index container starts here
   visibility: hidden;
 }
 #notification {
-  z-index: 1020;
+  z-index: 1090;
   background-color: var(--transparent-background);
   color: white;
 }
 #async-loading {
-  z-index: 1030;
+  z-index: 1100;
   background-color: var(--dark-brown);
   color: white;
 }
 #sticky-loading{
-  width: 350px;
+  min-width: 300px;
+  max-width: 350px;
   margin-left: auto;
   margin-right: auto;
   padding: 14px;
@@ -922,15 +925,19 @@ Seller index container starts here
   visibility: hidden;
   background-color: white;
   color: var(--primary);
-  z-index: 1040;
+  z-index: 1110;
   padding-right: 20px;
 }
 
-#sticky-loading i{
+#sticky-loading i, .badge-absolute{
   position: absolute;
   margin: 5px;
   top: 0px;
   right: 0px;
+}
+
+#sticky-loading i{
+  z-index: 1110;
 }
 
 .spinner-icon {
