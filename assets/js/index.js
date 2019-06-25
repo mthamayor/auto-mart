@@ -170,9 +170,32 @@ class Helpers {
     );
   }
 
+  /*
+  https://stackoverflow.com/questions/1714786/query-string-encoding-of-a-javascript-object
+  */
+  static serialize(obj) {
+    const str = [];
+    // eslint-disable-next-line no-restricted-syntax
+    for (const p in obj) {
+      // eslint-disable-next-line no-prototype-builtins
+      if (obj.hasOwnProperty(p)) {
+        str.push(`${encodeURIComponent(p)}=${encodeURIComponent(obj[p])}`);
+      }
+    }
+    return str.join('&');
+  }
+
   static logout() {
     localStorage.removeItem('user');
     window.location.replace('index.html');
+  }
+
+  static async delayedRoute(n = 5000, url) {
+    await new Promise((done) => {
+      setTimeout(() => {
+        window.location.replace(url);
+      }, n);
+    });
   }
 }
 
