@@ -657,6 +657,42 @@ describe('Car endpoint test', () => {
       );
     });
   });
+  describe('route GET car/:car_id/orders', () => {
+    before(async () => {
+      await carsHelper.clearCars();
+    });
+    before(async () => {
+      const res = await chai
+        .request(app)
+        .post('/api/v1/car')
+        .set('Authorization', `Bearer ${user1.token}`)
+        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .type('form')
+        .field('state', mockCars.validState)
+        .field('price', mockCars.validPrice)
+        .field('model', mockCars.validModel)
+        .field('manufacturer', mockCars.validManufacturer)
+        .field('bodyType', mockCars.validBodyType)
+        .field('name', mockCars.validName);
+      car1 = res.body.data;
+    });
+
+    it('should raise 200 when the orders for ad were successfully retrieved', async () => {
+      const res = await chai
+        .request(app)
+        .get(`/api/v1/car/${car1.id}/orders`)
+        .set('Authorization', `Bearer ${user1.token}`)
+        .type('form')
+        .send();
+      expect(res).to.have.status(200);
+      expect(res.body).to.have.property('status');
+      expect(res.body).to.have.property('data');
+      const { data, status } = res.body;
+      expect(data).to.be.a('array');
+      assert.strictEqual(status, 200, 'status should be 200');
+    });
+  });
+
   describe('route GET car/:car_id/flags', () => {
     before(async () => {
       await carsHelper.clearCars();

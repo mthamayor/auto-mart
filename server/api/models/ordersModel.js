@@ -34,6 +34,17 @@ export const getOrdersByBuyer = async (userId) => {
   return queryResult.rows;
 };
 
+export const getOrdersByCar = async (carId) => {
+  const queryText = {
+    name: 'get-orders-car',
+    text: 'SELECT * FROM orders WHERE car_id = $1',
+    values: [carId],
+  };
+  const queryResult = await query(queryText);
+
+  return queryResult.rows;
+};
+
 export const editPurchaseOrder = async (id, newPrice) => {
   const queryText = {
     name: 'edit-purchase-order',

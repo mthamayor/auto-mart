@@ -2,9 +2,9 @@
  * Routes every car API endpoint here
  */
 import express from 'express';
-import { Cars } from '../controllers';
+import { Flags, Cars, PurchaseOrders } from '../controllers';
 import { Authorization, CarsValidator } from '../middlewares';
-import Flags from '../controllers/Flags';
+
 
 const carsRouter = express.Router();
 
@@ -64,5 +64,12 @@ carsRouter.get(
 
 // Users can get all their cars
 carsRouter.get('/user/my-cars', Authorization.verifyToken, Cars.getCarsByOwner);
+
+// Users can get all orders for their car
+carsRouter.get(
+  '/:car_id/orders',
+  CarsValidator.getCar,
+  PurchaseOrders.getOrdersByCar,
+);
 
 export default carsRouter;
