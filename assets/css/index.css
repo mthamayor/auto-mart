@@ -65,6 +65,9 @@ body {
 .text-center{
   text-align: center;
 }
+.text-end{
+  text-align: end;
+}
 .badge{
   float: right;
   border-radius:5px;
@@ -83,7 +86,11 @@ body {
   color: white;
 }
 .badge-danger{
-  background: red;
+  background: var(--red);
+  color: white;
+}
+.badge-primary{
+  background: var(--primary-dark);
   color: white;
 }
 .caret {
@@ -185,6 +192,18 @@ body {
 }
 .font-color-primary {
   color: var(--primary-dark);
+}
+.v-none{
+  visibility: hidden;
+}
+.v-show{
+  visibility: visible;
+}
+.font-color-red{
+  color: var(--red);
+}
+.font-color-darkred{
+  color: var(--dark-red);
 }
 .fixed {
   position: fixed;
@@ -395,7 +414,7 @@ input[type='file'] {
   color: green;
 }
 .color-red{
-  color: red
+  color: red;
 }
 .color-black{
   color: black;
@@ -404,10 +423,10 @@ input[type='file'] {
 .border-color-green {
   border-color: green;
 }
-.border-color-red{
-  border-color: red
+.border-color-red {
+  border-color: red;
 }
-.border-color-black{
+.border-color-black {
   border-color: black;
 }
 
@@ -940,6 +959,46 @@ Seller index container starts here
   z-index: 1110;
 }
 
+.controls{
+  width: fit-content;
+}
+
+.control-item{
+  display: inline-flex;
+  margin-bottom: 10px;
+  min-width: 60px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  cursor: pointer;
+
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+
+.control-item:hover{
+  border-color: var(--primary);
+}
+
+.control-item-danger {
+  border: 1.2px solid red;
+}
+
+.control-item-primary {
+  border: 1.2px solid var(--primary);
+}
+
+.control-item-dark {
+  border: 1.2px solid var(--background);
+}
+
+.control-item i{
+  font-size: 20px;
+}
+
 .spinner-icon {
   display: inline-block;
   width: 8px;
@@ -1002,20 +1061,37 @@ Seller index container starts here
   z-index: 1050;
   width: 100%;
   height: 100%;
+  overflow: hidden;
   background: var(--transparent-background);
+
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
 }
+.p-orders {
+  height: 72%;
+  width: 350px;
+  min-width:300px;
+  max-width: 600px;
+  background: white;
+  overflow: auto;
+}
+
 .flag {
   background: white;
   min-width: 300px;
   width: 400px;
   min-height: 350px;
+  border-radius: 5px;
 }
 .flag-input {
-  border-color: var(--primary) !important;
+  border-color: var(--background) !important;
+  border-radius: 5px;
 }
 
 .flag-input:focus {
-  border-color: var(--primary-dark) !important;
+  border-color: var(--primary) !important;
 }
 .h-100 {
   height: 100% !important;
