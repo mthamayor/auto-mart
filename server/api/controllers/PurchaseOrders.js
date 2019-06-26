@@ -194,6 +194,24 @@ class PurchaseOrders {
 
     ResponseHandler.success(res, 200, data);
   }
+
+  /**
+   * @method getOrdersByCar
+   * @description - Fetches all car's purchase orders
+   * @param {object} req - Request object
+   * @param {object} res - Response object
+   * @returns {object} - JSON Response
+   */
+  static async getOrdersByCar(req, res) {
+    let id = req.params.car_id;
+    id = parseInt(id, 10);
+
+    const queryResult = await ordersHelper.getOrdersByCar(id);
+
+    const data = queryResult;
+
+    ResponseHandler.success(res, 200, data);
+  }
 }
 
 export default PurchaseOrders;

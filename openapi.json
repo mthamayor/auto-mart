@@ -317,7 +317,8 @@
           "style" : "form",
           "explode" : true,
           "schema" : {
-            "type" : "string"
+            "type" : "string",
+            "enum" : [ "new", "used" ]
           }
         }, {
           "name" : "status",
@@ -327,7 +328,8 @@
           "style" : "form",
           "explode" : true,
           "schema" : {
-            "type" : "string"
+            "type" : "string",
+            "enum" : [ "available", "sold" ]
           }
         } ],
         "responses" : {
@@ -788,6 +790,77 @@
           },
           "403" : {
             "description" : "Not an admin",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Advert not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/car/{car_id}/orders" : {
+      "get" : {
+        "tags" : [ "car" ],
+        "summary" : "Users can get all orders on their ad",
+        "parameters" : [ {
+          "name" : "car_id",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FetchPurchaseOrdersResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Access token is missing or invalid",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -1566,7 +1639,7 @@
           "status" : {
             "type" : "integer"
           },
-          "items" : {
+          "data" : {
             "type" : "array",
             "items" : {
               "$ref" : "#/components/schemas/CreatePurchaseOrderResponse_data"
