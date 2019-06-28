@@ -88,7 +88,6 @@ const fillOrderElement = (orderItem) => {
                 <span class="font-weight-bold mb uppercase"
                   >Buyer ID: ${orderItem.buyer}</span
                 >
-                <small class="float-right">${orderItem.created_on}</small>
               </div>
               <div class="d-flex align-items-center">
                 <small class="font-color-primary">Price offered:</small>
@@ -169,7 +168,6 @@ const fetchFlags = () => {
         return;
       }
       const flagsFill = document.querySelector('#flags-fill');
-
       flagsFill.innerHTML = response.data.length > 0
         ? processFlags(response)
         : '<p>No flags found</p>';
