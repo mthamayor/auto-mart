@@ -185,6 +185,11 @@ class Helpers {
     return str.join('&');
   }
 
+  static isValidDigits(num) {
+    const isNum = /^\d+$/;
+    return isNum.test(num);
+  }
+
   static logout() {
     localStorage.removeItem('user');
     window.location.replace('index.html');

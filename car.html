@@ -86,64 +86,42 @@
 
     <!-- Purchase orders container -->
     <div
+      id="orders-container"
       class="flag-container d-flex justify-content-center align-items-center d-none"
     >
-      <div class="p-orders m-small p-small vertical-scroll">
-        <div class="d-flex mb">
-          <div class="mr-medium"><h3 class="font-slabo">1</h3></div>
-          <div class="flex-1 d-flex divider">
-            <div
-              class="d-flex flex-1 flex-column justify-content-center uppercase"
-            >
-              <div class="font-weight-bold mb">Anifowose Habeeb</div>
-              <div class="d-flex align-items-center">
-                <small class="font-color-primary">Price offered:</small>
-                <div class="flex-1 text-center font-weight-bold">₦5000000</div>
-              </div>
-            </div>
-            <div class="d-flex flex-column">
-              <small class="badge badge-primary mb cursor-pointer uppercase"
-                >Accept</small
-              >
-              <small class="badge badge-danger mb cursor-pointer uppercase"
-                >Reject</small
-              >
-            </div>
-          </div>
+      <div class="p-orders m-small p-small pt-extra-large vertical-scroll">
+        <div class="d-flex justify-content-end p-medium">
+          <small
+            id="close-orders-button"
+            class="badge badge-primary uppercase font-weight-bold cursor-pointer badge-absolute"
+          >
+            <i class="lni-close"></i>
+          </small>
         </div>
+
+        <div id="orders-fill"></div>
       </div>
     </div>
     <!-- Purchase orders container ends here -->
 
     <!-- Flags container -->
     <div
+      id="flags-container"
+      ;
       class="flag-container d-flex justify-content-center align-items-center d-none"
     >
       <div class="p-orders m-small p-small vertical-scroll">
-        <div class="d-flex mb">
-          <div class="mr-medium align-self-center"><h3 class="font-slabo">1</h3></div>
-          <div class="flex-1 d-flex divider pb">
-            <div
-              class="d-flex flex-1 flex-column justify-content-center"
-            >
-              <div>
-                <span class="font-weight-bold mb uppercase">Anifowose Habeeb</span>
-                <small class="float-right">22/22/2012</small>
-              </div>
-              <div class="d-flex flex-column justify-content-center mb">
-                <small class="font-color-primary font-weight-bold uppercase">Reason</small>
-                <small class="flex-1">Fraudulent seller</small>
-              </div>
-              <div class="d-flex flex-column justify-content-center">
-                <small class="font-color-primary font-weight-bold uppercase">Description</small>
-                <small class="flex-1">The seller once duped me in the back
-                  The seller once duped me in the back
-                  The seller once duped me in the back
-                  The seller once duped me in the back
-                </small>
-              </div>
-            </div>
-          </div>
+        <div class="d-flex justify-content-end p-medium">
+          <small
+            id="close-flags-button"
+            class="badge badge-primary uppercase font-weight-bold cursor-pointer badge-absolute"
+          >
+            <i class="lni-close"></i>
+          </small>
+        </div>
+
+        <div id="flags-fill">
+        
         </div>
       </div>
     </div>
@@ -154,26 +132,43 @@
     <!-- Navigation container ends -->
 
     <div class="main-content">
-      <div class="d-flex justify-content-center">
+      <div id="controls-container" loggedElement class="d-flex justify-content-center d-none">
         <div class="controls">
-          <span class="control-item control-item-dark pr pl">
+          <span
+            id="delete-ad"
+            class="control-item control-item-dark pr pl"
+            heirachy="admin"
+          >
             <i class="fas fa-trash-alt font-color-darkred"></i>
             <span class="ml uppercase font-weight-bold">Delete</span>
           </span>
-          <span class="control-item control-item-dark pr pl">
+          <span
+            id="show-flags-button"
+            class="control-item control-item-dark pr pl"
+            heirachy="admin"
+          >
             <i class="fas fa-flag font-color-red"></i>
             <span class="ml uppercase font-weight-bold">Flags</span>
           </span>
-          <span class="control-item control-item-dark pr pl">
+          <span
+            id="show-orders-button"
+            class="control-item control-item-dark pr pl"
+            heirachy="seller"
+          >
             <i class="fas fa-clipboard-list font-color-primary"></i>
             <span class="ml uppercase font-weight-bold">Orders</span>
           </span>
-          <span class="control-item control-item-dark pr pl">
+          <span
+            id="buyer-order"
+            class="control-item control-item-dark pr pl"
+            heirachy="buyer"
+          >
             <i class="fas fa-clipboard-list font-color-primary"></i>
             <span class="ml uppercase font-weight-bold">My Order</span>
           </span>
         </div>
       </div>
+
       <div class="item-overview">
         <div class="item-images-container-2 align-items-center">
           <div class="d-flex preview-container-column vertical-scroll">
@@ -222,7 +217,9 @@
           </div>
           <p class="d-flex divider pb">
             <strong class="uppercase mr">Seller: </strong
-            ><span class="capitalized flex-1 text-end">Anifowose Technologies</span>
+            ><span class="capitalized flex-1 text-end"
+              >Anifowose Technologies</span
+            >
           </p>
           <p class="d-flex divider pb">
             <strong class="uppercase mr"> Model: </strong
@@ -238,18 +235,21 @@
           </p>
           <p class="d-flex divider pb">
             <strong class="uppercase mr"> State: </strong
-            ><span class="uppercase font-weight-bold font-style-oblique flex-1 text-end"
+            ><span
+              class="uppercase font-weight-bold font-style-oblique flex-1 text-end"
               >NEW</span
             >
           </p>
           <p class="d-flex divider pb">
             <strong class="uppercase mr">price:</strong>
-            <span class="flex-1 text-end font-weight-bold ">₦<span>40,000,000</span></span>
+            <span class="flex-1 text-end font-weight-bold "
+              >₦<span>40,000,000</span></span
+            >
           </p>
-          <div class="text-center">
+          <div loggedElement class="text-center d-none">
             <button class="submit-btn trimmed-btn">make order</button>
           </div>
-          <p id="flag-button" class="cursor-pointer">
+          <p id="flag-button" loggedElement class="cursor-pointer d-none">
             <i class="icons fas fa-flag"></i
             ><span class="font-weight-lighter">Report this AD?</span>
           </p>
