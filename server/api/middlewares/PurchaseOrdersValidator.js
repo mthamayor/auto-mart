@@ -27,7 +27,7 @@ class PurchaseOrdersValidator {
     if (
       carId === undefined
       || String(carId).trim() === ''
-      || !validator.isNumeric(carId)
+      || !validator.isNumeric(String(carId))
     ) {
       ResponseHandler.error(res, 400, 'car id is undefined or invalid');
       return;
@@ -36,7 +36,7 @@ class PurchaseOrdersValidator {
     if (
       priceOffered === undefined
       || String(priceOffered).trim() === ''
-      || !validator.isNumeric(priceOffered)
+      || !validator.isNumeric(String(priceOffered))
     ) {
       ResponseHandler.error(res, 400, 'price is undefined or invalid');
       return;
@@ -95,7 +95,7 @@ class PurchaseOrdersValidator {
     if (
       newPrice === undefined
       || String(newPrice).trim() === ''
-      || !validator.isNumeric(newPrice)
+      || !validator.isNumeric(String(newPrice))
     ) {
       ResponseHandler.error(res, 400, 'new price is undefined or invalid');
       return;
@@ -136,7 +136,7 @@ class PurchaseOrdersValidator {
     if (
       orderId === undefined
       || String(orderId).trim() === ''
-      || !validator.isNumeric(orderId)
+      || !validator.isNumeric(String(orderId))
     ) {
       ResponseHandler.error(res, 400, 'order id is undefined or invalid');
       return;

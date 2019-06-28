@@ -61,7 +61,7 @@ class CarsValidator {
         return;
       }
 
-      if (!validator.isNumeric(price)) {
+      if (!validator.isNumeric(String(price))) {
         ResponseHandler.error(res, 400, 'price is not a number');
         return;
       }
@@ -131,7 +131,7 @@ class CarsValidator {
     if (
       carId === undefined
       || String(carId).trim() === ''
-      || !validator.isNumeric(carId)
+      || !validator.isNumeric(String(carId))
     ) {
       ResponseHandler.error(
         res,
@@ -178,7 +178,7 @@ class CarsValidator {
     if (
       newPrice === undefined
       || String(newPrice).trim() === ''
-      || !validator.isNumeric(newPrice)
+      || !validator.isNumeric(String(newPrice))
     ) {
       ResponseHandler.error(res, 400, 'newPrice is undefined or invalid');
       return;
@@ -197,7 +197,7 @@ class CarsValidator {
   static async getCar(req, res, next) {
     const carId = req.params.car_id;
 
-    if (String(carId).trim() === '' || !validator.isNumeric(carId)) {
+    if (String(carId).trim() === '' || !validator.isNumeric(String(carId))) {
       ResponseHandler.error(res, 400, 'car_id parameter is not a valid number');
       return;
     }
@@ -265,12 +265,12 @@ class CarsValidator {
       && String(maxPrice).trim() !== ''
       && String(minPrice).trim() !== ''
     ) {
-      if (!validator.isNumeric(minPrice)) {
+      if (!validator.isNumeric(String(minPrice))) {
         ResponseHandler.error(res, 400, 'min_price is not a number');
         return;
       }
 
-      if (!validator.isNumeric(maxPrice)) {
+      if (!validator.isNumeric(String(maxPrice))) {
         ResponseHandler.error(res, 400, 'max_price is not a number');
         return;
       }
