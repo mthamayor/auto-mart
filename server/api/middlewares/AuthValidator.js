@@ -26,7 +26,7 @@ class AuthValidator {
       email, firstName, lastName, address, password,
     } = req.body;
 
-    if (email === undefined || !validator.isEmail(email)) {
+    if (email === undefined || !validator.isEmail(String(email))) {
       ResponseHandler.error(res, 400, 'email is undefined or invalid');
       return;
     }
@@ -69,7 +69,7 @@ class AuthValidator {
   static async signIn(req, res, next) {
     const { email, password } = req.body;
 
-    if (email === undefined || !validator.isEmail(email)) {
+    if (email === undefined || !validator.isEmail(String(email))) {
       ResponseHandler.error(res, 400, 'email is undefined or invalid');
       return;
     }
@@ -114,7 +114,7 @@ class AuthValidator {
    */
   static async forgotPassword(req, res, next) {
     const { email } = req.body;
-    if (!validator.isEmail(email)) {
+    if (!validator.isEmail(String(email))) {
       ResponseHandler.error(res, 400, 'email is invalid');
       return;
     }
@@ -174,7 +174,7 @@ class AuthValidator {
     const { email } = req.params;
     const { password, newPassword } = req.body;
 
-    if (email === undefined || !validator.isEmail(email)) {
+    if (email === undefined || !validator.isEmail(String(email))) {
       ResponseHandler.error(res, 400, 'email is undefined or invalid');
       return;
     }

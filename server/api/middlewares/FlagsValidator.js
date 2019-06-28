@@ -25,7 +25,7 @@ class FlagsValidator {
     if (
       carId === undefined
       || String(carId).trim() === ''
-      || !validator.isNumeric(carId)
+      || !validator.isNumeric(String(carId))
     ) {
       ResponseHandler.error(res, 400, 'car id is undefined or invalid');
       return;
