@@ -57,7 +57,7 @@ class Flags {
    * @returns {object} - JSON Response
    */
   static async getCarFlags(req, res) {
-    const { carId } = parseInt(req.params.car_id, 10);
+    const carId = parseInt(req.params.car_id, 10);
 
 
     const queryText = {
