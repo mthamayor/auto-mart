@@ -30,19 +30,19 @@ class AuthValidator {
       ResponseHandler.error(res, 400, 'email is undefined or invalid');
       return;
     }
-    if (firstName === undefined || !validator.isAlpha(firstName.trim())) {
+    if (firstName === undefined || !validator.isAlpha(String(firstName).trim())) {
       ResponseHandler.error(res, 400, 'first name is undefined or invalid');
       return;
     }
-    if (lastName === undefined || !validator.isAlpha(lastName.trim())) {
+    if (lastName === undefined || !validator.isAlpha(String(lastName).trim())) {
       ResponseHandler.error(res, 400, 'last name is undefined or invalid');
       return;
     }
-    if (address === undefined || address.trim() === '') {
+    if (address === undefined || String(address).trim() === '') {
       ResponseHandler.error(res, 400, 'address is undefined or invalid');
       return;
     }
-    if (password === undefined || password.trim() === '') {
+    if (password === undefined || String(password).trim() === '') {
       ResponseHandler.error(res, 400, 'password is undefined or invalid');
       return;
     }
@@ -74,7 +74,7 @@ class AuthValidator {
       return;
     }
 
-    if (password === undefined || password.trim() === '') {
+    if (password === undefined || String(password).trim() === '') {
       ResponseHandler.error(res, 400, 'password is undefined');
       return;
     }
@@ -119,7 +119,7 @@ class AuthValidator {
       return;
     }
     // check if user exists
-    const user = await usersHelper.getUserByEmail(email.trim());
+    const user = await usersHelper.getUserByEmail(String(email).trim());
 
     if (user === -1) {
       ResponseHandler.error(res, 404, 'user not found');
@@ -137,7 +137,7 @@ class AuthValidator {
    */
   static async resetPassword(req, res, next) {
     const { newPassword, token } = req.body;
-    if (newPassword === undefined || newPassword.trim() === '') {
+    if (newPassword === undefined || String(newPassword).trim() === '') {
       ResponseHandler.error(res, 400, 'new password is undefined');
       return;
     }
@@ -188,12 +188,12 @@ class AuthValidator {
     if (
       (password !== undefined || newPassword !== undefined)
     ) {
-      if (password === undefined || password.trim() === '') {
+      if (password === undefined || String(password).trim() === '') {
         ResponseHandler.error(res, 400, 'password is undefined');
         return;
       }
 
-      if (newPassword === undefined || newPassword.trim() === '') {
+      if (newPassword === undefined || String(newPassword).trim() === '') {
         ResponseHandler.error(res, 400, 'new password is undefined');
         return;
       }

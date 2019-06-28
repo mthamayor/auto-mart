@@ -24,18 +24,18 @@ class FlagsValidator {
 
     if (
       carId === undefined
-      || carId.trim() === ''
+      || String(carId).trim() === ''
       || !validator.isNumeric(carId)
     ) {
       ResponseHandler.error(res, 400, 'car id is undefined or invalid');
       return;
     }
 
-    if (reason === undefined || reason.trim() === '') {
+    if (reason === undefined || String(reason).trim() === '') {
       ResponseHandler.error(res, 400, 'reason is undefined');
       return;
     }
-    if (description === undefined || description.trim() === '') {
+    if (description === undefined || String(description).trim() === '') {
       ResponseHandler.error(res, 400, 'description is undefined');
       return;
     }
