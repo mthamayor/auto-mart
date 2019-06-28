@@ -42,7 +42,7 @@ class CarsValidator {
         state, price, manufacturer, model, bodyType, name,
       } = req.body;
 
-      if (state === undefined || state.trim() === '') {
+      if (state === undefined || String(state).trim() === '') {
         ResponseHandler.error(res, 400, 'vehicle state is undefined');
         return;
       }
@@ -56,7 +56,7 @@ class CarsValidator {
         return;
       }
 
-      if (price === undefined || price.trim() === '') {
+      if (price === undefined || String(price).trim() === '') {
         ResponseHandler.error(res, 400, 'price is undefined');
         return;
       }
@@ -66,12 +66,12 @@ class CarsValidator {
         return;
       }
 
-      if (manufacturer === undefined || manufacturer.trim() === '') {
+      if (manufacturer === undefined || String(manufacturer).trim() === '') {
         ResponseHandler.error(res, 400, 'manufacturer is undefined or invalid');
         return;
       }
 
-      if (model === undefined || model.trim() === '') {
+      if (model === undefined || String(model).trim() === '') {
         ResponseHandler.error(res, 400, 'model undefined or invalid');
         return;
       }
@@ -81,7 +81,7 @@ class CarsValidator {
         return;
       }
 
-      if (name === undefined || name.trim() === '') {
+      if (name === undefined || String(name).trim() === '') {
         ResponseHandler.error(res, 400, 'vehicle name undefined or invalid');
         return;
       }
@@ -130,7 +130,7 @@ class CarsValidator {
 
     if (
       carId === undefined
-      || carId.trim() === ''
+      || String(carId).trim() === ''
       || !validator.isNumeric(carId)
     ) {
       ResponseHandler.error(
@@ -177,7 +177,7 @@ class CarsValidator {
 
     if (
       newPrice === undefined
-      || newPrice.trim() === ''
+      || String(newPrice).trim() === ''
       || !validator.isNumeric(newPrice)
     ) {
       ResponseHandler.error(res, 400, 'newPrice is undefined or invalid');
@@ -197,7 +197,7 @@ class CarsValidator {
   static async getCar(req, res, next) {
     const carId = req.params.car_id;
 
-    if (carId.trim() === '' || !validator.isNumeric(carId)) {
+    if (String(carId).trim() === '' || !validator.isNumeric(carId)) {
       ResponseHandler.error(res, 400, 'car_id parameter is not a valid number');
       return;
     }
@@ -232,19 +232,19 @@ class CarsValidator {
 
     let filterPriceParams;
 
-    if (status !== undefined && status.trim() !== '') {
+    if (status !== undefined && String(status).trim() !== '') {
       filterParams.push({ name: 'status', value: status });
     }
 
-    if (state !== undefined && state.trim() !== '') {
+    if (state !== undefined && String(state).trim() !== '') {
       filterParams.push({ name: 'state', value: state });
     }
 
-    if (manufacturer !== undefined && manufacturer.trim() !== '') {
+    if (manufacturer !== undefined && String(manufacturer).trim() !== '') {
       filterParams.push({ name: 'manufacturer', value: manufacturer });
     }
 
-    if (bodyType !== undefined && bodyType.trim() !== '') {
+    if (bodyType !== undefined && String(bodyType).trim() !== '') {
       filterParams.push({ name: 'body_type', value: bodyType });
     }
 
@@ -262,8 +262,8 @@ class CarsValidator {
     if (
       minPrice !== undefined
       && maxPrice !== undefined
-      && maxPrice.trim() !== ''
-      && minPrice.trim() !== ''
+      && String(maxPrice).trim() !== ''
+      && String(minPrice).trim() !== ''
     ) {
       if (!validator.isNumeric(minPrice)) {
         ResponseHandler.error(res, 400, 'min_price is not a number');
