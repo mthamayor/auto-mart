@@ -120,9 +120,7 @@
           </small>
         </div>
 
-        <div id="flags-fill">
-        
-        </div>
+        <div id="flags-fill"></div>
       </div>
     </div>
     <!-- Flags container ends here -->
@@ -132,11 +130,15 @@
     <!-- Navigation container ends -->
 
     <div class="main-content">
-      <div id="controls-container" loggedElement class="d-flex justify-content-center d-none">
+      <div
+        id="controls-container"
+        loggedElement
+        class="d-flex justify-content-center d-none"
+      >
         <div class="controls">
           <span
             id="delete-ad"
-            class="control-item control-item-dark pr pl"
+            class="control-item control-item-dark pr pl d-none"
             heirachy="admin"
           >
             <i class="fas fa-trash-alt font-color-darkred"></i>
@@ -144,7 +146,7 @@
           </span>
           <span
             id="show-flags-button"
-            class="control-item control-item-dark pr pl"
+            class="control-item control-item-dark pr pl d-none"
             heirachy="admin"
           >
             <i class="fas fa-flag font-color-red"></i>
@@ -152,27 +154,27 @@
           </span>
           <span
             id="show-orders-button"
-            class="control-item control-item-dark pr pl"
+            class="control-item control-item-dark pr pl d-none"
             heirachy="seller"
           >
             <i class="fas fa-clipboard-list font-color-primary"></i>
             <span class="ml uppercase font-weight-bold">Orders</span>
           </span>
-          <span
-            id="buyer-order"
-            class="control-item control-item-dark pr pl"
-            heirachy="buyer"
+          <a
+            id="buyer-order-button"
+            class="control-item control-item-dark pr pl d-none"
+            loggedElement
           >
             <i class="fas fa-clipboard-list font-color-primary"></i>
-            <span class="ml uppercase font-weight-bold">My Order</span>
-          </span>
+            <span class="ml uppercase font-weight-bold color-black">My Order</span>
+        </a>
         </div>
       </div>
 
       <div class="item-overview">
         <div class="item-images-container-2 align-items-center">
           <div class="d-flex preview-container-column vertical-scroll">
-            <div class="temp-image">
+            <div class="temp-image" id="image-preview-list">
               <div
                 class="img-preview d-flex m-small align-items-center justify-content-center"
               >
@@ -203,7 +205,7 @@
             </div>
           </div>
 
-          <div class="item-image-main flex-1">
+          <div class="item-image-main flex-1" id="main-image">
             <img
               class="img-responsive"
               src="./assets/img/cars/toyota-avalon.webp"
@@ -211,47 +213,16 @@
           </div>
         </div>
         <div class="divider small-screen-divider"></div>
-        <div class="item-details shadow p-medium mb">
-          <div>
-            <h1 class="font-slabo capitalized">Toyota Avalon 2019 edition</h1>
-          </div>
-          <p class="d-flex divider pb">
-            <strong class="uppercase mr">Seller: </strong
-            ><span class="capitalized flex-1 text-end"
-              >Anifowose Technologies</span
-            >
-          </p>
-          <p class="d-flex divider pb">
-            <strong class="uppercase mr"> Model: </strong
-            ><span class="uppercase flex-1 text-end">2019 LE</span>
-          </p>
-          <p class="d-flex divider pb">
-            <strong class="uppercase mr"> Manufacturer: </strong
-            ><span class="uppercase flex-1 text-end">Lexus</span>
-          </p>
-          <p class="d-flex divider pb">
-            <strong class="uppercase mr"> Body: </strong
-            ><span class="capitalized flex-1 text-end">Trailer</span>
-          </p>
-          <p class="d-flex divider pb">
-            <strong class="uppercase mr"> State: </strong
-            ><span
-              class="uppercase font-weight-bold font-style-oblique flex-1 text-end"
-              >NEW</span
-            >
-          </p>
-          <p class="d-flex divider pb">
-            <strong class="uppercase mr">price:</strong>
-            <span class="flex-1 text-end font-weight-bold "
-              >₦<span>40,000,000</span></span
-            >
-          </p>
+        <div  class="item-details shadow p-medium mb">
+          <div id="car-details-container"></div>
           <div loggedElement class="text-center d-none">
-            <button class="submit-btn trimmed-btn">make order</button>
+            <button id="make-order-button" class="submit-btn trimmed-btn">
+              make order
+            </button>
           </div>
           <p id="flag-button" loggedElement class="cursor-pointer d-none">
-            <i class="icons fas fa-flag"></i
-            ><span class="font-weight-lighter">Report this AD?</span>
+            <i class="icons fas fa-flag"></i>
+            <span class="font-weight-lighter">Report this AD?</span>
           </p>
         </div>
       </div>

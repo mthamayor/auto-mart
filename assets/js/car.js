@@ -2,6 +2,7 @@
 /* eslint-disable no-undef */
 
 let getUser = localStorage.getItem('user');
+let fetchedCar;
 if (
   !(
     getUser === null
@@ -11,12 +12,23 @@ if (
   )
 ) {
   const loggedElements = document.querySelectorAll('[loggedElement]');
+
   loggedElements.forEach((element) => {
     element.classList.remove('d-none');
   });
-}
+  getUser = JSON.parse(getUser);
 
-getUser = JSON.parse(getUser);
+  // const adminElements = document.querySelectorAll('[heirachy=admin]');
+  // const sellerElements = document.querySelectorAll('[heirachy=seller]');
+  // const buyerElements = document.querySelectorAll('[heirachy=buyer]');
+  if (getUser.is_admin === true) {
+    const adminElements = document.querySelectorAll('[heirachy=admin]');
+    adminElements.forEach((element) => {
+      element.classList.remove('d-none');
+      element.classList.remove('v-none');
+    });
+  }
+}
 
 const flagButton = document.querySelector('#flag-button');
 const flagContainer = document.querySelector('#flag-container');
@@ -33,9 +45,44 @@ const ordersContainer = document.querySelector('#orders-container');
 const showOrdersButton = document.querySelector('#show-orders-button');
 const hideOrdersButton = document.querySelector('#close-orders-button');
 
-const adminElements = document.querySelectorAll('[heirachy=admin]');
-const sellerElements = document.querySelectorAll('[heirachy=seller]');
-const buyerElements = document.querySelectorAll('[heirachy=buyer]');
+const fillCarDetails = ({ data }) => {
+  const carDetailsContainer = document.querySelector('#car-details-container');
+
+  const carDetailsElement = `
+    <div>
+      <h1 class="font-slabo capitalized">${data.name}</h1>
+    </div>
+    <p class="d-flex divider pb">
+      <strong class="uppercase mr">Seller ID: </strong>
+        <span class="capitalized flex-1 text-end">${data.id}</span>
+      </p>
+      <p class="d-flex divider pb">
+        <strong class="uppercase mr"> Model: </strong>
+        <span class="uppercase flex-1 text-end">${data.model}</span>
+      </p>
+      <p class="d-flex divider pb">
+        <strong class="uppercase mr"> Manufacturer: </strong>
+        <span class="uppercase flex-1 text-end">${data.manufacturer}</span>
+      </p>
+      <p class="d-flex divider pb">
+        <strong class="uppercase mr"> Body: </strong>
+        <span class="capitalized flex-1 text-end">${data.body_type}</span>
+      </p>
+      <p class="d-flex divider pb">
+        <strong class="uppercase mr"> State: </strong>
+        <span
+              class="uppercase font-weight-bold font-style-oblique flex-1 text-end"
+              >${data.state}</span>
+      </p>
+      <p class="d-flex divider pb">
+        <strong class="uppercase mr">price:</strong>
+        <span class="flex-1 text-end font-weight-bold ">
+          ₦<span>${Helpers.formatMoney(data.price)}</span>
+        </span>
+      </p>
+  `;
+  carDetailsContainer.innerHTML = carDetailsElement;
+};
 
 const fillFlagElement = (flagItem) => {
   const flag = `
@@ -72,7 +119,184 @@ const fillFlagElement = (flagItem) => {
   return flag;
 };
 
+/* Populate the control button */
+const populatePageControls = ({ data }) => {
+  const tempImage = document.querySelector('#image-preview-list');
+  const mainImage = document.querySelector('#main-image');
+  const makeOrderButton = document.querySelector('#make-order-button');
+  const buyerOrderButton = document.querySelector('#buyer-order-button');
+
+
+  buyerOrderButton.href = `./edit-purchase-order.html?car_id=${data.id}`;
+  try {
+    if (data.owner === getUser.id) {
+      const sellerElements = document.querySelectorAll('[heirachy=seller]');
+      sellerElements.forEach((element) => {
+        element.classList.remove('d-none');
+        element.classList.remove('v-none');
+      });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+
+  if (data.status === 'sold') {
+    makeOrderButton.disabled = true;
+    makeOrderButton.textContent = 'Sold';
+    flagButton.classList.add('d-none');
+  } else {
+    makeOrderButton.addEventListener('click', () => {
+      window.location.href = `create-purchase-order.html?car_id=${data.id}`;
+    });
+  }
+
+  let previewList = '';
+  const imageUrls = data.image_urls;
+
+  imageUrls.forEach((image) => {
+    previewList += `
+      <div
+        class="img-preview d-flex m-small align-items-center justify-content-center"
+        >
+        <img
+          class="img-responsive cursor-pointer"
+          src="${image}"
+          alt="image"
+        />
+      </div>
+    `;
+  });
+  tempImage.innerHTML = previewList;
+  mainImage.innerHTML = `
+    <img
+      class="img-responsive"
+      src="${imageUrls[0]}"
+      />
+  `;
+};
+
+/* Fetch the car */
+const fetchCar = async (carId) => {
+  Populator.pageLoading(true);
+  const endpoint = `https://mthamayor-auto-mart.herokuapp.com/api/v1/car/${carId}`;
+  const fetchRequest = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  await fetch(endpoint, fetchRequest)
+    .then(res => res.json())
+    .then((response) => {
+      if (response.error) {
+        Populator.showStickyNotification('error', response.error);
+        return;
+      }
+      fetchedCar = response.data;
+      populatePageControls(response);
+      fillCarDetails(response);
+      Populator.pageLoading(false);
+    })
+    .catch((err) => {
+      Populator.hideAsyncNotification();
+      Populator.showNotification('Internet error occured. please try again');
+      console.log(err);
+    });
+};
+
+/* Handles Acceptance of purchase orders */
+const acceptOffer = (orderId) => {
+  Populator.showAsyncNotification();
+  const { token } = getUser;
+  const endpoint = `https://mthamayor-auto-mart.herokuapp.com/api/v1/order/${orderId}/accept`;
+  const fetchRequest = {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  fetch(endpoint, fetchRequest)
+    .then(res => res.json())
+    .then((response) => {
+      Populator.hideAsyncNotification();
+      if (response.error) {
+        Populator.showStickyNotification('error', response.error);
+        return;
+      }
+      Populator.showStickyNotification('success', 'Purchase order accepted. reloading...');
+      setTimeout(() => window.location.reload(), 3000);
+    })
+    .catch((err) => {
+      Populator.hideAsyncNotification();
+      Populator.showNotification('Internet error occured. please try again');
+      console.log(err);
+    });
+};
+
+/* Handles rejection of purchase orders */
+const rejectOffer = (orderId) => {
+  Populator.showAsyncNotification();
+  const { token } = getUser;
+  const endpoint = `https://mthamayor-auto-mart.herokuapp.com/api/v1/order/${orderId}/reject`;
+  const fetchRequest = {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  fetch(endpoint, fetchRequest)
+    .then(res => res.json())
+    .then((response) => {
+      Populator.hideAsyncNotification();
+      if (response.error) {
+        Populator.showStickyNotification('error', response.error);
+        return;
+      }
+      Populator.showStickyNotification(
+        'success',
+        'Purchase order rejected. reloading...',
+      );
+      setTimeout(() => window.location.reload(), 3000);
+    })
+    .catch((err) => {
+      Populator.hideAsyncNotification();
+      Populator.showNotification('Internet error occured. please try again');
+      console.log(err);
+    });
+};
+
 const fillOrderElement = (orderItem) => {
+  const carStatus = fetchedCar.status;
+  let actionDiv = '';
+  switch (orderItem.status) {
+    case 'accepted':
+      actionDiv = '<small class="badge badge-success mb cursor-pointer uppercase">Accepted</small>';
+      break;
+    case 'rejected':
+      actionDiv = '<small class="badge badge-danger mb cursor-pointer uppercase">Rejected</small>';
+      break;
+    default:
+      if (carStatus === 'available') {
+        actionDiv = `<small
+                id="accept-order"
+                class="badge badge-gold mb cursor-pointer uppercase"
+                onClick = acceptOffer(${orderItem.id})
+                >Accept</small
+              >
+              <small
+                id="reject-order"
+                class="badge badge-danger mb cursor-pointer uppercase"
+                onClick = rejectOffer(${orderItem.id})
+                >Reject</small
+              >
+      `;
+      }
+  }
   const order = `
         <div class="d-flex mb">
           <div class="mr-medium">
@@ -97,16 +321,7 @@ const fillOrderElement = (orderItem) => {
               </div>
             </div>
             <div class="d-flex flex-column">
-              <small
-                id="accept-order"
-                class="badge badge-gold mb cursor-pointer uppercase"
-                >Accept</small
-              >
-              <small
-                id="reject-order"
-                class="badge badge-danger mb cursor-pointer uppercase"
-                >Reject</small
-              >
+              ${actionDiv}
             </div>
           </div>
         </div>
@@ -124,7 +339,8 @@ if (!Helpers.isValidDigits(extractCarId)) {
   Populator.showStickyNotification('error', 'Invalid car id provided');
   throw new Error('Invalid car id provided');
 }
-Populator.pageLoading(false);
+
+fetchCar(extractCarId);
 
 const processFlags = ({ data }) => {
   let parsedHtml = '';
