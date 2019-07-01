@@ -46,7 +46,7 @@
       id="flag-container"
       class="flag-container d-flex justify-content-center align-items-center d-none"
     >
-      <div class="flag m-small p-small">
+      <form id="flag-form" class="flag m-small p-small">
         <h2 class="font-slabo">
           We are sorry you are having problems with this product.
         </h2>
@@ -72,12 +72,50 @@
         </div>
         <div class="d-flex mt mb">
           <div class="form-group flex-1 mr">
-            <button id="cancel-button" class="submit-btn outlined-btn">
+            <button
+              id="cancel-button"
+              type="button"
+              class="submit-btn outlined-btn"
+            >
               Cancel
             </button>
           </div>
           <div class="form-group flex-1 ml">
-            <button id="report-button" class="submit-btn">Report</button>
+            <button
+              id="report-button"
+              name="submit"
+              type="submit"
+              class="submit-btn"
+            >
+              Report
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <!-- Flag container ends here -->
+
+    <!-- Flag container -->
+    <div
+      id="delete-confirmation-container"
+      class="flag-container d-flex justify-content-center align-items-center d-none"
+    >
+      <div class="delete m-small p-small">
+        <h2>
+          Are you sure you want to delete this AD?
+        </h2>
+        <div class="divider"></div>
+
+        <div class="d-flex mt mb">
+          <div class="form-group flex-1 mr">
+            <button id="cancel-delete-button" class="submit-btn outlined-btn">
+              Cancel
+            </button>
+          </div>
+          <div class="form-group flex-1 ml">
+            <button id="confirm-delete-button" class="outlined-btn delete-btn">
+              Delete
+            </button>
           </div>
         </div>
       </div>
@@ -166,8 +204,10 @@
             loggedElement
           >
             <i class="fas fa-clipboard-list font-color-primary"></i>
-            <span class="ml uppercase font-weight-bold color-black">My Order</span>
-        </a>
+            <span class="ml uppercase font-weight-bold color-black"
+              >My Order</span
+            >
+          </a>
         </div>
       </div>
 
@@ -213,7 +253,7 @@
           </div>
         </div>
         <div class="divider small-screen-divider"></div>
-        <div  class="item-details shadow p-medium mb">
+        <div class="item-details shadow p-medium mb">
           <div id="car-details-container"></div>
           <div loggedElement class="text-center d-none">
             <button id="make-order-button" class="submit-btn trimmed-btn">

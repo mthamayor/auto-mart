@@ -764,6 +764,7 @@ button,
   -moz-transition: all 0.5s;
   -o-transition: all 0.5s;
   transition: all 0.5s;
+  border-radius: 5px;
 }
 .submit-btn {
   padding: 16px;
@@ -1094,6 +1095,14 @@ Seller index container starts here
   min-height: 350px;
   border-radius: 5px;
 }
+
+.delete{
+  background: white;
+  min-width: 300px;
+  width: 400px;
+  border-radius: 5px;
+}
+
 .flag-input {
   border-color: var(--background) !important;
   border-radius: 5px;

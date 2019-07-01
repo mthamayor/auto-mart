@@ -18,14 +18,10 @@ if (
   });
   getUser = JSON.parse(getUser);
 
-  // const adminElements = document.querySelectorAll('[heirachy=admin]');
-  // const sellerElements = document.querySelectorAll('[heirachy=seller]');
-  // const buyerElements = document.querySelectorAll('[heirachy=buyer]');
   if (getUser.is_admin === true) {
     const adminElements = document.querySelectorAll('[heirachy=admin]');
     adminElements.forEach((element) => {
       element.classList.remove('d-none');
-      element.classList.remove('v-none');
     });
   }
 }
@@ -38,8 +34,16 @@ const reportButton = document.querySelector('#report-button');
 const flagsContainer = document.querySelector('#flags-container');
 const showFlagsButton = document.querySelector('#show-flags-button');
 const hideFlagsButton = document.querySelector('#close-flags-button');
+const flagForm = document.querySelector('#flag-form');
 
 const deleteAdButton = document.querySelector('#delete-ad');
+const deleteConfirmationContainer = document.querySelector(
+  '#delete-confirmation-container',
+);
+const deleteConfirmationButton = document.querySelector(
+  '#confirm-delete-button',
+);
+const cancelDeleteButton = document.querySelector('#cancel-delete-button');
 
 const ordersContainer = document.querySelector('#orders-container');
 const showOrdersButton = document.querySelector('#show-orders-button');
@@ -133,7 +137,6 @@ const populatePageControls = ({ data }) => {
       const sellerElements = document.querySelectorAll('[heirachy=seller]');
       sellerElements.forEach((element) => {
         element.classList.remove('d-none');
-        element.classList.remove('v-none');
       });
     }
   } catch (err) {
@@ -173,6 +176,40 @@ const populatePageControls = ({ data }) => {
       src="${imageUrls[0]}"
       />
   `;
+};
+
+/* Delete the ad */
+const deleteAd = (carId) => {
+  Populator.showAsyncNotification();
+  const { token } = getUser;
+  const endpoint = `https://mthamayor-auto-mart.herokuapp.com/api/v1/car/${carId}`;
+  const fetchRequest = {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  fetch(endpoint, fetchRequest)
+    .then(res => res.json())
+    .then((response) => {
+      Populator.hideAsyncNotification();
+      if (response.error) {
+        Populator.showStickyNotification('error', response.error);
+        return;
+      }
+      Populator.showStickyNotification(
+        'success',
+        'Car deleted successfully...',
+      );
+      setTimeout(() => window.location.replace('search-cars.html'), 3000);
+    })
+    .catch((err) => {
+      Populator.hideAsyncNotification();
+      Populator.showNotification('Internet error occured. please try again');
+      console.log(err);
+    });
 };
 
 /* Fetch the car */
@@ -457,6 +494,78 @@ const toggleFlagsList = () => {
   }
 };
 
+const toggleDeleteContainer = () => {
+  if (deleteConfirmationContainer.classList.contains('d-none')) {
+    deleteConfirmationContainer.classList.remove('d-none');
+  } else {
+    deleteConfirmationContainer.classList.add('d-none');
+  }
+};
+
+/* Flag the Ad */
+const flagAd = (payload) => {
+  const endpoint = 'https://mthamayor-auto-mart.herokuapp.com/api/v1/flag';
+  const fetchRequest = {
+    method: 'POST',
+    body: payload,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getUser.token}`,
+    },
+  };
+
+  fetch(endpoint, fetchRequest)
+    .then(res => res.json())
+    .then((response) => {
+      Populator.hideAsyncNotification();
+      if (response.error) {
+        Populator.showStickyNotification('error', response.error);
+        return;
+      }
+      Populator.showStickyNotification('success', 'Ad successfully flagged');
+      toggleFlag();
+    })
+    .catch((err) => {
+      Populator.hideAsyncNotification();
+      Populator.showNotification('Internet error occured. please try again');
+      console.log(err);
+    });
+};
+
+flagForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const reason = flagForm.reason.value;
+  const description = flagForm.description.value;
+
+  // Form validation
+  if (reason.length < 10) {
+    Populator.showStickyNotification('error', 'Reason too short');
+    return;
+  }
+
+  if (description.length < 10) {
+    Populator.showStickyNotification('error', 'Description too short');
+    return;
+  }
+
+  Populator.hideStickyNotification();
+  // Validation ends here
+
+  // Api calls
+  let payload = {
+    carId: fetchedCar.id,
+    reason: Helpers.capitalizeWords(reason),
+    description,
+  };
+  payload = JSON.stringify(payload);
+
+  flagAd(payload);
+});
+flagForm.addEventListener('reset', (event) => {
+  event.preventDefault();
+  console.log(reset);
+});
+
 const replaceImages = (image) => {
   image.addEventListener('click', (event) => {
     if (event.target.src === undefined) {
@@ -475,6 +584,10 @@ hideFlagsButton.addEventListener('click', toggleFlagsList);
 
 showOrdersButton.addEventListener('click', toggleOrdersList);
 hideOrdersButton.addEventListener('click', toggleOrdersList);
+
+deleteAdButton.addEventListener('click', toggleDeleteContainer);
+cancelDeleteButton.addEventListener('click', toggleDeleteContainer);
+deleteConfirmationButton.addEventListener('click', () => { deleteAd(fetchedCar.id); });
 
 const imageTemplates = document.querySelectorAll('.temp-image');
 for (let i = 0; i < imageTemplates.length; i += 1) {
