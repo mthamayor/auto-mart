@@ -1,100 +1,278 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./assets/css/index.css" rel="stylesheet" />
+    <link
+      rel="shortcut icon"
+      href="./assets/img/logo-black.ico"
+      type="image/x-icon"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.lineicons.com/1.0.1/LineIcons.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+      integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay"
+      crossorigin="anonymous"
+    />
+    <title>Auto | Ad</title>
+  </head>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="./assets/css/index.css" rel="stylesheet">
-  <link rel="shortcut icon" href="./assets/img/logo-black.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="https://cdn.lineicons.com/1.0.1/LineIcons.min.css">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-  <title>Auto | Ad</title>
-</head>
+  <body>
+    <!-- Stores page name -->
+    <input type="hidden" name="present-page" value="search-cars" />
 
-<body>
-  <!-- Stores page name -->
-  <input type = "hidden" name="present-page" value="search-cars" />
-  
-  <!-- Flag container -->
-  <div id="flag-container" class="flag-container d-flex justify-content-center align-items-center d-none">
-    <div class="flag m-small p-small">
-      <h3 class="font-color-primary">We are sorry you are having problems with this product.</h3>
-      <div class="divider"></div>
-      <p class="font-weight-bold mb-0">Reason:</p>
-      <div class="form-group mb">
-        <input class="input flag-input" placeholder="Reason" name="reason" type="text" />
-      </div>
-      
-      <p class="font-weight-bold mb-0">Description:</p>
-      <div class="form-group mb">
-        <textarea class="input textarea flag-input" rows="5" placeholder="Description" name="description"></textarea>
-      </div>
-      <div class="d-flex mt mb">
-        <div class="form-group flex-1 mr">
-        <button id="cancel-button" class="submit-btn outlined-btn">Cancel</button>
-      </div>
-      <div class="form-group flex-1 ml">
-        <button id="report-button" class="submit-btn">Report</button>
-      </div>
-      
+    <!-- notifications -->
+    <div id="notification"></div>
+    <div id="page-loading" class="hide">
+      <div class="d-flex justify-content-center align-items-center h-100">
+        <div class="spinner-icon spinner-big spin-animation"></div>
       </div>
     </div>
-  </div>
-  <!-- Flag container ends here -->
+    <div id="async-loading">
+      <div class="spinner-icon spin-animation mr"></div>
+      Please Wait
+    </div>
+    <div id="sticky-loading" class="shadow"></div>
+    <!-- notifications ends here -->
 
-  <!-- Navigation container -->
-  <header id="navigation" class="nav absolute">
-  </header>
-  <!-- Navigation container ends -->
-  <div class="main-content">
-    <div class="item-overview">
-      <div class="item-images-container-2 align-items-center">
-        
-        <div class="d-flex preview-container-column vertical-scroll" >
-          <div class="temp-image">
-            <div class="img-preview d-flex m-small align-items-center justify-content-center" >
-              <img class="img-responsive cursor-pointer" src="./assets/img/cars/toyota-avalon.webp" alt="" />
-            </div>
-            <div class="img-preview d-flex m-small align-items-center justify-content-center" >
-              <img class="img-responsive cursor-pointer" src="./assets/img/cars/toyota-avalon-interior.jpg" alt="" />
-            </div>
-            <div class="img-preview d-flex m-small align-items-center justify-content-center" >
-              <img class="img-responsive cursor-pointer" src="./assets/img/cars/toyota-avalon-engine.jpg" alt="" />
-            </div>  
+    <!-- Flag container -->
+    <div
+      id="flag-container"
+      class="flag-container d-flex justify-content-center align-items-center d-none"
+    >
+      <form id="flag-form" class="flag m-small p-small">
+        <h2 class="font-slabo">
+          We are sorry you are having problems with this product.
+        </h2>
+        <div class="divider"></div>
+        <p class="font-weight-bold mb-0">Reason:</p>
+        <div class="form-group mb">
+          <input
+            class="input flag-input"
+            placeholder="Reason"
+            name="reason"
+            type="text"
+          />
+        </div>
+
+        <p class="font-weight-bold mb-0">Description:</p>
+        <div class="form-group mb">
+          <textarea
+            class="input textarea flag-input"
+            rows="5"
+            placeholder="Description"
+            name="description"
+          ></textarea>
+        </div>
+        <div class="d-flex mt mb">
+          <div class="form-group flex-1 mr">
+            <button
+              id="cancel-button"
+              type="button"
+              class="submit-btn outlined-btn"
+            >
+              Cancel
+            </button>
+          </div>
+          <div class="form-group flex-1 ml">
+            <button
+              id="report-button"
+              name="submit"
+              type="submit"
+              class="submit-btn"
+            >
+              Report
+            </button>
           </div>
         </div>
+      </form>
+    </div>
+    <!-- Flag container ends here -->
 
-        
-        <div class="item-image-main flex-1">
-            <img class="img-responsive" src="./assets/img/cars/toyota-avalon.webp"/>
+    <!-- Flag container -->
+    <div
+      id="delete-confirmation-container"
+      class="flag-container d-flex justify-content-center align-items-center d-none"
+    >
+      <div class="delete m-small p-small">
+        <h2>
+          Are you sure you want to delete this AD?
+        </h2>
+        <div class="divider"></div>
+
+        <div class="d-flex mt mb">
+          <div class="form-group flex-1 mr">
+            <button id="cancel-delete-button" class="submit-btn outlined-btn">
+              Cancel
+            </button>
+          </div>
+          <div class="form-group flex-1 ml">
+            <button id="confirm-delete-button" class="outlined-btn delete-btn">
+              Delete
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="divider small-screen-divider"></div>
-      <div class="item-details">
-        <div>
-          <h1 class = "font-slabo capitalized">Toyota Avalon 2019 edition</h1>
-        </div>
-        <p><strong class="uppercase"> — Seller: </strong><span class="capitalized">Anifowose Technologies</span></p>
-        <p><strong class="uppercase"> — Model: </strong><span class="uppercase">2019 LE</span></p>
-        <p><strong class="uppercase"> — Manufacturer: </strong><span class="uppercase">Lexus</span></p>
-        <p><strong class="uppercase"> — Body Type: </strong><span class="capitalized">Trailer</span></p>
-        <p><strong class="uppercase"> — Car State: </strong><span class="uppercase font-weight-bold font-style-oblique">NEW</span></p>
-        <h2 class="capitalized">Price: <span class="">₦<span>40,000,000</span></span></h2>
-        <div class="text-center">
-          <button class="submit-btn trimmed-btn">make order</button>
-        </div>
-        <p id="flag-button" class="cursor-pointer"><i class="icons fas fa-flag"></i><span class="font-weight-lighter">Report this AD?</span></p>
       </div>
     </div>
-  </div>
+    <!-- Flag container ends here -->
 
-  <footer id="footer-container"></footer>
-  
-  <script src="assets/js/components.js"></script>
-  <script src="assets/js/index.js"></script>
-  <script src="assets/js/navigation.js"></script>
-  <script src="assets/js/car.js"></script>
-</body>
+    <!-- Purchase orders container -->
+    <div
+      id="orders-container"
+      class="flag-container d-flex justify-content-center align-items-center d-none"
+    >
+      <div class="p-orders m-small p-small pt-extra-large vertical-scroll">
+        <div class="d-flex justify-content-end p-medium">
+          <small
+            id="close-orders-button"
+            class="badge badge-primary uppercase font-weight-bold cursor-pointer badge-absolute"
+          >
+            <i class="lni-close"></i>
+          </small>
+        </div>
 
+        <div id="orders-fill"></div>
+      </div>
+    </div>
+    <!-- Purchase orders container ends here -->
+
+    <!-- Flags container -->
+    <div
+      id="flags-container"
+      ;
+      class="flag-container d-flex justify-content-center align-items-center d-none"
+    >
+      <div class="p-orders m-small p-small vertical-scroll">
+        <div class="d-flex justify-content-end p-medium">
+          <small
+            id="close-flags-button"
+            class="badge badge-primary uppercase font-weight-bold cursor-pointer badge-absolute"
+          >
+            <i class="lni-close"></i>
+          </small>
+        </div>
+
+        <div id="flags-fill"></div>
+      </div>
+    </div>
+    <!-- Flags container ends here -->
+
+    <!-- Navigation container -->
+    <header id="navigation" class="nav absolute"></header>
+    <!-- Navigation container ends -->
+
+    <div class="main-content">
+      <div
+        id="controls-container"
+        loggedElement
+        class="d-flex justify-content-center d-none"
+      >
+        <div class="controls">
+          <span
+            id="delete-ad"
+            class="control-item control-item-dark pr pl d-none"
+            heirachy="admin"
+          >
+            <i class="fas fa-trash-alt font-color-darkred"></i>
+            <span class="ml uppercase font-weight-bold">Delete</span>
+          </span>
+          <span
+            id="show-flags-button"
+            class="control-item control-item-dark pr pl d-none"
+            heirachy="admin"
+          >
+            <i class="fas fa-flag font-color-red"></i>
+            <span class="ml uppercase font-weight-bold">Flags</span>
+          </span>
+          <span
+            id="show-orders-button"
+            class="control-item control-item-dark pr pl d-none"
+            heirachy="seller"
+          >
+            <i class="fas fa-clipboard-list font-color-primary"></i>
+            <span class="ml uppercase font-weight-bold">Orders</span>
+          </span>
+          <a
+            id="buyer-order-button"
+            class="control-item control-item-dark pr pl d-none"
+            loggedElement
+          >
+            <i class="fas fa-clipboard-list font-color-primary"></i>
+            <span class="ml uppercase font-weight-bold color-black"
+              >My Order</span
+            >
+          </a>
+        </div>
+      </div>
+
+      <div class="item-overview">
+        <div class="item-images-container-2 align-items-center">
+          <div class="d-flex preview-container-column vertical-scroll">
+            <div class="temp-image" id="image-preview-list">
+              <div
+                class="img-preview d-flex m-small align-items-center justify-content-center"
+              >
+                <img
+                  class="img-responsive cursor-pointer"
+                  src="./assets/img/cars/toyota-avalon.webp"
+                  alt=""
+                />
+              </div>
+              <div
+                class="img-preview d-flex m-small align-items-center justify-content-center"
+              >
+                <img
+                  class="img-responsive cursor-pointer"
+                  src="./assets/img/cars/toyota-avalon-interior.jpg"
+                  alt=""
+                />
+              </div>
+              <div
+                class="img-preview d-flex m-small align-items-center justify-content-center"
+              >
+                <img
+                  class="img-responsive cursor-pointer"
+                  src="./assets/img/cars/toyota-avalon-engine.jpg"
+                  alt=""
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="item-image-main flex-1" id="main-image">
+            <img
+              class="img-responsive"
+              src="./assets/img/cars/toyota-avalon.webp"
+            />
+          </div>
+        </div>
+        <div class="divider small-screen-divider"></div>
+        <div class="item-details shadow p-medium mb">
+          <div id="car-details-container"></div>
+          <div loggedElement class="text-center d-none">
+            <button id="make-order-button" class="submit-btn trimmed-btn">
+              make order
+            </button>
+          </div>
+          <p id="flag-button" loggedElement class="cursor-pointer d-none">
+            <i class="icons fas fa-flag"></i>
+            <span class="font-weight-lighter">Report this AD?</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <footer id="footer-container"></footer>
+
+    <script src="assets/js/components.js"></script>
+    <script src="assets/js/index.js"></script>
+    <script src="assets/js/navigation.js"></script>
+    <script src="assets/js/car.js"></script>
+  </body>
 </html>

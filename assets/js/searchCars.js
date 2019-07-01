@@ -2,18 +2,6 @@
 /* eslint-disable no-undef */
 // Handle form submission
 
-let getUser = localStorage.getItem('user');
-if (
-  getUser === null
-  || getUser === undefined
-  || getUser === 'undefined'
-  || getUser === 'null'
-) {
-  window.location.replace('signin.html');
-}
-
-getUser = JSON.parse(getUser);
-
 const searchForm = document.querySelector('#search-form');
 const carText = document.querySelector('#car-header');
 const carsContainer = document.querySelector('#car-container');
@@ -82,13 +70,11 @@ const processCars = ({ data }) => {
 
 const searchCars = (queryParams = '') => {
   Populator.showAsyncNotification();
-  const { token } = getUser;
   const endpoint = `https://mthamayor-auto-mart.herokuapp.com/api/v1/car?status=available&${queryParams}`;
   const fetchRequest = {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
     },
   };
 
