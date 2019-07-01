@@ -38,92 +38,18 @@
       <div class="spinner-icon spin-animation mr"></div>
       Please Wait
     </div>
+    <div id="sticky-loading" class="shadow"></div>
     <!-- notifications ends here -->
+
     <!-- Navigation container -->
     <header id="navigation" class="nav absolute"></header>
     <!-- Navigation container ends -->
 
     <div class="main-content">
       <div class="item-overview justify-content-center">
-        <div class="flex-1">
-          <p class="section-header">Order Preview</p>
-          <!-- The letter header -->
-          <div class="d-flex align-items-center">
-            <div class="flex-1">
-              <div class="in-page-logo">
-                <img class="img-responsive" src="assets/img/logo-black.png" />
-              </div>
-            </div>
-            <div class="flex-1 text-align-end">
-              <h3 class="">Purchase order <span>#1</span></h3>
-            </div>
-          </div>
-          <!-- Address -->
-          <div class="d-flex align-items-center">
-            <div class="flex-1">
-              <div class="item-image-main">
-                <p class="font-weight-bold uppercase divider">CUSTOMER</p>
-                <p>Anifowose Habeeb</p>
+        <div id="purchase-order-container" class="flex-1 pr"></div>
 
-                <p class="capitalized">
-                  Fate Reservation Road, Ilorin, Kwara State
-                </p>
-                <p>anifowosehabeeb@gmail.com</p>
-              </div>
-            </div>
-            <div class="">
-              <p>22/11/2014</p>
-            </div>
-          </div>
-
-          <!-- Item description -->
-          <div>
-            <div class="item-image-main">
-              <p class="font-weight-bold divider uppercase">Purchase Item</p>
-            </div>
-          </div>
-          <p class="font-weight-bold">
-            Order:
-            <span class="font-weight-lighter float-right"
-              >Lexus RX350 Limited Edition</span
-            >
-          </p>
-          <p class="font-weight-bold uppercase">Item Description</p>
-          <p class="font-weight-bold divider pb">
-            Seller:
-            <span class="font-weight-lighter float-right"
-              >Anifowose Habeeb</span
-            >
-          </p>
-          <p class="font-weight-bold divider pb">
-            Model: <span class="font-weight-lighter float-right">2019 LE</span>
-          </p>
-          <p class="font-weight-bold divider pb">
-            Manufacturer:
-            <span class="font-weight-lighter float-right uppercase">Lexus</span>
-          </p>
-          <p class="font-weight-bold divider pb">
-            Car state:
-            <span
-              class="font-weight-lighter float-right uppercase font-style-oblique"
-              >New</span
-            >
-          </p>
-          <p class="font-weight-bold  divider pb">
-            Body type: <span class="font-weight-lighter float-right">Car</span>
-          </p>
-          <p class="font-weight-bold uppercase  divider pb">
-            Seller's Price:
-            <span class=" float-right uppercase"><span>₦</span>14,000,000</span>
-          </p>
-          <p class="font-weight-bold uppercase  divider pb">
-            Price offered:
-            <span class=" float-right uppercase" id="price-offered-container">
-            </span>
-          </p>
-        </div>
-
-        <div class="p-small ml-medium side-content">
+        <div class="p-small side-content">
           <form id="create-order-form" class="search-box d-flex flex-column">
             <h2 class="mb-0 font-weight-lighter">Price offered</h2>
             <div
