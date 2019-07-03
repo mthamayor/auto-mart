@@ -1,4 +1,18 @@
 /* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
+
+let getUser = localStorage.getItem('user');
+if (
+  getUser === null
+  || getUser === undefined
+  || getUser === 'undefined'
+  || getUser === 'null'
+) {
+  window.location.replace('signin.html');
+}
+
+getUser = JSON.parse(getUser);
+
 const createAdForm = document.querySelector('#create-ad-form');
 const previewContainer = document.querySelector('#preview');
 const fileUpload = document.querySelector('#file-upload');
@@ -23,9 +37,9 @@ const populatePreviewContainer = (files) => {
   e.target.result
 }" alt="" />
         `;
-      console.log(e.target.result);
       previewContainer.appendChild(imgContainer);
     };
+
     fileReader.readAsDataURL(file);
   }
 };
@@ -33,19 +47,51 @@ let files = [];
 fileUpload.addEventListener('change', (event) => {
   const extractFiles = event.target.files;
   files = extractFiles;
-
   if (files.length > 0) {
     populatePreviewContainer(files);
   }
 });
 
+const createAd = (formData) => {
+  Populator.showAsyncNotification();
+  Populator.pageLoading(true);
+  const endpoint = 'https://mthamayor-auto-mart.herokuapp.com/api/v1/car';
+  const fetchRequest = {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${getUser.token}`,
+    },
+    body: formData,
+  };
+
+  fetch(endpoint, fetchRequest)
+    .then(res => res.json())
+    .then((response) => {
+      if (response.error) {
+        Populator.hideAsyncNotification();
+        Populator.showStickyNotification('error', response.error);
+        return;
+      }
+      const { data } = response;
+
+      Populator.showStickyNotification('success', 'Ad created successfully');
+      Populator.hideAsyncNotification();
+      Populator.pageLoading(false);
+    })
+    .catch((err) => {
+      console.log(err);
+      Populator.hideAsyncNotification();
+      Populator.pageLoading(false);
+      throw new Error();
+    });
+};
 createAdForm.addEventListener('submit', (event) => {
   event.preventDefault();
-  const vehicleName = createAdForm['vehicle-name'].value;
+  const name = createAdForm.name.value;
   const manufacturer = createAdForm.manufacturer.value;
   const model = createAdForm.model.value;
-  const vehicleState = createAdForm.state.value;
-  const bodyType = createAdForm['body-type'].value;
+  const state = createAdForm.state.value;
+  const bodyType = createAdForm.bodyType.value;
   const price = createAdForm.price.value;
 
   // Validation starts here
@@ -54,7 +100,7 @@ createAdForm.addEventListener('submit', (event) => {
     return;
   }
 
-  if (vehicleName.length <= 0) {
+  if (name.length <= 0) {
     Populator.showNotification('Please enter a valid vehicle name');
     return;
   }
@@ -66,7 +112,7 @@ createAdForm.addEventListener('submit', (event) => {
     Populator.showNotification('Please enter a valid model');
     return;
   }
-  if (vehicleState.length <= 0) {
+  if (state.length <= 0) {
     Populator.showNotification('Please enter a valid vehicle state');
     return;
   }
@@ -74,16 +120,14 @@ createAdForm.addEventListener('submit', (event) => {
     Populator.showNotification('Please enter a valid body type');
     return;
   }
-  if (price.length <= 0 || Number.isNaN(price)) {
+  if (!Helpers.isValidDigits(price)) {
     Populator.showNotification('Please enter a valid price');
     return;
   }
   // Validation ends here
 
   // Api calls
-  Populator.showAsyncNotification();
+  const formData = new FormData(createAdForm);
 
-  setTimeout(() => {
-    Populator.hideAsyncNotification();
-  }, 3000);
+  createAd(formData);
 });

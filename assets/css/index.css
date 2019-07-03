@@ -881,6 +881,7 @@ button,
 .search-img-container {
   overflow: hidden;
   height: 150px;
+  min-width: 150px;
   position: relative;
 }
 .search-description-container {
