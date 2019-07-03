@@ -159,7 +159,7 @@ const fetchCar = async (carId) => {
     .then(res => res.json())
     .then((response) => {
       if (response.error) {
-        Populator.showStickyNotification(response.error);
+        Populator.showStickyNotification('error', response.error);
         return;
       }
       const { data } = response;
@@ -181,8 +181,8 @@ const fetchCar = async (carId) => {
     })
     .catch((err) => {
       Populator.hideAsyncNotification();
-      Populator.showNotification('Internet error occured. please try again');
       Populator.pageLoading(false);
+      throw new Error();
     });
 };
 
@@ -219,7 +219,6 @@ const fetchUserOrders = async () => {
     fetchedOrder = found;
   } catch (err) {
     Populator.hideAsyncNotification();
-    Populator.showStickyNotification('error', err);
     throw new Error('Internet error occured');
   }
   await populateOrder();

@@ -28,14 +28,18 @@
   <input type = "hidden" name="present-page" value="create-ad" />
 
   <!-- notifications -->
-  <div id="notification"></div>
-  <div id="page-loading" class="hide">
-    <div class="d-flex justify-content-center align-items-center h-100">
-      <div class="spinner-icon spinner-big spin-animation"></div>
+    <div id="notification"></div>
+    <div id="page-loading" class="hide">
+      <div class="d-flex justify-content-center align-items-center h-100">
+        <div class="spinner-icon spinner-big spin-animation"></div>
+      </div>
     </div>
-  </div>
-  <div id="async-loading"><div class="spinner-icon spin-animation mr"></div>Please Wait</div>
-  <!-- notifications ends here -->
+    <div id="async-loading">
+      <div class="spinner-icon spin-animation mr"></div>
+      Please Wait
+    </div>
+    <div id="sticky-loading" class="shadow"></div>
+    <!-- notifications ends here -->
 
     <!-- Navigation container -->
     <header id="navigation" class="nav absolute"></header>
@@ -59,7 +63,7 @@
                 >
                   <i class="lni-add-file"></i>
                 </div>
-                <input id="file-upload" type="file" accept="image/*" multiple />
+                <input id="file-upload" name="imageArray" type="file" accept="image/*" multiple />
                 <div
                   class="label flex-1 d-flex align-items-center justify-content-center uppercase"
                 >
@@ -86,7 +90,7 @@
                 type="text"
                 class="search-input"
                 placeholder="Vehicle name"
-                name="vehicle-name"
+                name="name"
               />
             </div>
             <div
@@ -127,7 +131,7 @@
                 type="text"
                 class="search-input"
                 placeholder="Body type"
-                name="body-type"
+                name="bodyType"
               />
               <datalist id="car-type">
                 <option value="Car"> </option>
