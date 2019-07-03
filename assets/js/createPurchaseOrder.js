@@ -38,7 +38,7 @@ const populateOrder = () => {
             <div class="flex-1">
               <div class="item-image-main">
                 <p class="font-weight-bold uppercase divider">CUSTOMER</p>
-                <p>${getUser.firstName} ${getUser.lastName}</p>
+                <p>${getUser.first_name} ${getUser.last_name}</p>
 
                 <p class="capitalized">
                   ${getUser.address}
