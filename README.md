@@ -56,11 +56,13 @@ This Application API is deployed on heroku via [https://mthamayor-auto-mart.hero
 
 The frontend (UI) is deployed on github pages via [https://mthamayor.github.io/auto-mart/](https://mthamayor.github.io/auto-mart/)
 For admin privileges, please log in with the below credentials
-| Admin accounts | Password |
-|--|--|
-| admin@automart.com | userpassword123 |
+
+| Admin accounts          | Password        |
+| :---------------------: |:---------------:|
+| admin@automart.com      | userpassword123 |
 
 If you do not wish to create an account,  please log in with the below credentials
-| Admin accounts | Password |
-|--|--|
+
+| User accounts     | Password        |
+|:-----------------:|:---------------:|
 | user@automart.com | userpassword123 |
