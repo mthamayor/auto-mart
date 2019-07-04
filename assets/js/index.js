@@ -131,7 +131,6 @@ class Populator {
   }
 }
 
-
 class Helpers {
   static formatMoney(money) {
     let newWord = '';
@@ -203,7 +202,6 @@ class Helpers {
     });
   }
 }
-
 
 window.addEventListener('scroll', () => {
   const navBar = document.querySelector('.nav');

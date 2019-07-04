@@ -37,9 +37,7 @@ const createAccount = (payload) => {
     })
     .catch((err) => {
       Populator.hideAsyncNotification();
-      Populator.showNotification(
-        'Internet error occured. please try again',
-      );
+      Populator.showNotification('Internet error occured. please try again');
       console.log(err);
     });
 };
@@ -65,10 +63,7 @@ signUpForm.addEventListener('submit', (event) => {
     return;
   }
   if (lastName.length <= 0) {
-    Populator.showStickyNotification(
-      'error',
-      'Please enter a valid last name',
-    );
+    Populator.showStickyNotification('error', 'Please enter a valid last name');
     return;
   }
   if (address.length <= 0 || address.length >= 350) {
@@ -96,7 +91,6 @@ signUpForm.addEventListener('submit', (event) => {
 
   Populator.hideStickyNotification();
   // Validation ends here
-
 
   // Api calls
   let payload = {

@@ -50,6 +50,11 @@ body {
   display: flex;
   flex-direction: row;
 }
+
+.d-flex-inline{
+  display: inline-flex;
+}
+
 .flex-1 {
   flex: 1;
 }
@@ -67,6 +72,9 @@ body {
 }
 .text-end{
   text-align: end;
+}
+.text-start{
+  text-align: start;
 }
 .badge{
   float: right;
@@ -127,8 +135,14 @@ body {
 .align-items-center {
   align-items: center;
 }
+.align-items-end {
+  align-items: flex-end;
+}
 .align-self-center {
   align-self: center;
+}
+.align-self-end{
+  align-self: flex-end;
 }
 .mr {
   margin-right: 10px;
@@ -341,6 +355,16 @@ input[type='file'] {
   background: var(--primary);
   color: white;
 }
+
+.restricted-container {
+  width: 100%;
+  min-width: 300px;
+  max-width: 1000px;
+  
+  max-height: 500px;
+  overflow: auto;
+}
+
 .preview-container {
   max-width: 400px;
   overflow: auto;

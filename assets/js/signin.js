@@ -38,9 +38,7 @@ const logIn = (payload) => {
     })
     .catch((err) => {
       Populator.hideAsyncNotification();
-      Populator.showNotification(
-        'Internet error occured. please try again',
-      );
+      Populator.showNotification('Internet error occured. please try again');
       console.log(err);
     });
 };

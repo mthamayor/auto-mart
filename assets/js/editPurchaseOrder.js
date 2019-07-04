@@ -31,7 +31,9 @@ const populateOrder = () => {
               </div>
             </div>
             <div class="flex-1 text-align-end">
-              <h3 class="">Purchase order: <span>${fetchedOrder.status}</span></h3>
+              <h3 class="">Purchase order: <span>${
+  fetchedOrder.status
+}</span></h3>
             </div>
           </div>
           <!-- Address -->
@@ -93,9 +95,9 @@ const populateOrder = () => {
           </p>
           <p class="font-weight-bold uppercase  divider pb">
             Price Offered:
-            <span class=" float-right uppercase"><span>₦</span>${
-  Helpers.formatMoney(fetchedOrder.price_offered)
-}</span>
+            <span class=" float-right uppercase"><span>₦</span>${Helpers.formatMoney(
+    fetchedOrder.price_offered,
+  )}</span>
           </p>
           <p class="font-weight-bold uppercase  divider pb">
             New Price offered:
@@ -111,7 +113,9 @@ const populateOrder = () => {
 
 /* Create purchase order */
 const editPurchaseOrder = (payload) => {
-  const endpoint = `https://mthamayor-auto-mart.herokuapp.com/api/v1/order/${fetchedOrder.id}/price`;
+  const endpoint = `https://mthamayor-auto-mart.herokuapp.com/api/v1/order/${
+    fetchedOrder.id
+  }/price`;
   const fetchRequest = {
     method: 'PATCH',
     body: payload,

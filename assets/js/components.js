@@ -45,13 +45,28 @@ const loggedNav = `
       <li class="dropdown">
         <a class="cursor-pointer d-sm-none">Adverts</a>
         <ul class="dropdown-content">
-          <li><a href="./create-ad.html"><i class="icons lni-car"></i>Create Adverts</a></li>
-          <li><a href="./my-adverts.html"><i class="icons lni-cart-full"></i>My Adverts</a></li>
+          <li><a href="./create-ad.html"><i class="icons lni-car"></i>Create Advert</a></li>
         </ul>
       </li>
       <li><a href="./search-cars.html">View Cars</a></li>
       <li id ="sign-out-button" class="cursor-pointer"><a>Sign out</a></li>
     </ul>
-    <span class="links"><a href="search-cars.html"><i class="lni-search"></i>Search</a></span>
+    <span class="menu-toggle"><i class="menu-toggle-icon lni-menu"></i></span>
+`;
+
+const adminNav = `
+  <div class="logo"><a class="logo-link" href="./dashboard.html"><img src="./assets/img/logo.png" /></a></div>
+    <ul class="links d-sm-none">
+      <li class="home-link"><a href="dashboard.html">Home</a></li>
+      <li class="dropdown">
+        <a class="cursor-pointer d-sm-none">Adverts</a>
+        <ul class="dropdown-content">
+          <li><a href="./create-ad.html"><i class="icons lni-car"></i>Create Adverts</a></li>
+        </ul>
+      </li>
+      <li><a href="./search-cars.html">View Cars</a></li>
+      <li id ="sign-out-button" class="cursor-pointer"><a>Sign out</a></li>
+    </ul>
+    <span class="links"><a href="admin-search-cars.html"><i class="lni-search"></i>Admin Search</a></span>
     <span class="menu-toggle"><i class="menu-toggle-icon lni-menu"></i></span>
 `;

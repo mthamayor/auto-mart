@@ -130,7 +130,6 @@ const populatePageControls = ({ data }) => {
   const makeOrderButton = document.querySelector('#make-order-button');
   const buyerOrderButton = document.querySelector('#buyer-order-button');
 
-
   buyerOrderButton.href = `./edit-purchase-order.html?car_id=${data.id}`;
   try {
     if (data.owner === getUser.id) {
@@ -263,7 +262,10 @@ const acceptOffer = (orderId) => {
         Populator.showStickyNotification('error', response.error);
         return;
       }
-      Populator.showStickyNotification('success', 'Purchase order accepted. reloading...');
+      Populator.showStickyNotification(
+        'success',
+        'Purchase order accepted. reloading...',
+      );
       setTimeout(() => window.location.reload(), 3000);
     })
     .catch((err) => {
@@ -587,7 +589,9 @@ hideOrdersButton.addEventListener('click', toggleOrdersList);
 
 deleteAdButton.addEventListener('click', toggleDeleteContainer);
 cancelDeleteButton.addEventListener('click', toggleDeleteContainer);
-deleteConfirmationButton.addEventListener('click', () => { deleteAd(fetchedCar.id); });
+deleteConfirmationButton.addEventListener('click', () => {
+  deleteAd(fetchedCar.id);
+});
 
 const imageTemplates = document.querySelectorAll('.temp-image');
 for (let i = 0; i < imageTemplates.length; i += 1) {

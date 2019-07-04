@@ -3,10 +3,11 @@
 
 let getUser = localStorage.getItem('user');
 if (
-  !(getUser === null
-  || getUser === undefined
-  || getUser === 'undefined'
-  || getUser === 'null'
+  !(
+    getUser === null
+    || getUser === undefined
+    || getUser === 'undefined'
+    || getUser === 'null'
   )
 ) {
   window.location.replace('dashboard.html');
@@ -17,15 +18,14 @@ getUser = JSON.parse(getUser);
 const resetPassword = (email, payload) => {
   Populator.showAsyncNotification();
 
-  const endpoint = `https://mthamayor-auto-mart.herokuapp.com/api/v1/users/${
-    email
-  }/reset_password`;
-  const fetchRequest = payload === undefined ? {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }
+  const endpoint = `https://mthamayor-auto-mart.herokuapp.com/api/v1/users/${email}/reset_password`;
+  const fetchRequest = payload === undefined
+    ? {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
     : {
       method: 'POST',
       headers: {
@@ -94,12 +94,16 @@ forgotPasswordForm.addEventListener('submit', (event) => {
     }
     const pattern = /^[\w._]+$/;
     if (!pattern.test(presentPassword)) {
-      Populator.showNotification('Invalid password characters detected in your present password');
+      Populator.showNotification(
+        'Invalid password characters detected in your present password',
+      );
       return;
     }
 
     if (!pattern.test(newPassword)) {
-      Populator.showNotification('Invalid password characters detected in your new password');
+      Populator.showNotification(
+        'Invalid password characters detected in your new password',
+      );
       return;
     }
     if (String(presentPassword).trim() === String(newPassword).trim()) {

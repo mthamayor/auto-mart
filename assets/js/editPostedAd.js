@@ -17,7 +17,9 @@ const toggleEditAdContainer = () => {
 const editAd = (payload) => {
   Populator.showAsyncNotification();
 
-  const endpoint = `https://mthamayor-auto-mart.herokuapp.com/api/v1/car/${fetchedCar.id}/price`;
+  const endpoint = `https://mthamayor-auto-mart.herokuapp.com/api/v1/car/${
+    fetchedCar.id
+  }/price`;
   const fetchRequest = {
     method: 'PATCH',
     headers: {
@@ -37,7 +39,10 @@ const editAd = (payload) => {
       }
 
       Populator.hideAsyncNotification();
-      Populator.showStickyNotification('success', 'Ad edited successfully. Reloading page');
+      Populator.showStickyNotification(
+        'success',
+        'Ad edited successfully. Reloading page',
+      );
       setTimeout(() => window.location.reload(), 3000);
     })
     .catch((err) => {

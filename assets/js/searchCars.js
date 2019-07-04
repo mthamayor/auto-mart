@@ -53,7 +53,9 @@ const processCars = ({ data }) => {
               Type: <span class="uppercase">${element.body_type}</span>
             </div>
             <div class="capitalized mb">
-              Manufacturer: <span class="uppercase">${element.manufacturer}</span>
+              Manufacturer: <span class="uppercase">${
+  element.manufacturer
+}</span>
             </div>
             <div class="font-weight-bold capitalized mb">
               Price: <span class="">₦<span>${Helpers.formatMoney(
@@ -88,7 +90,8 @@ const searchCars = (queryParams = '') => {
       }
       const carsSearch = processCars(response);
       carText.textContent = response.data.length > 0
-        ? `${response.data.length} car found` : 'No cars found';
+        ? `${response.data.length} car found`
+        : 'No cars found';
       carsContainer.innerHTML = carsSearch;
     })
     .catch((err) => {
@@ -149,7 +152,7 @@ searchForm.addEventListener('submit', (event) => {
   // Api calls
   let queryParam = {};
 
-  if ((String(manufacturer).length) > 0) {
+  if (String(manufacturer).length > 0) {
     queryParam.manufacturer = String(manufacturer).toLowerCase();
   }
   if (String(bodyType).length > 0) {
