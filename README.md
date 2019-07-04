@@ -13,7 +13,7 @@ Auto Mart is an online marketplace for automobiles of diverse makes, model or bo
  3. Install dependencies from the root directory
  4. Starting the project from a localhost server
  5. ENV Variables
- 6. Deployment
+ 6. Deployment (API and UI)
 
 ## Documentation, Pivotal tracker project and UI
 
@@ -21,7 +21,7 @@ This Documentation for this API can be found on [here](https://mthamayor-auto-ma
 
 This Pivotal tracker project for this API can be found on [here](https://www.pivotaltracker.com/n/projects/2346094)
 
-This User Interface for this API can be found on [here](http://mthamayor.github.io/auto-mart)
+This Root branch for the User Interface is [gh-pages](https://github.com/mthamayor/auto-mart/tree/gh-pages)
 
 ## Cloning the repository
 
@@ -50,6 +50,17 @@ You can choose to run tests with
 A sample of the env file is provided. Some features will not work in productions unless they are
 filled out.
 
-## Deployment
+## Deployment (API and UI)
 
-This Application is hosted on  heroku via [https://mthamayor-auto-mart.herokuapp.com/](https://mthamayor-auto-mart.herokuapp.com/)
+This Application API is deployed on heroku via [https://mthamayor-auto-mart.herokuapp.com/](https://mthamayor-auto-mart.herokuapp.com/)
+
+The frontend (UI) is deployed on github pages via [https://mthamayor.github.io/auto-mart/](https://mthamayor.github.io/auto-mart/)
+For admin privileges, please log in with the below credentials
+| Admin accounts | Password |
+|--|--|
+| admin@automart.com | userpassword123 |
+
+If you do not wish to create an account,  please log in with the below credentials
+| Admin accounts | Password |
+|--|--|
+| user@automart.com | userpassword123 |
