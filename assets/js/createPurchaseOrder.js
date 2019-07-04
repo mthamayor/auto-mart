@@ -5,9 +5,9 @@ let getUser = localStorage.getItem('user');
 let fetchedCar;
 if (
   getUser === null
-    || getUser === undefined
-    || getUser === 'undefined'
-    || getUser === 'null'
+  || getUser === undefined
+  || getUser === 'undefined'
+  || getUser === 'null'
 ) {
   window.location.replace('signin.html');
 }
@@ -102,7 +102,9 @@ const populateOrder = () => {
             </span>
           </p>
   `;
-  const purchaseOrderContainer = document.querySelector('#purchase-order-container');
+  const purchaseOrderContainer = document.querySelector(
+    '#purchase-order-container',
+  );
   purchaseOrderContainer.innerHTML = orderElement;
 };
 
@@ -126,7 +128,10 @@ const createPurchaseOrder = (payload) => {
         Populator.showStickyNotification('error', response.error);
         return;
       }
-      Populator.showStickyNotification('success', 'Purchase order successfully created');
+      Populator.showStickyNotification(
+        'success',
+        'Purchase order successfully created',
+      );
       setTimeout(() => {
         window.location.replace(`car.html?car_id=${fetchedCar.id}`);
       }, 3000);
@@ -164,12 +169,16 @@ const fetchCar = async (carId) => {
       }
 
       if (data.owner === getUser.id) {
-        Populator.showStickyNotification('error', 'You cannot create order for ad you created');
+        Populator.showStickyNotification(
+          'error',
+          'You cannot create order for ad you created',
+        );
         return;
       }
 
       fetchedCar = data;
-    }).catch((err) => {
+    })
+    .catch((err) => {
       Populator.hideAsyncNotification();
       Populator.showNotification('Internet error occured. please try again');
       Populator.pageLoading(false);
@@ -200,7 +209,10 @@ const fetchUserOrders = async () => {
     const { data } = response;
     const found = data.find(element => element.car_id === fetchedCar.id);
     if (found) {
-      Populator.showStickyNotification('error', 'You already created a purchase order');
+      Populator.showStickyNotification(
+        'error',
+        'You already created a purchase order',
+      );
       throw new Error('Order already created');
     }
   } catch (err) {

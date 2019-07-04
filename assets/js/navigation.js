@@ -16,7 +16,12 @@ const navigationMount = () => {
     }
   } else {
     try {
-      Populator.populateContainer('navigation', loggedNav);
+      const extractUser = JSON.parse(getUser);
+      if (extractUser.is_admin) {
+        Populator.populateContainer('navigation', adminNav);
+      } else {
+        Populator.populateContainer('navigation', loggedNav);
+      }
     } catch (ex) {
       console.warn('Navigation container not found');
     }
