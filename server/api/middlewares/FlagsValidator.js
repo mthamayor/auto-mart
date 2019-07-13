@@ -16,7 +16,8 @@ class FlagsValidator {
    * @param {function} next - Passes control to next middleware
    */
   static async createFlag(req, res, next) {
-    const { carId, reason, description } = req.body;
+    const carId = req.body.car_id;
+    const { reason, description } = req.body;
 
     const authData = req.authToken.data;
 

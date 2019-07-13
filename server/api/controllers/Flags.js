@@ -15,7 +15,8 @@ class Flags {
    * @returns {object} - JSON Response
    */
   static async createFlag(req, res) {
-    const { carId, reason, description } = req.body;
+    const carId = req.body.car_id;
+    const { reason, description } = req.body;
 
     const authData = req.authToken.data;
     const reporter = authData.id;

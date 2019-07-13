@@ -17,7 +17,6 @@ describe('Users GET car endpoint test', () => {
   let car1;
   let car2;
 
-
   const fileUrl = `${__dirname}/__mock__/__img__/toyota-avalon.jpg`;
   before(async () => {
     await usersHelper.removeAllUsers();
@@ -43,13 +42,13 @@ describe('Users GET car endpoint test', () => {
       .request(app)
       .post('/api/v1/car')
       .set('Authorization', `Bearer ${user1.token}`)
-      .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+      .attach('image_url', fileUrl, 'toyoto-avalon.jpg')
       .type('form')
       .field('state', 'new')
       .field('price', '1500000')
       .field('model', 'lx350')
       .field('manufacturer', 'lexus')
-      .field('bodyType', 'jeep')
+      .field('body_type', 'jeep')
       .field('name', 'Lexus 350 2014 model');
     car1 = res.body.data;
   });
@@ -58,13 +57,13 @@ describe('Users GET car endpoint test', () => {
       .request(app)
       .post('/api/v1/car')
       .set('Authorization', `Bearer ${user1.token}`)
-      .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+      .attach('image_url', fileUrl, 'toyoto-avalon.jpg')
       .type('form')
       .field('state', 'used')
       .field('price', '1000000')
       .field('model', 'LE2015')
       .field('manufacturer', 'toyota')
-      .field('bodyType', 'car')
+      .field('body_type', 'car')
       .field('name', 'Toyota baseus LE2015 with AC');
     car2 = res.body.data;
   });
@@ -91,7 +90,7 @@ describe('Users GET car endpoint test', () => {
         .post('/api/v1/flag')
         .type('form')
         .send({
-          carId: car1.id,
+          car_id: car1.id,
           reason: 'Fraudulent seller',
           description: 'The seller once duped me',
         })
@@ -117,7 +116,7 @@ describe('Users GET car endpoint test', () => {
         .set('Authorization', 'Bearer adsflsa')
         .type('form')
         .send({
-          carId: car1.id,
+          car_id: car1.id,
           reason: 'Fraudulent seller',
           description: 'The seller once duped me',
         })
@@ -143,7 +142,7 @@ describe('Users GET car endpoint test', () => {
         .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send({
-          carId: '',
+          car_id: '',
           reason: 'Fraudulent seller',
           description: 'The seller once duped me',
         })
@@ -169,7 +168,7 @@ describe('Users GET car endpoint test', () => {
         .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send({
-          carId: car1.id,
+          car_id: car1.id,
           reason: '',
           description: 'The seller once duped me',
         })
@@ -196,7 +195,7 @@ describe('Users GET car endpoint test', () => {
         .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send({
-          carId: car1.id,
+          car_id: car1.id,
           reason: 'Fraudulent seller',
           description: '',
         })
@@ -222,7 +221,7 @@ describe('Users GET car endpoint test', () => {
         .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send({
-          carId: 12223,
+          car_id: 12223,
           reason: 'Fraudulent seller',
           description: 'The seller once duped me',
         })
@@ -248,7 +247,7 @@ describe('Users GET car endpoint test', () => {
         .set('Authorization', `Bearer ${user1.token}`)
         .type('form')
         .send({
-          carId: car1.id,
+          car_id: car1.id,
           reason: 'Fraudulent seller',
           description: 'The seller once duped me',
         })
@@ -274,7 +273,7 @@ describe('Users GET car endpoint test', () => {
         .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send({
-          carId: car2.id,
+          car_id: car2.id,
           reason: 'Fraudulent seller',
           description: 'The seller once duped me',
         })
@@ -300,7 +299,7 @@ describe('Users GET car endpoint test', () => {
         .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send({
-          carId: car1.id,
+          car_id: car1.id,
           reason: 'Fraudulent seller',
           description: 'The seller once duped me',
         })
@@ -319,7 +318,11 @@ describe('Users GET car endpoint test', () => {
 
           assert.strictEqual(status, 201, 'Status should be 201');
 
-          assert.strictEqual(data.car_id, car1.id, `car_id should be ${car1.id}`);
+          assert.strictEqual(
+            data.car_id,
+            car1.id,
+            `car_id should be ${car1.id}`,
+          );
           assert.strictEqual(
             data.user_id,
             user2.id,

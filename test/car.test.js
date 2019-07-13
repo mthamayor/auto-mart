@@ -48,14 +48,14 @@ describe('Car endpoint test', () => {
       chai
         .request(app)
         .post('/api/v1/car')
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .attach('image_url', fileUrl, 'toyoto-avalon.jpg')
         .type('form')
         .field('owner', user1.id)
         .field('state', mockCars.validState)
         .field('price', mockCars.validPrice)
         .field('model', mockCars.validModel)
         .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
+        .field('body_type', mockCars.validBodyType)
         .field('name', mockCars.validName)
         .end((err, res) => {
           expect(res).to.have.status(401);
@@ -76,14 +76,14 @@ describe('Car endpoint test', () => {
         .request(app)
         .post('/api/v1/car')
         .set('Authorization', 'Bearer adsfljewos')
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .attach('image_url', fileUrl, 'toyoto-avalon.jpg')
         .type('form')
         .field('owner', user1.id)
         .field('state', mockCars.validState)
         .field('price', mockCars.validPrice)
         .field('model', mockCars.validModel)
         .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
+        .field('body_type', mockCars.validBodyType)
         .field('name', mockCars.validName)
         .end((err, res) => {
           expect(res).to.have.status(401);
@@ -109,7 +109,7 @@ describe('Car endpoint test', () => {
         .field('price', mockCars.validPrice)
         .field('model', mockCars.validModel)
         .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
+        .field('body_type', mockCars.validBodyType)
         .field('name', mockCars.validName)
         .end((err, res) => {
           expect(res).to.have.status(400);
@@ -128,12 +128,12 @@ describe('Car endpoint test', () => {
         .request(app)
         .post('/api/v1/car')
         .set('Authorization', `Bearer ${user1.token}`)
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .attach('image_url', fileUrl, 'toyoto-avalon.jpg')
         .type('form')
         .field('price', mockCars.validPrice)
         .field('model', mockCars.validModel)
         .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
+        .field('body_type', mockCars.validBodyType)
         .field('name', mockCars.validName)
         .end((err, res) => {
           expect(res).to.have.status(400);
@@ -154,13 +154,13 @@ describe('Car endpoint test', () => {
         .request(app)
         .post('/api/v1/car')
         .set('Authorization', `Bearer ${user1.token}`)
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .attach('image_url', fileUrl, 'toyoto-avalon.jpg')
         .type('form')
         .field('price', mockCars.validPrice)
         .field('model', mockCars.validModel)
         .field('state', mockCars.invalidState)
         .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
+        .field('body_type', mockCars.validBodyType)
         .field('name', mockCars.validName)
         .end((err, res) => {
           expect(res).to.have.status(400);
@@ -181,12 +181,12 @@ describe('Car endpoint test', () => {
         .request(app)
         .post('/api/v1/car')
         .set('Authorization', `Bearer ${user1.token}`)
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .attach('image_url', fileUrl, 'toyoto-avalon.jpg')
         .type('form')
         .field('state', mockCars.validState)
         .field('model', mockCars.validModel)
         .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
+        .field('body_type', mockCars.validBodyType)
         .field('name', mockCars.validName)
         .end((err, res) => {
           expect(res).to.have.status(400);
@@ -200,12 +200,12 @@ describe('Car endpoint test', () => {
         .request(app)
         .post('/api/v1/car')
         .set('Authorization', `Bearer ${user1.token}`)
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .attach('image_url', fileUrl, 'toyoto-avalon.jpg')
         .type('form')
         .field('state', mockCars.validState)
         .field('model', mockCars.validModel)
         .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
+        .field('body_type', mockCars.validBodyType)
         .field('name', mockCars.validName)
         .end((err, res) => {
           expect(res).to.have.status(400);
@@ -226,13 +226,13 @@ describe('Car endpoint test', () => {
         .request(app)
         .post('/api/v1/car')
         .set('Authorization', `Bearer ${user1.token}`)
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .attach('image_url', fileUrl, 'toyoto-avalon.jpg')
         .type('form')
         .field('state', mockCars.validState)
         .field('price', mockCars.invalidPrice)
         .field('model', mockCars.validModel)
         .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
+        .field('body_type', mockCars.validBodyType)
         .field('name', mockCars.validName)
         .end((err, res) => {
           expect(res).to.have.status(400);
@@ -253,12 +253,12 @@ describe('Car endpoint test', () => {
         .request(app)
         .post('/api/v1/car')
         .set('Authorization', `Bearer ${user1.token}`)
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .attach('image_url', fileUrl, 'toyoto-avalon.jpg')
         .type('form')
         .field('state', mockCars.validState)
         .field('price', mockCars.validPrice)
         .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
+        .field('body_type', mockCars.validBodyType)
         .field('name', mockCars.validName)
         .end((err, res) => {
           expect(res).to.have.status(400);
@@ -278,12 +278,12 @@ describe('Car endpoint test', () => {
         .request(app)
         .post('/api/v1/car')
         .set('Authorization', `Bearer ${user1.token}`)
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .attach('image_url', fileUrl, 'toyoto-avalon.jpg')
         .type('form')
         .field('state', mockCars.validState)
         .field('price', mockCars.validPrice)
         .field('model', mockCars.validModel)
-        .field('bodyType', mockCars.validBodyType)
+        .field('body_type', mockCars.validBodyType)
         .field('name', mockCars.validName)
         .end((err, res) => {
           expect(res).to.have.status(400);
@@ -303,7 +303,7 @@ describe('Car endpoint test', () => {
         .request(app)
         .post('/api/v1/car')
         .set('Authorization', `Bearer ${user1.token}`)
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .attach('image_url', fileUrl, 'toyoto-avalon.jpg')
         .type('form')
         .field('state', mockCars.validState)
         .field('price', mockCars.validPrice)
@@ -322,41 +322,18 @@ describe('Car endpoint test', () => {
           done();
         });
     });
-    it('should raise 400 error with no or invalid vehicle name', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/car')
-        .set('Authorization', `Bearer ${user1.token}`)
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
-        .type('form')
-        .field('state', mockCars.validState)
-        .field('price', mockCars.validPrice)
-        .field('model', mockCars.validModel)
-        .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
-        .end((err, res) => {
-          expect(res).to.have.status(400);
-          const { error } = res.body;
-          assert.strictEqual(
-            error,
-            'vehicle name undefined or invalid',
-            'vehicle name undefined or invalid',
-          );
-          done();
-        });
-    });
     it('should raise 201 and successfully create the ad', async () => {
       const res = await chai
         .request(app)
         .post('/api/v1/car')
         .set('Authorization', `Bearer ${user1.token}`)
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .attach('image_url', fileUrl, 'toyoto-avalon.jpg')
         .type('form')
         .field('state', mockCars.validState)
         .field('price', mockCars.validPrice)
         .field('model', mockCars.validModel)
         .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
+        .field('body_type', mockCars.validBodyType)
         .field('name', mockCars.validName);
       expect(res).to.have.status(201);
       expect(res.body).to.have.property('status');
@@ -365,7 +342,7 @@ describe('Car endpoint test', () => {
       const { data } = res.body;
       expect(data).to.have.property('id');
       expect(data).to.have.property('created_on');
-      expect(data).to.have.property('image_urls');
+      expect(data).to.have.property('image_url');
       expect(data).to.have.property('status');
       expect(data).to.have.property('state');
       const {
@@ -398,13 +375,13 @@ describe('Car endpoint test', () => {
         .request(app)
         .post('/api/v1/car')
         .set('Authorization', `Bearer ${user1.token}`)
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .attach('image_url', fileUrl, 'toyoto-avalon.jpg')
         .type('form')
         .field('state', mockCars.validState)
         .field('price', mockCars.validPrice)
         .field('model', mockCars.validModel)
         .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
+        .field('body_type', mockCars.validBodyType)
         .field('name', mockCars.validName);
       car1 = res.body.data;
     });
@@ -521,17 +498,17 @@ describe('Car endpoint test', () => {
         .request(app)
         .post('/api/v1/car')
         .set('Authorization', `Bearer ${user1.token}`)
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .attach('image_url', fileUrl, 'toyoto-avalon.jpg')
         .type('form')
         .field('state', mockCars.validState)
         .field('price', mockCars.validPrice)
         .field('model', mockCars.validModel)
         .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
+        .field('body_type', mockCars.validBodyType)
         .field('name', mockCars.validName);
       car1 = res.body.data;
     });
-    it('should raise 400 error newPrice is undefined', (done) => {
+    it('should raise 400 error price is undefined', (done) => {
       chai
         .request(app)
         .patch(`/api/v1/car/${car1.id}/price`)
@@ -547,8 +524,8 @@ describe('Car endpoint test', () => {
           );
           assert.strictEqual(
             res.body.error,
-            'newPrice is undefined or invalid',
-            'newPrice is undefined or invalid',
+            'price is undefined or invalid',
+            'price is undefined or invalid',
           );
           done();
         });
@@ -560,7 +537,7 @@ describe('Car endpoint test', () => {
         .set('Authorization', `Bearer ${user1.token}`)
         .type('form')
         .send({
-          newPrice: '1200000',
+          price: '1200000',
         })
         .end((err, res) => {
           expect(res).to.have.status(201);
@@ -581,13 +558,13 @@ describe('Car endpoint test', () => {
         .request(app)
         .post('/api/v1/car')
         .set('Authorization', `Bearer ${user1.token}`)
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .attach('image_url', fileUrl, 'toyoto-avalon.jpg')
         .type('form')
         .field('state', mockCars.validState)
         .field('price', mockCars.validPrice)
         .field('model', mockCars.validModel)
         .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
+        .field('body_type', mockCars.validBodyType)
         .field('name', mockCars.validName);
       car1 = res.body.data;
     });
@@ -648,7 +625,7 @@ describe('Car endpoint test', () => {
       expect(data).to.have.property('price');
       expect(data).to.have.property('model');
       expect(data).to.have.property('state');
-      expect(data).to.have.property('image_urls');
+      expect(data).to.have.property('image_url');
       expect(data).to.have.property('body_type');
       assert.strictEqual(
         status,
@@ -666,13 +643,13 @@ describe('Car endpoint test', () => {
         .request(app)
         .post('/api/v1/car')
         .set('Authorization', `Bearer ${user1.token}`)
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .attach('image_url', fileUrl, 'toyoto-avalon.jpg')
         .type('form')
         .field('state', mockCars.validState)
         .field('price', mockCars.validPrice)
         .field('model', mockCars.validModel)
         .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
+        .field('body_type', mockCars.validBodyType)
         .field('name', mockCars.validName);
       car1 = res.body.data;
     });
@@ -702,13 +679,13 @@ describe('Car endpoint test', () => {
         .request(app)
         .post('/api/v1/car')
         .set('Authorization', `Bearer ${user1.token}`)
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .attach('image_url', fileUrl, 'toyoto-avalon.jpg')
         .type('form')
         .field('state', mockCars.validState)
         .field('price', mockCars.validPrice)
         .field('model', mockCars.validModel)
         .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
+        .field('body_type', mockCars.validBodyType)
         .field('name', mockCars.validName);
       car1 = res.body.data;
     });
@@ -744,13 +721,13 @@ describe('Car endpoint test', () => {
         .request(app)
         .post('/api/v1/car')
         .set('Authorization', `Bearer ${user1.token}`)
-        .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+        .attach('image_url', fileUrl, 'toyoto-avalon.jpg')
         .type('form')
         .field('state', mockCars.validState)
         .field('price', mockCars.validPrice)
         .field('model', mockCars.validModel)
         .field('manufacturer', mockCars.validManufacturer)
-        .field('bodyType', mockCars.validBodyType)
+        .field('body_type', mockCars.validBodyType)
         .field('name', mockCars.validName);
       car1 = res.body.data;
     });

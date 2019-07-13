@@ -16,16 +16,16 @@ class Cars {
    * @returns {object} - JSON Response
    */
   static async createAd(req, res) {
+    const bodyType = req.body.body_type;
+
     const {
       state,
       price,
       manufacturer,
       model,
-      bodyType,
-      name,
       imageUrlList,
     } = req.body;
-
+    const name = `${manufacturer} ${model}`;
     const authData = req.authToken.data;
 
     const queryText = {
@@ -61,7 +61,7 @@ class Cars {
       state: queryResult.state,
       status: queryResult.status,
       body_type: queryResult.body_type,
-      image_urls: queryResult.image_urls,
+      image_url: queryResult.image_urls,
     };
 
     ResponseHandler.success(res, 201, data);
@@ -91,7 +91,7 @@ class Cars {
       state: queryResult.state,
       status: queryResult.status,
       body_type: queryResult.body_type,
-      image_urls: queryResult.image_urls,
+      image_url: queryResult.image_urls,
     };
 
     ResponseHandler.success(res, 201, data);
@@ -107,13 +107,13 @@ class Cars {
   static async updateCarPice(req, res) {
     let id = req.params.car_id;
 
-    let { newPrice } = req.body;
+    let { price } = req.body;
 
     id = parseInt(id, 10);
 
-    newPrice = parseFloat(newPrice);
+    price = parseFloat(price);
 
-    const queryResult = await carsHelper.updateCarPrice(id, newPrice);
+    const queryResult = await carsHelper.updateCarPrice(id, price);
 
     const data = {
       id: queryResult.id,
@@ -126,7 +126,7 @@ class Cars {
       state: queryResult.state,
       status: queryResult.status,
       body_type: queryResult.body_type,
-      image_urls: queryResult.image_urls,
+      image_url: queryResult.image_urls,
     };
 
     ResponseHandler.success(res, 201, data);
@@ -157,7 +157,7 @@ class Cars {
       state: queryResult.state,
       status: queryResult.status,
       body_type: queryResult.body_type,
-      image_urls: queryResult.image_urls,
+      image_url: queryResult.image_urls,
     };
 
     ResponseHandler.success(res, 200, data);
@@ -206,7 +206,7 @@ class Cars {
         state: car.state,
         status: car.status,
         body_type: car.body_type,
-        image_urls: car.image_urls,
+        image_url: car.image_urls,
       };
       data.push(returnData);
     });

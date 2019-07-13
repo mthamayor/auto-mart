@@ -14,6 +14,6 @@ const fileFilter = (req, file, callback) => {
   }
   callback(null, true);
 };
-const upload = multer({ storage, fileFilter }).array('imageArray', 10);
+const upload = multer({ storage, fileFilter }).array('image_url', 10);
 
 export default upload;
