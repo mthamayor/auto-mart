@@ -34,13 +34,10 @@ class HelperFunctions {
    */
   static validPassword(password) {
     /* Password must not contain spaces
-     Password length must be greater or equal to 8
-     Password can only contain '.' and '_' special characters
+     Password length must be greater than 0
      */
-    const pattern = /^[\w._]+$/;
     if (
-      !pattern.test(password)
-      || password.length < 8
+      password.length <= 0
       || password.indexOf(' ') >= 0
     ) {
       return false;

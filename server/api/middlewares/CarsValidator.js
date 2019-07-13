@@ -38,8 +38,9 @@ class CarsValidator {
 
       const imgFiles = req.files;
 
+      const bodyType = req.body.body_type;
       const {
-        state, price, manufacturer, model, bodyType, name,
+        state, price, manufacturer, model,
       } = req.body;
 
       if (state === undefined || String(state).trim() === '') {
@@ -78,11 +79,6 @@ class CarsValidator {
 
       if (bodyType === undefined || bodyType.trim() === '') {
         ResponseHandler.error(res, 400, 'body type is undefined or invalid');
-        return;
-      }
-
-      if (name === undefined || String(name).trim() === '') {
-        ResponseHandler.error(res, 400, 'vehicle name undefined or invalid');
         return;
       }
 
@@ -173,14 +169,14 @@ class CarsValidator {
    * @param {function} next - Passes control to next middleware
    */
   static updateCarPrice(req, res, next) {
-    const { newPrice } = req.body;
+    const { price } = req.body;
 
     if (
-      newPrice === undefined
-      || String(newPrice).trim() === ''
-      || !validator.isNumeric(String(newPrice))
+      price === undefined
+      || String(price).trim() === ''
+      || !validator.isNumeric(String(price))
     ) {
-      ResponseHandler.error(res, 400, 'newPrice is undefined or invalid');
+      ResponseHandler.error(res, 400, 'price is undefined or invalid');
       return;
     }
 

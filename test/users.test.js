@@ -64,11 +64,7 @@ describe('Users Reset Password endpoint test', () => {
       expect(res.body).to.have.property('error');
       const { error, status } = res.body;
       assert.strictEqual(status, 404, 'Status should be 404');
-      assert.strictEqual(
-        error,
-        'user not found',
-        'user not found',
-      );
+      assert.strictEqual(error, 'user not found', 'user not found');
     });
 
     it('should raise 204 if password was successfully changed', async () => {
@@ -99,7 +95,7 @@ describe('Users Reset Password endpoint test', () => {
         .type('form')
         .send({
           password: '',
-          newPassword: 'MTHA.2JLSDF',
+          new_password: 'MTHA.2JLSDF',
         });
       expect(res).to.have.status(400);
       expect(res.body).to.have.property('status');
@@ -121,7 +117,7 @@ describe('Users Reset Password endpoint test', () => {
         .type('form')
         .send({
           password: 'KHADS9_DSFJ',
-          newPassword: 'MTHA.049382',
+          new_password: 'MTHA.049382',
         });
       expect(res).to.have.status(403);
       expect(res.body).to.have.property('status');
@@ -143,7 +139,7 @@ describe('Users Reset Password endpoint test', () => {
         .type('form')
         .send({
           password: `${mockUser.validUser.password}`,
-          newPassword: '',
+          new_password: '',
         });
       expect(res).to.have.status(400);
       expect(res.body).to.have.property('status');
@@ -165,7 +161,7 @@ describe('Users Reset Password endpoint test', () => {
         .type('form')
         .send({
           password: `${mockUser.validUser.password}`,
-          newPassword: 'dsfa',
+          new_password: 'ds fa',
         });
       expect(res).to.have.status(400);
       expect(res.body).to.have.property('status');
@@ -187,7 +183,7 @@ describe('Users Reset Password endpoint test', () => {
         .type('form')
         .send({
           password: mockUser.validUser.password,
-          newPassword: 'REBEL_123245',
+          new_password: 'REBEL_123245',
         });
       expect(res).to.have.status(204);
     });

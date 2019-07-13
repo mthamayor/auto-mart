@@ -22,8 +22,10 @@ class AuthValidator {
    * @param {function} next - Passes control to next middleware
    */
   static async signUp(req, res, next) {
+    const firstName = req.body.first_name;
+    const lastName = req.body.last_name;
     const {
-      email, firstName, lastName, address, password,
+      email, address, password,
     } = req.body;
 
     if (email === undefined || !validator.isEmail(String(email))) {
@@ -136,7 +138,8 @@ class AuthValidator {
    * @param {function} next - Passes control to next middleware
    */
   static async resetPassword(req, res, next) {
-    const { newPassword, token } = req.body;
+    const newPassword = req.body.new_password;
+    const { token } = req.body;
     if (newPassword === undefined || String(newPassword).trim() === '') {
       ResponseHandler.error(res, 400, 'new password is undefined');
       return;
@@ -172,7 +175,8 @@ class AuthValidator {
    */
   static async reset(req, res, next) {
     const { email } = req.params;
-    const { password, newPassword } = req.body;
+    const newPassword = req.body.new_password;
+    const { password } = req.body;
 
     if (email === undefined || !validator.isEmail(String(email))) {
       ResponseHandler.error(res, 400, 'email is undefined or invalid');

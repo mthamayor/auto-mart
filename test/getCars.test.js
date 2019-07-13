@@ -9,7 +9,6 @@ import mockCars from './__mock__/mockCars';
 import { usersHelper, carsHelper } from '../server/api/models';
 import mockUser from './__mock__/mockUser';
 
-
 chai.use(chaiHttp);
 
 describe('Users GET car endpoint test', () => {
@@ -55,13 +54,13 @@ describe('Users GET car endpoint test', () => {
       .request(app)
       .post('/api/v1/car')
       .set('Authorization', `Bearer ${user1.token}`)
-      .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+      .attach('image_url', fileUrl, 'toyoto-avalon.jpg')
       .type('form')
       .field('state', 'new')
       .field('price', '1500000')
       .field('model', 'lx350')
       .field('manufacturer', 'lexus')
-      .field('bodyType', 'jeep')
+      .field('body_type', 'jeep')
       .field('name', 'Lexus 350 2014 model');
     car1 = res.body.data;
   });
@@ -70,13 +69,13 @@ describe('Users GET car endpoint test', () => {
       .request(app)
       .post('/api/v1/car')
       .set('Authorization', `Bearer ${user1.token}`)
-      .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+      .attach('image_url', fileUrl, 'toyoto-avalon.jpg')
       .type('form')
       .field('state', 'used')
       .field('price', '1000000')
       .field('model', 'LE2015')
       .field('manufacturer', 'toyota')
-      .field('bodyType', 'car')
+      .field('body_type', 'car')
       .field('name', 'Toyota baseus LE2015 with AC');
     car2 = res.body.data;
   });
@@ -85,13 +84,13 @@ describe('Users GET car endpoint test', () => {
       .request(app)
       .post('/api/v1/car')
       .set('Authorization', `Bearer ${user1.token}`)
-      .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+      .attach('image_url', fileUrl, 'toyoto-avalon.jpg')
       .type('form')
       .field('state', mockCars.validState)
       .field('price', mockCars.validPrice)
       .field('model', mockCars.validModel)
       .field('manufacturer', mockCars.validManufacturer)
-      .field('bodyType', mockCars.validBodyType)
+      .field('body_type', mockCars.validBodyType)
       .field('name', mockCars.validName);
     car3 = res.body.data;
   });
@@ -100,13 +99,13 @@ describe('Users GET car endpoint test', () => {
       .request(app)
       .post('/api/v1/car')
       .set('Authorization', `Bearer ${user1.token}`)
-      .attach('imageArray', fileUrl, 'toyoto-avalon.jpg')
+      .attach('image_url', fileUrl, 'toyoto-avalon.jpg')
       .type('form')
       .field('state', 'used')
       .field('price', '450000')
       .field('model', '2010')
       .field('manufacturer', 'hyundai')
-      .field('bodyType', 'car')
+      .field('body_type', 'car')
       .field('name', 'Hyundai Utility family bus');
     car4 = res.body.data;
   });
@@ -123,76 +122,10 @@ describe('Users GET car endpoint test', () => {
   });
 
   describe('Users GET api/v1/car', () => {
-    it('should raise 401 if user token is not provided', (done) => {
-      chai
-        .request(app)
-        .get('/api/v1/car')
-        .type('form')
-        .send()
-        .end((err, res) => {
-          expect(res).to.have.status(401);
-          expect(res.body).to.have.property('status');
-          expect(res.body).to.have.property('error');
-
-          const { error, status } = res.body;
-          assert.strictEqual(status, 401, 'Status should be 401');
-          assert.strictEqual(
-            error,
-            'you do not have permission to access this route',
-            'you do not have permission to access this route',
-          );
-          done();
-        });
-    });
-    it('should raise 401 if invalid token is provided', (done) => {
-      chai
-        .request(app)
-        .get('/api/v1/car')
-        .set('Authorization', 'Bearer adsfslwouw')
-        .type('form')
-        .send()
-        .end((err, res) => {
-          expect(res).to.have.status(401);
-          expect(res.body).to.have.property('status');
-          expect(res.body).to.have.property('error');
-
-          const { error, status } = res.body;
-          assert.strictEqual(status, 401, 'Status should be 401');
-          assert.strictEqual(
-            error,
-            'invalid token provided. please provide a valid token',
-            'invalid token provided. please provide a valid token',
-          );
-          done();
-        });
-    });
-    it('should raise 403 if user is not an admin', (done) => {
-      chai
-        .request(app)
-        .get('/api/v1/car')
-        .set('Authorization', `Bearer ${user1.token}`)
-        .type('form')
-        .send()
-        .end((err, res) => {
-          expect(res).to.have.status(403);
-          expect(res.body).to.have.property('status');
-          expect(res.body).to.have.property('error');
-
-          const { error, status } = res.body;
-          assert.strictEqual(status, 403, 'Status should be 403');
-          assert.strictEqual(
-            error,
-            'Forbidden: only admins can access this route',
-            'Forbidden: only admins can access this route',
-          );
-          done();
-        });
-    });
     it('should raise 200 when all cars are successfully returned', async () => {
       const res = await chai
         .request(app)
         .get('/api/v1/car')
-        .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send();
       expect(res).to.have.status(200);
@@ -218,7 +151,6 @@ describe('Users GET car endpoint test', () => {
         car2.status,
         `Status should be ${car2.status}`,
       );
-
 
       const returnedCar3 = data[2];
       assert.strictEqual(
@@ -288,9 +220,7 @@ describe('Users GET car endpoint test', () => {
       const minPrice = 1200000;
       chai
         .request(app)
-        .get(
-          `/api/v1/car?status=available&min_price=${minPrice}`,
-        )
+        .get(`/api/v1/car?status=available&min_price=${minPrice}`)
         .type('form')
         .send()
         .end((err, res) => {
@@ -363,7 +293,9 @@ describe('Users GET car endpoint test', () => {
       const minPrice = 450000;
       const res = await chai
         .request(app)
-        .get(`/api/v1/car?status=available&min_price=${minPrice}&max_price=${maxPrice}`)
+        .get(
+          `/api/v1/car?status=available&min_price=${minPrice}&max_price=${maxPrice}`,
+        )
         .type('form')
         .send();
       expect(res).to.have.status(200);
@@ -518,7 +450,7 @@ describe('Users GET car endpoint test', () => {
       );
     });
 
-    it('should raise 200 when the user\'s adverts are successfully returned', async () => {
+    it("should raise 200 when the user's adverts are successfully returned", async () => {
       const res = await chai
         .request(app)
         .get('/api/v1/car/user/my-cars')

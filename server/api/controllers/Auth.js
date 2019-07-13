@@ -21,8 +21,10 @@ class Auth {
    * @returns {object} - JSON Response
    */
   static async signUp(req, res) {
+    let firstName = req.body.first_name;
+    let lastName = req.body.last_name;
     let {
-      email, firstName, lastName, address, password,
+      email, address, password,
     } = req.body;
 
     email = HelperFunctions.removeAllWhitespace(email);
@@ -180,7 +182,8 @@ class Auth {
    * @returns {object} - JSON Response
    */
   static async resetPassword(req, res) {
-    let { email, newPassword } = req.body;
+    let newPassword = req.body.new_password;
+    let { email } = req.body;
 
     email = email.trim();
     newPassword = newPassword.trim();
@@ -200,7 +203,7 @@ class Auth {
    */
   static async reset(req, res) {
     const { email } = req.params;
-    const { newPassword } = req.body;
+    const newPassword = req.body.new_password;
 
     if (
       (newPassword !== undefined)

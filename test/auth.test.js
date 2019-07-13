@@ -29,12 +29,12 @@ describe('Users auth endpoint test', () => {
       const { validUser } = mockUser;
       assert.strictEqual(
         res.body.data.first_name,
-        validUser.firstName,
+        validUser.first_name,
         'First name sent is correct',
       );
       assert.strictEqual(
         res.body.data.last_name,
-        validUser.lastName,
+        validUser.last_name,
         'Last name sent is correct',
       );
       assert.strictEqual(
@@ -62,11 +62,7 @@ describe('Users auth endpoint test', () => {
         .end((err, res) => {
           expect(res).to.have.status(400);
 
-          assert.strictEqual(
-            res.body.status,
-            400,
-            'Status code should be 400',
-          );
+          assert.strictEqual(res.body.status, 400, 'Status code should be 400');
           assert.strictEqual(
             res.body.error,
             'password is undefined or invalid',
@@ -86,11 +82,7 @@ describe('Users auth endpoint test', () => {
         .end((err, res) => {
           expect(res).to.have.status(400);
 
-          assert.strictEqual(
-            res.body.status,
-            400,
-            'Status code should be 400',
-          );
+          assert.strictEqual(res.body.status, 400, 'Status code should be 400');
           assert.strictEqual(
             res.body.error,
             'address is undefined or invalid',
@@ -110,11 +102,7 @@ describe('Users auth endpoint test', () => {
         .end((err, res) => {
           expect(res).to.have.status(400);
 
-          assert.strictEqual(
-            res.body.status,
-            400,
-            'Status code should be 400',
-          );
+          assert.strictEqual(res.body.status, 400, 'Status code should be 400');
           assert.strictEqual(
             res.body.error,
             'first name is undefined or invalid',
@@ -134,11 +122,7 @@ describe('Users auth endpoint test', () => {
         .end((err, res) => {
           expect(res).to.have.status(400);
 
-          assert.strictEqual(
-            res.body.status,
-            400,
-            'Status code should be 400',
-          );
+          assert.strictEqual(res.body.status, 400, 'Status code should be 400');
           assert.strictEqual(
             res.body.error,
             'last name is undefined or invalid',
@@ -158,11 +142,7 @@ describe('Users auth endpoint test', () => {
         .end((err, res) => {
           expect(res).to.have.status(400);
 
-          assert.strictEqual(
-            res.body.status,
-            400,
-            'Status code should be 400',
-          );
+          assert.strictEqual(res.body.status, 400, 'Status code should be 400');
           assert.strictEqual(
             res.body.error,
             'email is undefined or invalid',
@@ -182,11 +162,7 @@ describe('Users auth endpoint test', () => {
         .end((err, res) => {
           expect(res).to.have.status(409);
 
-          assert.strictEqual(
-            res.body.status,
-            409,
-            'Status code should be 409',
-          );
+          assert.strictEqual(res.body.status, 409, 'Status code should be 409');
           assert.strictEqual(
             res.body.error,
             'user already exists',
@@ -212,12 +188,12 @@ describe('Users auth endpoint test', () => {
       const { validUser } = mockUser;
       assert.strictEqual(
         res.body.data.first_name,
-        validUser.firstName,
+        validUser.first_name,
         'First name returned is correct',
       );
       assert.strictEqual(
         res.body.data.last_name,
-        validUser.lastName,
+        validUser.last_name,
         'Last name returned is correct',
       );
       assert.strictEqual(
@@ -247,11 +223,7 @@ describe('Users auth endpoint test', () => {
         .end((err, res) => {
           expect(res).to.have.status(400);
 
-          assert.strictEqual(
-            res.body.status,
-            400,
-            'Status code should be 400',
-          );
+          assert.strictEqual(res.body.status, 400, 'Status code should be 400');
           assert.strictEqual(
             res.body.error,
             'password is undefined',
@@ -274,11 +246,7 @@ describe('Users auth endpoint test', () => {
         .end((err, res) => {
           expect(res).to.have.status(401);
 
-          assert.strictEqual(
-            res.body.status,
-            401,
-            'Status code should be 401',
-          );
+          assert.strictEqual(res.body.status, 401, 'Status code should be 401');
           assert.strictEqual(
             res.body.error,
             'invalid login credentials',
@@ -300,11 +268,7 @@ describe('Users auth endpoint test', () => {
         .end((err, res) => {
           expect(res).to.have.status(400);
 
-          assert.strictEqual(
-            res.body.status,
-            400,
-            'Status code should be 400',
-          );
+          assert.strictEqual(res.body.status, 400, 'Status code should be 400');
           assert.strictEqual(
             res.body.error,
             'email is undefined or invalid',
@@ -320,20 +284,14 @@ describe('Users auth endpoint test', () => {
         .request(app)
         .post('/api/v1/auth/signin')
         .type('form')
-        .send(
-          {
-            email: mockUser.fakeUserEmail,
-            password: mockUser.password,
-          },
-        )
+        .send({
+          email: mockUser.fakeUserEmail,
+          password: mockUser.password,
+        })
         .end((err, res) => {
           expect(res).to.have.status(404);
 
-          assert.strictEqual(
-            res.body.status,
-            404,
-            'Status code should be 404',
-          );
+          assert.strictEqual(res.body.status, 404, 'Status code should be 404');
           assert.strictEqual(
             res.body.error,
             'user does not exist',
@@ -372,11 +330,7 @@ describe('Users auth endpoint test', () => {
         .end((err, res) => {
           expect(res).to.have.status(400);
 
-          assert.strictEqual(
-            res.body.status,
-            400,
-            'Status code should be 400',
-          );
+          assert.strictEqual(res.body.status, 400, 'Status code should be 400');
           assert.strictEqual(
             res.body.error,
             'email is invalid',
@@ -397,11 +351,7 @@ describe('Users auth endpoint test', () => {
         .end((err, res) => {
           expect(res).to.have.status(404);
 
-          assert.strictEqual(
-            res.body.status,
-            404,
-            'Status code should be 404',
-          );
+          assert.strictEqual(res.body.status, 404, 'Status code should be 404');
           assert.strictEqual(
             res.body.error,
             'user not found',
@@ -421,16 +371,12 @@ describe('Users auth endpoint test', () => {
         .type('form')
         .send({
           token,
-          newPassword: '',
+          new_password: '',
         })
         .end((err, res) => {
           expect(res).to.have.status(400);
 
-          assert.strictEqual(
-            res.body.status,
-            400,
-            'Status code should be 400',
-          );
+          assert.strictEqual(res.body.status, 400, 'Status code should be 400');
           assert.strictEqual(
             res.body.error,
             'new password is undefined',
@@ -447,16 +393,12 @@ describe('Users auth endpoint test', () => {
         .type('form')
         .send({
           token,
-          newPassword: '$hAMSD*',
+          new_password: '$h AMSD*',
         })
         .end((err, res) => {
           expect(res).to.have.status(400);
 
-          assert.strictEqual(
-            res.body.status,
-            400,
-            'Status code should be 400',
-          );
+          assert.strictEqual(res.body.status, 400, 'Status code should be 400');
           assert.strictEqual(
             res.body.error,
             'password is not valid',
@@ -473,16 +415,12 @@ describe('Users auth endpoint test', () => {
         .type('form')
         .send({
           token: 'lafdjsoje1234',
-          newPassword: 'MTHA.3OSLDS',
+          new_password: 'MTHA.3OSLDS',
         })
         .end((err, res) => {
           expect(res).to.have.status(400);
 
-          assert.strictEqual(
-            res.body.status,
-            400,
-            'Status code should be 400',
-          );
+          assert.strictEqual(res.body.status, 400, 'Status code should be 400');
           assert.strictEqual(
             res.body.error,
             'invalid password reset token provided',
@@ -499,7 +437,7 @@ describe('Users auth endpoint test', () => {
         .type('form')
         .send({
           token,
-          newPassword: 'ANIMASHAUN321',
+          new_password: 'ANIMASHAUN321',
         });
 
       expect(res).to.have.status(200);
@@ -507,11 +445,7 @@ describe('Users auth endpoint test', () => {
       expect(res.body).to.have.property('data');
 
       const { status, data } = res.body;
-      assert.strictEqual(
-        status,
-        200,
-        'Expected status to be 200',
-      );
+      assert.strictEqual(status, 200, 'Expected status to be 200');
       assert.strictEqual(
         data,
         'Password successfully changed',

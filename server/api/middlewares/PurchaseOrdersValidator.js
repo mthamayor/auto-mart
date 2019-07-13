@@ -20,7 +20,8 @@ class PurchaseOrdersValidator {
    * @param {function} next - Passes control to next middleware
    */
   static async createPurchaseOrder(req, res, next) {
-    const { carId, priceOffered } = req.body;
+    const carId = req.body.car_id;
+    const { price } = req.body;
     const authData = req.authToken.data;
     const buyer = authData.id;
 
@@ -34,9 +35,9 @@ class PurchaseOrdersValidator {
     }
 
     if (
-      priceOffered === undefined
-      || String(priceOffered).trim() === ''
-      || !validator.isNumeric(String(priceOffered))
+      price === undefined
+      || String(price).trim() === ''
+      || !validator.isNumeric(String(price))
     ) {
       ResponseHandler.error(res, 400, 'price is undefined or invalid');
       return;
@@ -81,7 +82,7 @@ class PurchaseOrdersValidator {
     const orderId = req.params.order_id;
     const authData = req.authToken.data;
     const buyer = authData.id;
-    const { newPrice } = req.body;
+    const { price } = req.body;
 
     if (
       orderId === undefined
@@ -93,9 +94,9 @@ class PurchaseOrdersValidator {
     }
 
     if (
-      newPrice === undefined
-      || String(newPrice).trim() === ''
-      || !validator.isNumeric(String(newPrice))
+      price === undefined
+      || String(price).trim() === ''
+      || !validator.isNumeric(String(price))
     ) {
       ResponseHandler.error(res, 400, 'new price is undefined or invalid');
       return;
