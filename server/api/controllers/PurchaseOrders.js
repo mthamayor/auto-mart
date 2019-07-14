@@ -20,10 +20,10 @@ class PurchaseOrders {
    */
   static async createOrder(req, res) {
     let carId = req.body.car_id;
-    let { price } = req.body;
+    let { amount } = req.body;
     const authData = req.authToken.data;
     carId = parseInt(carId, 10);
-    price = parseFloat(price);
+    amount = parseFloat(amount);
 
     const queryText = {
       name: 'insert-order',
@@ -31,7 +31,7 @@ class PurchaseOrders {
         'INSERT INTO orders(buyer, car_id, price_offered) '
         + 'VALUES($1, $2, $3) '
         + 'RETURNING *',
-      values: [authData.id, carId, price],
+      values: [authData.id, carId, amount],
     };
 
     let queryResult;
