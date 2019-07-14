@@ -290,7 +290,7 @@
             "type" : "number"
           }
         }, {
-          "name" : "bodyType",
+          "name" : "body_type",
           "in" : "query",
           "description" : "Filter with body type of car",
           "required" : false,
@@ -1389,11 +1389,11 @@
       "User" : {
         "type" : "object",
         "properties" : {
-          "firstName" : {
+          "first_name" : {
             "type" : "string",
             "description" : "User first name"
           },
-          "lastName" : {
+          "last_name" : {
             "type" : "string",
             "description" : "User last name"
           },
@@ -1427,10 +1427,6 @@
       "CreateAd" : {
         "type" : "object",
         "properties" : {
-          "name" : {
-            "type" : "string",
-            "description" : "Car full name/description"
-          },
           "state" : {
             "type" : "string",
             "description" : "State of the car (new or used)"
@@ -1447,11 +1443,11 @@
             "type" : "string",
             "description" : "Model of the car (LX350, LE2015 etc)"
           },
-          "bodyType" : {
+          "body_type" : {
             "type" : "string",
             "description" : "Body type of the car (Car, Bus etc)"
           },
-          "imageArray" : {
+          "image_url" : {
             "type" : "string",
             "description" : "Attach images of the car",
             "format" : "binary"
@@ -1461,7 +1457,7 @@
       "NewPrice" : {
         "type" : "object",
         "properties" : {
-          "newPrice" : {
+          "price" : {
             "type" : "number",
             "description" : "New price (or offerer price) of the item"
           }
@@ -1470,11 +1466,11 @@
       "PurchaseOrder" : {
         "type" : "object",
         "properties" : {
-          "carId" : {
+          "car_id" : {
             "type" : "integer",
             "description" : "ID of the car of the purchase order"
           },
-          "priceOffered" : {
+          "amount" : {
             "type" : "number",
             "description" : "The price buyer is offering"
           }
@@ -1492,7 +1488,7 @@
       "Reset" : {
         "type" : "object",
         "properties" : {
-          "newPassword" : {
+          "new_password" : {
             "type" : "string",
             "description" : "Your new password"
           }
@@ -1505,7 +1501,7 @@
             "type" : "string",
             "description" : "Your present password"
           },
-          "newPassword" : {
+          "new_password" : {
             "type" : "string",
             "description" : "Your new password"
           }
@@ -1514,7 +1510,7 @@
       "Flag" : {
         "type" : "object",
         "properties" : {
-          "carId" : {
+          "car_id" : {
             "type" : "integer",
             "description" : "ID of the car you are reporting"
           },
@@ -1594,7 +1590,7 @@
           "data" : {
             "type" : "array",
             "items" : {
-              "$ref" : "#/components/schemas/CarResponse_data"
+              "$ref" : "#/components/schemas/CarsResponse_data"
             }
           }
         }
@@ -1754,6 +1750,49 @@
           }
         }
       },
+      "CarsResponse_data" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "created_on" : {
+            "type" : "integer"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "owner" : {
+            "type" : "integer"
+          },
+          "manufacturer" : {
+            "type" : "string"
+          },
+          "model" : {
+            "type" : "string"
+          },
+          "price" : {
+            "type" : "number"
+          },
+          "state" : {
+            "type" : "string",
+            "enum" : [ "new", "used" ]
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "available", "sold" ]
+          },
+          "body_type" : {
+            "type" : "string"
+          },
+          "image_url" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
       "CreateAdResponse_data" : {
         "type" : "object",
         "properties" : {
@@ -1868,8 +1907,8 @@
               "$ref" : "#/components/schemas/User"
             },
             "example" : {
-              "firstName" : "Anifowose",
-              "lastName" : "Habeeb",
+              "first_name" : "Anifowose",
+              "last_name" : "Habeeb",
               "email" : "anifowosehabeeb@gmail.com",
               "address" : "Ganmo Street, Ilorin",
               "password" : "MTHA.294821"
@@ -1901,16 +1940,15 @@
               "$ref" : "#/components/schemas/CreateAd"
             },
             "example" : {
-              "name" : "Audi Cruizer",
               "state" : "New",
               "price" : 11000000,
               "manufacturer" : "Audi",
               "model" : "LX450",
-              "bodyType" : "car",
-              "imageArray" : "Files"
+              "body_type" : "car",
+              "image_url" : "Files"
             },
             "encoding" : {
-              "imageArray" : {
+              "image_url" : {
                 "contentType" : "image/jpg, image/jpeg, image/png, image/webp",
                 "style" : "form"
               }
@@ -1927,7 +1965,7 @@
               "$ref" : "#/components/schemas/NewPrice"
             },
             "example" : {
-              "newPrice" : 9000000
+              "price" : 9000000
             }
           }
         },
@@ -1941,8 +1979,8 @@
               "$ref" : "#/components/schemas/PurchaseOrder"
             },
             "example" : {
-              "carId" : 1,
-              "priceOffered" : 5000000
+              "car_id" : 1,
+              "amount" : 5000000
             }
           }
         },
@@ -1970,7 +2008,7 @@
               "$ref" : "#/components/schemas/Reset"
             },
             "example" : {
-              "newPassword" : "ALT2343LSDF"
+              "new_password" : "ALT2343LSDF"
             }
           }
         }
@@ -1984,7 +2022,7 @@
             },
             "example" : {
               "password" : "MAYOR_LSDH",
-              "newPassword" : "ALT2343LSDF"
+              "new_password" : "ALT2343LSDF"
             }
           }
         }
@@ -1997,7 +2035,7 @@
               "$ref" : "#/components/schemas/Flag"
             },
             "example" : {
-              "carId" : 1,
+              "car_id" : 1,
               "reason" : "Fraudulent seller",
               "description" : "This seller once duped me in the past"
             }
