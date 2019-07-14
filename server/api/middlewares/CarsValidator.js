@@ -35,7 +35,7 @@ class CarsValidator {
       }
 
       // Everything went fine.
-
+      console.log(req.files);
       const imgFiles = req.files;
 
       const bodyType = req.body.body_type;
@@ -113,6 +113,7 @@ class CarsValidator {
   static verifyImage(req, res, next) {
     console.log(typeof req.body.image_url);
     console.log(req.body.image_url);
+    console.log(`IMG_URL ${req.body.img_url}`);
     next();
   }
 
