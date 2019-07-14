@@ -28,6 +28,7 @@ class CarsValidator {
    */
   static createAd(req, res, next) {
     if (req.body.img_url) {
+      console.log(req.body);
       const imgUrl = req.body.img_url;
       if (typeof imgUrl === 'object') {
         req.body.imageUrlList = imgUrl;
@@ -88,6 +89,7 @@ class CarsValidator {
           'body type is undefined or invalid',
         );
       }
+      next();
     } else {
       upload(req, res, async (err) => {
         if (err || err instanceof multer.MulterError) {
