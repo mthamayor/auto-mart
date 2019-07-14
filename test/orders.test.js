@@ -84,7 +84,7 @@ describe('Users order endpoint test', () => {
       .patch(`/api/v1/car/${carCreated2.id}/status`)
       .set('Authorization', `Bearer ${user1.token}`)
       .type('form')
-      .send();
+      .send({ status: 'sold' });
   });
 
   // Clean up db after all test suites

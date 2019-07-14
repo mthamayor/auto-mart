@@ -185,6 +185,8 @@ class CarsValidator {
     console.log(`markAsSold params ${JSON.stringify(req.params)}`);
     const carId = req.params.car_id;
 
+    const { status } = req.body;
+
     const authData = req.authToken;
 
     const user = authData.id === undefined ? authData.data.id : authData.id;
@@ -214,6 +216,14 @@ class CarsValidator {
       return;
     }
 
+    if (
+      status === undefined
+      || String(status).trim() === ''
+    ) {
+      ResponseHandler.error(res, 400, 'status is undefined or invalid');
+      return;
+    }
+
     next();
   }
 
@@ -224,16 +234,47 @@ class CarsValidator {
    * @param {object} res - Response object
    * @param {function} next - Passes control to next middleware
    */
-  static updateCarPrice(req, res, next) {
+  static async updateCarPrice(req, res, next) {
     console.log(`update car price ${JSON.stringify(req.body)}`);
+
+    const carId = req.params.car_id;
+
+    const authData = req.authToken;
+
     const { price } = req.body;
+
+    const user = authData.id === undefined ? authData.data.id : authData.id;
+
+    if (
+      carId === undefined
+      || String(carId).trim() === ''
+      || !validator.isNumeric(String(carId))
+    ) {
+      ResponseHandler.error(
+        res,
+        400,
+        'car_id parameter is undefined or invalid',
+      );
+      return;
+    }
+
+    const findCar = await carsHelper.getCar(parseInt(carId, 10));
+
+    if (findCar === -1) {
+      ResponseHandler.error(res, 404, 'car advert does not exist');
+      return;
+    }
+
+    if (findCar.owner !== user) {
+      ResponseHandler.error(res, 403, "you cannot edit another user's advert");
+      return;
+    }
 
     if (
       price === undefined
       || String(price).trim() === ''
       || !validator.isNumeric(String(price))
     ) {
-      console.log(`update car error ${JSON.stringify(req.body)}`);
       ResponseHandler.error(res, 400, 'price is undefined or invalid');
       return;
     }
@@ -274,9 +315,6 @@ class CarsValidator {
    * @param {function} next - Passes control to next middleware
    */
   static filterCars(req, res, next) {
-    console.log(`GET CAR body ${JSON.stringify(req.body)}`);
-    console.log(`GET CARS query ${JSON.stringify(req.query)}`);
-    console.log(`GET CARS params ${JSON.stringify(req.params)}`);
     const { status, state, manufacturer } = req.query;
 
     let minPrice = req.query.min_price;

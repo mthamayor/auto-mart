@@ -116,7 +116,7 @@ describe('Users GET car endpoint test', () => {
       .patch(`/api/v1/car/${car4.id}/status`)
       .set('Authorization', `Bearer ${user1.token}`)
       .type('form')
-      .send();
+      .send({ status: 'sold' });
     const { data } = res.body;
     car4 = data;
   });
