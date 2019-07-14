@@ -126,6 +126,7 @@ describe('Users GET car endpoint test', () => {
       const res = await chai
         .request(app)
         .get('/api/v1/car')
+        .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send();
       expect(res).to.have.status(200);
@@ -172,6 +173,7 @@ describe('Users GET car endpoint test', () => {
       const res = await chai
         .request(app)
         .get('/api/v1/car?status=available')
+        .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send();
 
@@ -199,6 +201,7 @@ describe('Users GET car endpoint test', () => {
         .get(
           `/api/v1/car?status=available&min_price=${minPrice}&max_price=${maxPrice}`,
         )
+        .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send()
         .end((err, res) => {
@@ -221,6 +224,7 @@ describe('Users GET car endpoint test', () => {
       chai
         .request(app)
         .get(`/api/v1/car?status=available&min_price=${minPrice}`)
+        .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send()
         .end((err, res) => {
@@ -246,6 +250,7 @@ describe('Users GET car endpoint test', () => {
         .get(
           `/api/v1/car?status=available&min_price=${minPrice}&max_price=${maxPrice}`,
         )
+        .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send()
         .end((err, res) => {
@@ -271,6 +276,7 @@ describe('Users GET car endpoint test', () => {
         .get(
           `/api/v1/car?status=available&min_price=${minPrice}&max_price=${maxPrice}`,
         )
+        .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send()
         .end((err, res) => {
@@ -296,6 +302,7 @@ describe('Users GET car endpoint test', () => {
         .get(
           `/api/v1/car?status=available&min_price=${minPrice}&max_price=${maxPrice}`,
         )
+        .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send();
       expect(res).to.have.status(200);
@@ -322,6 +329,7 @@ describe('Users GET car endpoint test', () => {
       const res = await chai
         .request(app)
         .get('/api/v1/car?status=available&state=new')
+        .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send();
       expect(res).to.have.status(200);
@@ -346,6 +354,7 @@ describe('Users GET car endpoint test', () => {
       const res = await chai
         .request(app)
         .get('/api/v1/car?status=available&state=used')
+        .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send();
       expect(res).to.have.status(200);
@@ -371,6 +380,7 @@ describe('Users GET car endpoint test', () => {
       const res = await chai
         .request(app)
         .get(`/api/v1/car?status=available&manufacturer=${manufacturer}`)
+        .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send();
       expect(res).to.have.status(200);
@@ -435,7 +445,7 @@ describe('Users GET car endpoint test', () => {
       const res = await chai
         .request(app)
         .get('/api/v1/car/user/my-cars')
-        .set('Authorization', 'Bearer dfaslfdsoaeoes')
+        .set('Authorization', 'Bearer dsljldfssjodfjco')
         .type('form')
         .send();
       expect(res).to.have.status(401);

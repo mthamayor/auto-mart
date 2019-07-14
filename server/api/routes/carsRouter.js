@@ -48,6 +48,7 @@ carsRouter.delete(
 
 // Admin can get all cars
 carsRouter.get('/',
+  Authorization.verifyToken,
   CarsValidator.filterCars,
   Cars.filterCars);
 
