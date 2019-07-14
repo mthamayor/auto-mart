@@ -174,12 +174,6 @@ class CarsValidator {
     }
   }
 
-  static verifyImage(req, res, next) {
-    console.log(typeof req.body.image_url);
-    console.log(req.body.image_url);
-    next();
-  }
-
   /**
    * @method markAsSold
    * @description - validates mark as sold parameters
@@ -216,15 +210,6 @@ class CarsValidator {
 
     if (findCar.owner !== user) {
       ResponseHandler.error(res, 403, "you cannot edit another user's advert");
-      return;
-    }
-
-    if (findCar.status !== 'available') {
-      ResponseHandler.error(
-        res,
-        409,
-        'the car has already been marked as sold',
-      );
       return;
     }
 
@@ -286,6 +271,7 @@ class CarsValidator {
    * @param {function} next - Passes control to next middleware
    */
   static filterCars(req, res, next) {
+    console.log(`FILTER CARS ${JSON.stringify(req.query)}`);
     const { status, state, manufacturer } = req.query;
 
     let minPrice = req.query.min_price;

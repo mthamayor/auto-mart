@@ -54,26 +54,6 @@ class Authorization {
   }
 
   /**
-   * @method isAdmin
-   * @description - Checks if user is an admin
-   * @param {object} req - Request object
-   * @param {object} res - Response object
-   * @param {function} next - Passes control to next middleware
-   */
-  static isAdmin(req, res, next) {
-    const authData = req.authToken.data;
-    if (authData.isAdmin === false) {
-      ResponseHandler.error(
-        res,
-        401,
-        'you do not have permission to access this route',
-      );
-      return;
-    }
-    next();
-  }
-
-  /**
    * @method adminSearch
    * @description - Checks if its admin protected route
    * @param {object} req - Request object

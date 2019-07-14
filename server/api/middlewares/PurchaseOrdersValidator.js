@@ -45,14 +45,6 @@ class PurchaseOrdersValidator {
 
     const findCar = await carsHelper.getCar(parseInt(carId, 10));
 
-    if (findCar.owner === buyer) {
-      ResponseHandler.error(
-        res,
-        409,
-        'you cannot create purchase order for ad you created',
-      );
-      return;
-    }
     if (findCar === -1) {
       ResponseHandler.error(res, 404, 'car not found');
       return;
