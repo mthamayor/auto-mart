@@ -17,11 +17,11 @@ ordersRouter.post(
   PurchaseOrders.createOrder,
 );
 
-// Protected route
-ordersRouter.patch('/:order_id/price',
-  Authorization.verifyToken,
-  PurchaseOrdersValidator.updatePurchaseOrder,
-  PurchaseOrders.updatePurchaseOrder);
+// // Protected route
+// ordersRouter.patch('/:order_id/price',
+//   Authorization.verifyToken,
+//   PurchaseOrdersValidator.updatePurchaseOrder,
+//   PurchaseOrders.updatePurchaseOrder);
 
 // // Protected route
 ordersRouter.patch('/:order_id/accept',
