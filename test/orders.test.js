@@ -199,32 +199,6 @@ describe('Users order endpoint test', () => {
           done();
         });
     });
-    it('should raise 409 error with ad creator making purchase order', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/order')
-        .set('Authorization', `Bearer ${user1.token}`)
-        .type('form')
-        .send({
-          car_id: carCreated.id,
-          price: mockOrders.validPriceOffered,
-        })
-        .end((err, res) => {
-          expect(res).to.have.status(409);
-          assert.strictEqual(
-            res.body.status,
-            409,
-            'Status code should be 409',
-          );
-          assert.strictEqual(
-            res.body.error,
-            'you cannot create purchase order for ad you created',
-            'you cannot create purchase order for ad you created',
-          );
-
-          done();
-        });
-    });
     it('should raise 201 with valid inputs', async () => {
       const res = await chai
         .request(app)

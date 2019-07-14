@@ -467,29 +467,6 @@ describe('Car endpoint test', () => {
         'Car status should be sold',
       );
     });
-    it('should raise 409 error if trying to edit sold car', (done) => {
-      chai
-        .request(app)
-        .patch(`/api/v1/car/${car1.id}/status`)
-        .set('Authorization', `Bearer ${user1.token}`)
-        .type('form')
-        .send()
-        .end((err, res) => {
-          expect(res).to.have.status(409);
-          const { error } = res.body;
-          assert.strictEqual(
-            res.body.status,
-            409,
-            'Status code should be 409',
-          );
-          assert.strictEqual(
-            error,
-            'the car has already been marked as sold',
-            'the car has already been marked as sold',
-          );
-          done();
-        });
-    });
   });
   describe('route POST /api/v1/car/:car_id/price', () => {
     before(async () => {
@@ -739,29 +716,6 @@ describe('Car endpoint test', () => {
         .type('form')
         .send();
       user1 = res.body.data;
-    });
-
-    it('should raise 401 if user is not an admin', (done) => {
-      chai
-        .request(app)
-        .delete(`/api/v1/car/${car1.id}`)
-        .set('Authorization', `Bearer ${user2.token}`)
-        .type('form')
-        .send()
-        .end((err, res) => {
-          expect(res).to.have.status(401);
-          expect(res.body).to.have.property('status');
-          expect(res.body).to.have.property('error');
-
-          const { error, status } = res.body;
-          assert.strictEqual(status, 401, 'delete status should be 401');
-          assert.strictEqual(
-            error,
-            'you do not have permission to access this route',
-            'you do not have permission to access this route',
-          );
-          done();
-        });
     });
 
 

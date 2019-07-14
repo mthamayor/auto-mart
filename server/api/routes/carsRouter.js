@@ -42,7 +42,6 @@ carsRouter.get(
 carsRouter.delete(
   '/:car_id/',
   Authorization.verifyToken,
-  Authorization.isAdmin,
   CarsValidator.getCar,
   Cars.deleteCar,
 );
@@ -56,7 +55,6 @@ carsRouter.get('/',
 carsRouter.get(
   '/:car_id/flags',
   Authorization.verifyToken,
-  Authorization.isAdmin,
   CarsValidator.getCar,
   Flags.getCarFlags,
 );
