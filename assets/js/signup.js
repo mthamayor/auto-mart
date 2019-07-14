@@ -94,8 +94,8 @@ signUpForm.addEventListener('submit', (event) => {
 
   // Api calls
   let payload = {
-    firstName: Helpers.capitalizeWords(firstName),
-    lastName: Helpers.capitalizeWords(lastName),
+    first_name: Helpers.capitalizeWords(firstName),
+    last_name: Helpers.capitalizeWords(lastName),
     email: String(email).toLowerCase(),
     address: Helpers.capitalizeWords(address),
     password,

@@ -114,7 +114,7 @@ forgotPasswordForm.addEventListener('submit', (event) => {
     }
     payload = JSON.stringify({
       password: presentPassword,
-      newPassword,
+      new_password: newPassword,
     });
   }
   // Form validation ends here

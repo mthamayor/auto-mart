@@ -238,7 +238,7 @@ createOrderForm.addEventListener('submit', (event) => {
 
   // Api calls
   let payload = {
-    carId: fetchedCar.id,
+    car_id: fetchedCar.id,
     priceOffered,
   };
   payload = JSON.stringify(payload);

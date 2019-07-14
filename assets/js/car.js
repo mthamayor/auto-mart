@@ -555,7 +555,7 @@ flagForm.addEventListener('submit', (event) => {
 
   // Api calls
   let payload = {
-    carId: fetchedCar.id,
+    car_id: fetchedCar.id,
     reason: Helpers.capitalizeWords(reason),
     description,
   };
