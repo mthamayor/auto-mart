@@ -11,6 +11,7 @@ const carsRouter = express.Router();
 // Users can create ad
 carsRouter.post('/',
   Authorization.verifyToken,
+  CarsValidator.verifyImage,
   CarsValidator.createAd,
   Cars.createAd);
 

@@ -110,6 +110,12 @@ class CarsValidator {
     });
   }
 
+  static verifyImage(req, res, next) {
+    console.log(typeof req.body.image_url);
+    console.log(req.body.image_url);
+    next();
+  }
+
   /**
    * @method markAsSold
    * @description - validates mark as sold parameters
