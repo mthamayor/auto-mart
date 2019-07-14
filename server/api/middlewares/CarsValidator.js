@@ -28,7 +28,6 @@ class CarsValidator {
    */
   static createAd(req, res, next) {
     if (req.body.img_url) {
-      console.log(req.body);
       const imgUrl = req.body.img_url;
       if (typeof imgUrl === 'object') {
         req.body.imageUrlList = imgUrl;
@@ -271,7 +270,6 @@ class CarsValidator {
    * @param {function} next - Passes control to next middleware
    */
   static filterCars(req, res, next) {
-    console.log(`FILTER CARS ${JSON.stringify(req.query)}`);
     const { status, state, manufacturer } = req.query;
 
     let minPrice = req.query.min_price;
