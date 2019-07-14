@@ -21,7 +21,7 @@ class PurchaseOrdersValidator {
    */
   static async createPurchaseOrder(req, res, next) {
     const carId = req.body.car_id;
-    const { price } = req.body;
+    const { amount } = req.body;
     const authData = req.authToken.data;
     const buyer = authData.id;
 
@@ -35,9 +35,9 @@ class PurchaseOrdersValidator {
     }
 
     if (
-      price === undefined
-      || String(price).trim() === ''
-      || !validator.isNumeric(String(price))
+      amount === undefined
+      || String(amount).trim() === ''
+      || !validator.isNumeric(String(amount))
     ) {
       ResponseHandler.error(res, 400, 'price is undefined or invalid');
       return;

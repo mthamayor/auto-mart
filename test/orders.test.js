@@ -101,7 +101,7 @@ describe('Users order endpoint test', () => {
         .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
         .send({
-          price: mockOrders.validPriceOffered,
+          amount: mockOrders.validPriceOffered,
         })
         .end((err, res) => {
           expect(res).to.have.status(400);
@@ -154,7 +154,7 @@ describe('Users order endpoint test', () => {
         .type('form')
         .send({
           car_id: 1837381,
-          price: mockOrders.validPriceOffered,
+          amount: mockOrders.validPriceOffered,
         })
         .end((err, res) => {
           expect(res).to.have.status(404);
@@ -181,7 +181,7 @@ describe('Users order endpoint test', () => {
         .type('form')
         .send({
           car_id: carCreated2.id,
-          price: mockOrders.validPriceOffered,
+          amount: mockOrders.validPriceOffered,
         })
         .end((err, res) => {
           expect(res).to.have.status(403);
@@ -207,7 +207,7 @@ describe('Users order endpoint test', () => {
         .type('form')
         .send({
           car_id: carCreated.id,
-          price: mockOrders.validPriceOffered,
+          amount: mockOrders.validPriceOffered,
         });
       const { data, status } = res.body;
       expect(res).to.have.status(201);
@@ -228,7 +228,7 @@ describe('Users order endpoint test', () => {
         .type('form')
         .send({
           car_id: carCreated.id,
-          price: mockOrders.validPriceOffered,
+          amount: mockOrders.validPriceOffered,
         });
       const { error, status } = res.body;
 
