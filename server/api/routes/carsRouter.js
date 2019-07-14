@@ -26,7 +26,6 @@ carsRouter.patch(
 carsRouter.patch(
   '/:car_id/price',
   Authorization.verifyToken,
-  CarsValidator.markAsSold,
   CarsValidator.updateCarPrice,
   Cars.updateCarPice,
 );

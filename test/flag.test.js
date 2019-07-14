@@ -75,7 +75,7 @@ describe('Users GET car endpoint test', () => {
       .patch(`/api/v1/car/${car2.id}/status`)
       .set('Authorization', `Bearer ${user1.token}`)
       .type('form')
-      .send();
+      .send({ status: 'sold' });
   });
   after(async () => {
     await usersHelper.removeAllUsers();

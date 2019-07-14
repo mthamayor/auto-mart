@@ -391,7 +391,7 @@ describe('Car endpoint test', () => {
         .patch('/api/v1/car/1as/status')
         .set('Authorization', `Bearer ${user1.token}`)
         .type('form')
-        .send()
+        .send({ status: 'sold' })
         .end((err, res) => {
           expect(res).to.have.status(400);
           assert.strictEqual(
@@ -413,7 +413,7 @@ describe('Car endpoint test', () => {
         .patch('/api/v1/car/2183739/status')
         .set('Authorization', `Bearer ${user1.token}`)
         .type('form')
-        .send()
+        .send({ status: 'sold' })
         .end((err, res) => {
           expect(res).to.have.status(404);
           assert.strictEqual(
@@ -435,7 +435,7 @@ describe('Car endpoint test', () => {
         .patch(`/api/v1/car/${car1.id}/status`)
         .set('Authorization', `Bearer ${user2.token}`)
         .type('form')
-        .send()
+        .send({ status: 'sold' })
         .end((err, res) => {
           expect(res).to.have.status(403);
           assert.strictEqual(
@@ -451,13 +451,35 @@ describe('Car endpoint test', () => {
           done();
         });
     });
+    it('should raise 400 error if new status is undefined', (done) => {
+      chai
+        .request(app)
+        .patch(`/api/v1/car/${car1.id}/status`)
+        .set('Authorization', `Bearer ${user1.token}`)
+        .type('form')
+        .send()
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          assert.strictEqual(
+            res.body.status,
+            400,
+            'Status code should be 400',
+          );
+          assert.strictEqual(
+            res.body.error,
+            'status is undefined or invalid',
+            'status is undefined or invalid',
+          );
+          done();
+        });
+    });
     it('should raise 201 when ad is successfully marked as sold', async () => {
       const res = await chai
         .request(app)
         .patch(`/api/v1/car/${car1.id}/status`)
         .set('Authorization', `Bearer ${user1.token}`)
         .type('form')
-        .send();
+        .send({ status: 'sold' });
       expect(res).to.have.status(201);
       const { status, data } = res.body;
       assert.strictEqual(status, 201, 'Status code should be 201');
