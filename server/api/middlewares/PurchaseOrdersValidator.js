@@ -105,19 +105,6 @@ class PurchaseOrdersValidator {
       ResponseHandler.error(res, 403, "you cannot edit another user's order");
       return;
     }
-
-    const findCar = await carsHelper.getCar(findOrder.car_id);
-
-    if (findCar === -1) {
-      ResponseHandler.error(res, 404, 'the ad does not exist');
-      return;
-    }
-
-    if (findCar.status !== 'available') {
-      ResponseHandler.error(res, 403, 'the transaction is not pending');
-      return;
-    }
-
     next();
   }
 

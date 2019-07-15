@@ -52,54 +52,6 @@ class Authorization {
       next();
     });
   }
-
-  /**
-   * @method adminSearch
-   * @description - Checks if its admin protected route
-   * @param {object} req - Request object
-   * @param {object} res - Response object
-   * @param {function} next - Passes control to next middleware
-   */
-  static adminSearch(req, res, next) {
-    const { status } = req.query;
-    const querySize = Object.keys(req.query).length;
-
-    if ((status !== undefined && status === 'sold') || querySize <= 0) {
-      const bearerHeader = req.headers.authorization;
-      if (bearerHeader === undefined) {
-        ResponseHandler.error(
-          res,
-          401,
-          'you do not have permission to access this route',
-        );
-        return;
-      }
-      const token = bearerHeader.split(' ')[1];
-      const secret = process.env.JWT_SECRET || 'jwtSecret';
-      let decoded;
-
-      try {
-        decoded = jwt.verify(token, secret);
-      } catch (err) {
-        ResponseHandler.error(
-          res,
-          401,
-          'invalid token provided. please provide a valid token',
-        );
-        return;
-      }
-
-      if (!decoded.data.isAdmin) {
-        ResponseHandler.error(
-          res,
-          403,
-          'Forbidden: only admins can access this route',
-        );
-        return;
-      }
-    }
-    next();
-  }
 }
 
 export default Authorization;

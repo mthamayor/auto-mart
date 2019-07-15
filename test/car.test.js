@@ -365,6 +365,50 @@ describe('Car endpoint test', () => {
         'price should be valid',
       );
     });
+    it('should raise 201 and successfully create the ad with img_url field', async () => {
+      const res = await chai
+        .request(app)
+        .post('/api/v1/car')
+        .set('Authorization', `Bearer ${user1.token}`)
+        .type('form')
+        .send({
+          state: mockCars.validState,
+          price: mockCars.validPrice,
+          model: mockCars.validModel,
+          manufacturer: mockCars.validManufacturer,
+          body_type: mockCars.validBodyType,
+          img_url: 'https://google.com',
+        });
+      expect(res).to.have.status(201);
+      expect(res.body).to.have.property('status');
+      expect(res.body).to.have.property('data');
+
+      const { data } = res.body;
+      expect(data).to.have.property('id');
+      expect(data).to.have.property('created_on');
+      expect(data).to.have.property('image_url');
+      expect(data).to.have.property('status');
+      expect(data).to.have.property('state');
+      expect(data).to.have.property('name');
+
+      const { manufacturer, model, price } = data;
+
+      assert.strictEqual(
+        manufacturer,
+        mockCars.validManufacturer,
+        'manufacturer should be valid',
+      );
+      assert.strictEqual(
+        model,
+        mockCars.validModel,
+        'model should be valid',
+      );
+      assert.strictEqual(
+        price,
+        mockCars.validPrice,
+        'price should be valid',
+      );
+    });
   });
   describe('route POST /api/v1/car/:car_id/status', () => {
     before(async () => {
@@ -525,6 +569,30 @@ describe('Car endpoint test', () => {
             res.body.error,
             'price is undefined or invalid',
             'price is undefined or invalid',
+          );
+          done();
+        });
+    });
+    it('should raise 400 error with invalid car_id', (done) => {
+      chai
+        .request(app)
+        .patch(`/api/v1/car/${car1.id}saas/price`)
+        .set('Authorization', `Bearer ${user1.token}`)
+        .type('form')
+        .send({
+          price: '1200000',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          assert.strictEqual(
+            res.body.status,
+            400,
+            'Status code should be 400',
+          );
+          assert.strictEqual(
+            res.body.error,
+            'car_id parameter is undefined or invalid',
+            'car_id parameter is undefined or invalid',
           );
           done();
         });
