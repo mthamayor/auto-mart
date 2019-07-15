@@ -153,7 +153,7 @@ const populatePageControls = ({ data }) => {
   }
 
   let previewList = '';
-  const imageUrls = data.image_urls;
+  const imageUrls = data.image_url;
 
   imageUrls.forEach((image) => {
     previewList += `
@@ -218,6 +218,7 @@ const fetchCar = async (carId) => {
   const fetchRequest = {
     method: 'GET',
     headers: {
+      Authorization: `Bearer ${getUser.token}`,
       'Content-Type': 'application/json',
     },
   };

@@ -70,6 +70,7 @@ const createAd = (formData) => {
       if (response.error) {
         Populator.hideAsyncNotification();
         Populator.showStickyNotification('error', response.error);
+        Populator.pageLoading(false);
         return;
       }
       const { data } = response;

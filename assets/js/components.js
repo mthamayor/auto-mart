@@ -31,7 +31,6 @@ const mainNav = `
     <div class="logo"><a class="logo-link" href="./index.html"><img src="./assets/img/logo.png" /></a></div>
     <ul class="links d-sm-none">
       <li><a href="index.html">Home</a></li>
-      <li><a href="./search-cars.html">Our Cars</a></li>
       <li><a href="./signup.html">Sign Up</a></li>
       <li><a href="./signin.html">Sign In</a></li>
     </ul>

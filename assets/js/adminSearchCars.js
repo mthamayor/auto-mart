@@ -27,7 +27,7 @@ const processCars = ({ data }) => {
   let statusLabel;
   let stateLabel;
   data.forEach((element) => {
-    const imageUrls = element.image_urls;
+    const imageUrls = element.image_url;
     if (element.state === 'new') {
       stateLabel = '<small class="uppercase badge badge-gold mt">New</small>';
     } else {

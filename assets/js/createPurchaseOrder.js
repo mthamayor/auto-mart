@@ -150,6 +150,7 @@ const fetchCar = async (carId) => {
   const fetchRequest = {
     method: 'GET',
     headers: {
+      Authorization: `Bearer ${getUser.token}`,
       'Content-Type': 'application/json',
     },
   };
@@ -239,7 +240,7 @@ createOrderForm.addEventListener('submit', (event) => {
   // Api calls
   let payload = {
     car_id: fetchedCar.id,
-    priceOffered,
+    amount: priceOffered,
   };
   payload = JSON.stringify(payload);
 
