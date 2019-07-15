@@ -70,6 +70,7 @@ const createAd = (formData) => {
       if (response.error) {
         Populator.hideAsyncNotification();
         Populator.showStickyNotification('error', response.error);
+        Populator.pageLoading(false);
         return;
       }
       const { data } = response;
@@ -87,11 +88,10 @@ const createAd = (formData) => {
 };
 createAdForm.addEventListener('submit', (event) => {
   event.preventDefault();
-  const name = createAdForm.name.value;
   const manufacturer = createAdForm.manufacturer.value;
   const model = createAdForm.model.value;
   const state = createAdForm.state.value;
-  const bodyType = createAdForm.bodyType.value;
+  const bodyType = createAdForm.body_type.value;
   const price = createAdForm.price.value;
 
   // Validation starts here
@@ -100,10 +100,6 @@ createAdForm.addEventListener('submit', (event) => {
     return;
   }
 
-  if (name.length <= 0) {
-    Populator.showNotification('Please enter a valid vehicle name');
-    return;
-  }
   if (manufacturer.length <= 0) {
     Populator.showNotification('Please enter a valid manufacturer');
     return;

@@ -95,6 +95,7 @@ const fetchCar = async (carId) => {
   const fetchRequest = {
     method: 'GET',
     headers: {
+      Authorization: `Bearer ${getUser.token}`,
       'Content-Type': 'application/json',
     },
   };
@@ -148,7 +149,7 @@ const populateOrdersElement = async (order) => {
             >
               <img
                 class="search-img img-responsive"
-                src="${car.image_urls[0]}"
+                src="${car.image_url[0]}"
               />
               ${statusLabel}
             </div>

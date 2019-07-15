@@ -1,6 +1,17 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 // Handle form submission
+let getUser = localStorage.getItem('user');
+if (
+  getUser === null
+  || getUser === undefined
+  || getUser === 'undefined'
+  || getUser === 'null'
+) {
+  window.location.replace('signin.html');
+}
+
+getUser = JSON.parse(getUser);
 
 const searchForm = document.querySelector('#search-form');
 const carText = document.querySelector('#car-header');
@@ -15,7 +26,7 @@ const processCars = ({ data }) => {
   let statusLabel;
   let stateLabel;
   data.forEach((element) => {
-    const imageUrls = element.image_urls;
+    const imageUrls = element.image_url;
     if (element.state === 'new') {
       stateLabel = '<small class="uppercase badge badge-gold mt">New</small>';
     } else {
@@ -76,6 +87,7 @@ const searchCars = (queryParams = '') => {
   const fetchRequest = {
     method: 'GET',
     headers: {
+      Authorization: `Bearer ${getUser.token}`,
       'Content-Type': 'application/json',
     },
   };

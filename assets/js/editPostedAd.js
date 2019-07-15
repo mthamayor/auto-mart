@@ -65,7 +65,7 @@ editAdForm.addEventListener('submit', (event) => {
   }
 
   const payload = JSON.stringify({
-    newPrice,
+    price: newPrice,
   });
 
   editAd(payload);
