@@ -181,8 +181,6 @@ class CarsValidator {
    * @param {function} next - Passes control to next middleware
    */
   static async markAsSold(req, res, next) {
-    console.log(`markAsSold body ${JSON.stringify(req.body)}`);
-    console.log(`markAsSold params ${JSON.stringify(req.params)}`);
     const carId = req.params.car_id;
 
     const { status } = req.body;
@@ -235,15 +233,9 @@ class CarsValidator {
    * @param {function} next - Passes control to next middleware
    */
   static async updateCarPrice(req, res, next) {
-    console.log(`update car price ${JSON.stringify(req.body)}`);
-
     const carId = req.params.car_id;
 
-    const authData = req.authToken;
-
     const { price } = req.body;
-
-    const user = authData.id === undefined ? authData.data.id : authData.id;
 
     if (
       carId === undefined
@@ -255,18 +247,6 @@ class CarsValidator {
         400,
         'car_id parameter is undefined or invalid',
       );
-      return;
-    }
-
-    const findCar = await carsHelper.getCar(parseInt(carId, 10));
-
-    if (findCar === -1) {
-      ResponseHandler.error(res, 404, 'car advert does not exist');
-      return;
-    }
-
-    if (findCar.owner !== user) {
-      ResponseHandler.error(res, 403, "you cannot edit another user's advert");
       return;
     }
 

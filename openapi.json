@@ -496,7 +496,10 @@
               }
             }
           }
-        }
+        },
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
       },
       "delete" : {
         "tags" : [ "car" ],
@@ -676,6 +679,9 @@
             "type" : "integer"
           }
         } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/ChangeStatus"
+        },
         "responses" : {
           "200" : {
             "description" : "Success",
@@ -1463,6 +1469,15 @@
           }
         }
       },
+      "ChangeStatus" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "description" : "the new status"
+          }
+        }
+      },
       "PurchaseOrder" : {
         "type" : "object",
         "properties" : {
@@ -1966,6 +1981,20 @@
             },
             "example" : {
               "price" : 9000000
+            }
+          }
+        },
+        "required" : true
+      },
+      "ChangeStatus" : {
+        "description" : "New price",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ChangeStatus"
+            },
+            "example" : {
+              "status" : "sold"
             }
           }
         },
