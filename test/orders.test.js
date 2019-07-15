@@ -241,140 +241,140 @@ describe('Users order endpoint test', () => {
       );
     });
   });
-  // describe('route POST /api/v1/order/:order_id/price', () => {
-  //   it('should raise 400 error with invalid param order_id', (done) => {
-  //     chai
-  //       .request(app)
-  //       .patch('/api/v1/order/1s/price')
-  //       .set('Authorization', `Bearer ${user2.token}`)
-  //       .type('form')
-  //       .send({
-  //         price: mockOrders.validnewPrice,
-  //       })
-  //       .end((err, res) => {
-  //         expect(res).to.have.status(400);
+  describe('route POST /api/v1/order/:order_id/price', () => {
+    it('should raise 400 error with invalid param order_id', (done) => {
+      chai
+        .request(app)
+        .patch('/api/v1/order/1s/price')
+        .set('Authorization', `Bearer ${user2.token}`)
+        .type('form')
+        .send({
+          price: mockOrders.validnewPrice,
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
 
-  //         assert.strictEqual(
-  //           res.body.status,
-  //           400,
-  //           'Status code should be 400',
-  //         );
-  //         assert.strictEqual(
-  //           res.body.error,
-  //           'order id is undefined or invalid',
-  //           'order id is undefined or invalid',
-  //         );
-  //         done();
-  //       });
-  //   });
-  //   it('should raise 400 error with invalid or no new price', (done) => {
-  //     chai
-  //       .request(app)
-  //       .patch(`/api/v1/order/${order1.id}/price`)
-  //       .set('Authorization', `Bearer ${user2.token}`)
-  //       .type('form')
-  //       .send()
-  //       .end((err, res) => {
-  //         expect(res).to.have.status(400);
+          assert.strictEqual(
+            res.body.status,
+            400,
+            'Status code should be 400',
+          );
+          assert.strictEqual(
+            res.body.error,
+            'order id is undefined or invalid',
+            'order id is undefined or invalid',
+          );
+          done();
+        });
+    });
+    it('should raise 400 error with invalid or no new price', (done) => {
+      chai
+        .request(app)
+        .patch(`/api/v1/order/${order1.id}/price`)
+        .set('Authorization', `Bearer ${user2.token}`)
+        .type('form')
+        .send()
+        .end((err, res) => {
+          expect(res).to.have.status(400);
 
-  //         assert.strictEqual(
-  //           res.body.status,
-  //           400,
-  //           'Status code should be 400',
-  //         );
-  //         assert.strictEqual(
-  //           res.body.error,
-  //           'new price is undefined or invalid',
-  //           'new price is undefined or invalid',
-  //         );
-  //         done();
-  //       });
-  //   });
-  //   it('should raise 403 error when trying to edit another user\'s order', (done) => {
-  //     chai
-  //       .request(app)
-  //       .patch(`/api/v1/order/${order1.id}/price`)
-  //       .set('Authorization', `Bearer ${user1.token}`)
-  //       .type('form')
-  //       .send({
-  //         price: mockOrders.validNewPrice,
-  //       })
-  //       .end((err, res) => {
-  //         expect(res).to.have.status(403);
+          assert.strictEqual(
+            res.body.status,
+            400,
+            'Status code should be 400',
+          );
+          assert.strictEqual(
+            res.body.error,
+            'new price is undefined or invalid',
+            'new price is undefined or invalid',
+          );
+          done();
+        });
+    });
+    it('should raise 403 error when trying to edit another user\'s order', (done) => {
+      chai
+        .request(app)
+        .patch(`/api/v1/order/${order1.id}/price`)
+        .set('Authorization', `Bearer ${user1.token}`)
+        .type('form')
+        .send({
+          price: mockOrders.validNewPrice,
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(403);
 
-  //         assert.strictEqual(
-  //           res.body.status,
-  //           403,
-  //           'Status code should be 403',
-  //         );
-  //         assert.strictEqual(
-  //           res.body.error,
-  //           "you cannot edit another user's order",
-  //           "you cannot edit another user's order",
-  //         );
-  //         done();
-  //       });
-  //   });
-  //   it('should raise 404 error when purchase order does not exist', (done) => {
-  //     chai
-  //       .request(app)
-  //       .patch('/api/v1/order/10101/price')
-  //       .set('Authorization', `Bearer ${user2.token}`)
-  //       .type('form')
-  //       .send({
-  //         price: mockOrders.validNewPrice,
-  //       })
-  //       .end((err, res) => {
-  //         expect(res).to.have.status(404);
+          assert.strictEqual(
+            res.body.status,
+            403,
+            'Status code should be 403',
+          );
+          assert.strictEqual(
+            res.body.error,
+            "you cannot edit another user's order",
+            "you cannot edit another user's order",
+          );
+          done();
+        });
+    });
+    it('should raise 404 error when purchase order does not exist', (done) => {
+      chai
+        .request(app)
+        .patch('/api/v1/order/10101/price')
+        .set('Authorization', `Bearer ${user2.token}`)
+        .type('form')
+        .send({
+          price: mockOrders.validNewPrice,
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(404);
 
-  //         assert.strictEqual(
-  //           res.body.status,
-  //           404,
-  //           'Status code should be 404',
-  //         );
-  //         assert.strictEqual(
-  //           res.body.error,
-  //           'purchase order does not exist',
-  //           'purchase order does not exist',
-  //         );
-  //         done();
-  //       });
-  //   });
-  //   it('should raise 201 when order is successfully edited', async () => {
-  //     const res = await chai
-  //       .request(app)
-  //       .patch(`/api/v1/order/${order1.id}/price`)
-  //       .set('Authorization', `Bearer ${user2.token}`)
-  //       .type('form')
-  //       .send({
-  //         price: mockOrders.validNewPrice,
-  //       });
-  //     expect(res).to.have.status(201);
-  //     const { data } = res.body;
-  //     expect(data).to.have.property('id');
-  //     expect(data).to.have.property('car_id');
-  //     expect(data).to.have.property('status');
-  //     expect(data).to.have.property('old_price_offered');
-  //     expect(data).to.have.property('new_price_offered');
-  //     assert.strictEqual(
-  //       res.body.status,
-  //       201,
-  //       'Status code should be 201',
-  //     );
+          assert.strictEqual(
+            res.body.status,
+            404,
+            'Status code should be 404',
+          );
+          assert.strictEqual(
+            res.body.error,
+            'purchase order does not exist',
+            'purchase order does not exist',
+          );
+          done();
+        });
+    });
+    it('should raise 201 when order is successfully edited', async () => {
+      const res = await chai
+        .request(app)
+        .patch(`/api/v1/order/${order1.id}/price`)
+        .set('Authorization', `Bearer ${user2.token}`)
+        .type('form')
+        .send({
+          price: mockOrders.validNewPrice,
+        });
+      expect(res).to.have.status(201);
+      const { data } = res.body;
+      expect(data).to.have.property('id');
+      expect(data).to.have.property('car_id');
+      expect(data).to.have.property('status');
+      expect(data).to.have.property('old_price_offered');
+      expect(data).to.have.property('new_price_offered');
+      assert.strictEqual(
+        res.body.status,
+        201,
+        'Status code should be 201',
+      );
 
-  //     assert.strictEqual(
-  //       data.old_price_offered,
-  //       order1.price_offered,
-  //       'Old price offered does not match',
-  //     );
+      assert.strictEqual(
+        data.old_price_offered,
+        order1.price_offered,
+        'Old price offered does not match',
+      );
 
-  //     assert.strictEqual(
-  //       data.new_price_offered,
-  //       mockOrders.validNewPrice,
-  //       'New price offered does not match',
-  //     );
-  //   });
-  // });
+      assert.strictEqual(
+        data.new_price_offered,
+        mockOrders.validNewPrice,
+        'New price offered does not match',
+      );
+    });
+  });
   describe('route POST /api/v1/order/:order_id/reject', () => {
     it('should raise 400 error with invalid param order_id', (done) => {
       chai
